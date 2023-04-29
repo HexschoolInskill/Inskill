@@ -4,4 +4,8 @@
   <slot name="footer"></slot>
 </template>
 <script setup></script>
-<style lang="scss"></style>
+<style lang="scss">
+body {
+  @apply bg-black;
+}
+</style>

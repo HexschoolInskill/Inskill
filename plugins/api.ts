@@ -1,4 +1,4 @@
-import { $fetch, FetchOptions } from 'ofetch'
+import { FetchOptions } from 'ofetch'
 import UserModule from '~~/http/modules/user'
 
 interface IApiInstance {

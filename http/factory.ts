@@ -1,6 +1,6 @@
-import type { $Fetch } from 'ofetch'
+type $Fetch = typeof $fetch
 
-type requestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+type requestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 
 class HttpFactory {
   private $fetch: $Fetch
@@ -11,7 +11,7 @@ class HttpFactory {
 
   protected async call<T>(
     url: string,
-    method: requestMethods,
+    method: requestMethod,
     data?: object,
     extras = {}
   ): Promise<T> {

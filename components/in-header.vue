@@ -1,7 +1,7 @@
 <template>
   <header class="fixed left-0 top-10 w-screen">
     <in-container>
-      <div class="flex h-22 items-center justify-between rounded-6 bg-white px-6 py-5">
+      <div class="flex h-21 items-center justify-between rounded-6 bg-white py-5 pl-7 pr-6">
         <div class="w-40">
           <nuxt-link to="/" v-slot="{ navigate }">
             <img @click="navigate" src="/images/logo.svg" alt="" />

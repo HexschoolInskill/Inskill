@@ -16,7 +16,7 @@ class UserModule extends HttpFactory {
   async login() {}
   async logout() {}
   async update(payload: IProfilePayload) {
-    this.call(`${this.RESOURCE}`, 'POST', payload)
+    await this.call(`${this.RESOURCE}`, 'POST', payload)
   }
 }
 

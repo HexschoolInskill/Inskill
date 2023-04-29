@@ -1,4 +1,6 @@
-import type { $Fetch } from 'ofetch'
+type $Fetch = typeof $fetch
+
+type requestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 
 class HttpFactory {
   private $fetch: $Fetch
@@ -7,7 +9,12 @@ class HttpFactory {
     this.$fetch = fetcher
   }
 
-  protected async call<T>(url: string, method: string, data?: object, extras = {}): Promise<T> {
+  protected async call<T>(
+    url: string,
+    method: requestMethod,
+    data?: object,
+    extras = {}
+  ): Promise<T> {
     const res: T = await this.$fetch(url, { method, body: data, ...extras })
     return res
   }

@@ -65,7 +65,6 @@ export const usePolicyStore = defineStore('policy', () => {
     對於本站之隱私權政策有任何疑問,或者想提出變更、移除個人資料之請求,請前往本站「聯絡我們」頁面提交表單。`)
 
   const modalController = (type: string) => {
-    console.log(type)
     policyType.value = type
     modalOpen.value = !modalOpen.value
   }

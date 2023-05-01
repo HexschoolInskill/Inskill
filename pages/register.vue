@@ -3,31 +3,31 @@
 
   <form v-if="step === 1" class="flex flex-col">
     <InFormField
-      name="使用者名稱"
       v-model:field="v$.userName"
-      :customError="formFieldErrorMessage"
+      :custom-error="formFieldErrorMessage"
+      name="使用者名稱"
     ></InFormField>
 
     <InFormField
-      name="信箱"
       v-model:field="v$.userEmail"
-      :customError="formFieldErrorMessage"
+      :custom-error="formFieldErrorMessage"
+      name="信箱"
     ></InFormField>
 
     <InFormField
-      name="密碼"
       v-model:field="v$.password"
-      :customError="formFieldErrorMessage"
+      :custom-error="formFieldErrorMessage"
+      name="密碼"
     ></InFormField>
 
     <InFormField
-      name="確認密碼"
       v-model:field="v$.confirmPassword"
-      :customError="formFieldErrorMessage"
+      :custom-error="formFieldErrorMessage"
+      name="確認密碼"
     ></InFormField>
 
     <label for="agree" class="mb-4">
-      <input type="checkbox" name="agree" v-model="formFields.agree" />
+      <input v-model="formFields.agree" type="checkbox" name="agree" />
       同意
       <span class="cursor-pointer text-sky-400 underline" @click="modalController('user')"
         >使用者條款</span
@@ -99,7 +99,7 @@ const v$ = useVuelidate(rules, formFields)
 
 const step = ref(1)
 
-const register = async () => {
+const register = () => {
   if (
     formFields.userName.length &&
     formFields.userEmail.length &&

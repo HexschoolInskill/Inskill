@@ -3,15 +3,15 @@
 
   <form class="flex flex-col">
     <InFormField
-      name="信箱"
       v-model:field="v$.userEmail"
-      :customError="formFieldErrorMessage"
+      :custom-error="formFieldErrorMessage"
+      name="信箱"
     ></InFormField>
 
     <InFormField
-      name="密碼"
       v-model:field="v$.password"
-      :customError="formFieldErrorMessage"
+      :custom-error="formFieldErrorMessage"
+      name="密碼"
     ></InFormField>
 
     <button type="button" class="w-20 rounded border bg-black text-white" @click="login">

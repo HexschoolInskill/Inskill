@@ -38,9 +38,9 @@
         </div>
         <div class="modalFooter w-100 flex justify-center bg-slate-400 p-4">
           <button
+            type="button"
             class="w-20 rounded bg-black text-white"
             @click="modalController('')"
-            type="button"
           >
             確定
           </button>

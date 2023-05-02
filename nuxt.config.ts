@@ -3,13 +3,11 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: true
   },
-  nitro : {
-    plugins : [
-      '~/server/plugin/mongooseInit.ts'
-    ]
+  nitro: {
+    plugins: ['~/server/plugin/mongooseInit.ts']
   },
-  runtimeConfig : {
-    mongodbUri : process.env.MONGODB_URI,
-    JWT_SECRET : process.env.JWT_SECRET
+  runtimeConfig: {
+    mongodbUri: process.env.MONGODB_URI,
+    JWT_SECRET: process.env.JWT_SECRET
   }
 })

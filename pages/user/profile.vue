@@ -252,11 +252,19 @@
           <p v-else class="text-base leading-normal text-white">{{ about.data }}</p>
         </div>
       </div>
+      <button class="bg-white" @click="testNoti">Notify</button>
     </in-container>
   </section>
 </template>
 <script lang="ts" setup>
 import fieldWrapper from '~/utils/fieldWrapper'
+import useNotification from '~~/stores/useNotification'
+
+const { success } = useNotification()
+
+function testNoti() {
+  success('test')
+}
 
 const avatar = reactive(fieldWrapper<string>(''))
 const name = reactive(fieldWrapper<string>('我是老師', 'name', true))

@@ -1,4 +1,5 @@
 export default defineNuxtConfig({
+  css: ['@/assets/scss/style.scss'],
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
   typescript: {
     typeCheck: true
@@ -8,6 +9,9 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     mongodbUri: process.env.MONGODB_URI,
-    JWT_SECRET: process.env.JWT_SECRET
+    JWT_SECRET: process.env.JWT_SECRET,
+    public: {
+      apiBase: '/api'
+    }
   }
 })

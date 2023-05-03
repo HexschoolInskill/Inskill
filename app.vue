@@ -1,5 +1,6 @@
 <template>
-  <nuxt-layout name="default">
+  <!-- <nuxt-layout name="default"> -->
+  <nuxt-layout>
     <template #header>
       <in-header />
     </template>

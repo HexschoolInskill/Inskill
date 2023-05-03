@@ -10,7 +10,9 @@ module.exports = {
   },
   plugins: ['prettier'],
   rules: {
-    'prettier/prettier': 'error'
+    'prettier/prettier': 'error',
+    'no-console': 'off',
+    'import/no-named-as-default-member': 'off'
   },
   overrides: [
     {

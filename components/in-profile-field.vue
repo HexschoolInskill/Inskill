@@ -1,14 +1,26 @@
 <template>
   <div class="in-profile-field">
     <div v-if="edit">
-      <input
-        v-model="inputValue"
-        type="text"
-        class="flex h-8 w-full items-center rounded-1 px-3 outline-none"
-        :class="{ 'border-2 border-solid  border-red-600': error }"
-        :placeholder="placeholder"
-      />
-      <div class="mt-3 flex items-center gap-5">
+      <div class="relative">
+        <input
+          v-model="inputValue"
+          type="text"
+          class="flex h-8 w-full items-center rounded-1 px-3 outline-none"
+          :class="{
+            'border-2 border-solid  border-red-600': error,
+            'pointer-events-none select-none opacity-50': disabled
+          }"
+          :placeholder="placeholder"
+        />
+        <in-spin v-show="loading" class="absolute right-3 top-1/2 -translate-y-1/2" />
+      </div>
+
+      <div
+        class="mt-3 flex items-center gap-5"
+        :class="{
+          'pointer-events-none select-none opacity-50': disabled
+        }"
+      >
         <button
           class="rounded-1 bg-white px-3 font-bold hover:bg-white/80"
           @click="$emit('cancel')"
@@ -43,7 +55,7 @@ const inputValue = ref('')
 const props = defineProps({
   value: {
     type: String,
-    required: true
+    default: ''
   },
   placeholder: {
     type: String,

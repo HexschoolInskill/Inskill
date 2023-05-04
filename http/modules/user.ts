@@ -11,32 +11,41 @@ interface IProfilePayload {
   about?: string
 }
 
-interface loginPayload {
+interface IloginPayload {
   email: string
   password: string
 }
 
-interface registerPayload {
+interface IregisterPayload {
   username: string
   email: string
-  password: string
+  password: string,
+  confirmPassword: string
+}
+
+interface IEmailPayload {
+  email: string
 }
 
 class UserModule extends HttpFactory {
   private RESOURCE = '/user'
 
-  async login(payload: loginPayload) {
-    return await this.call(`${this.RESOURCE}/login`, 'POST', payload)
+  async login(payload: IloginPayload) {
+    return await this.call(`${this.RESOURCE}/sign_in`, 'POST', payload)
   }
-  
+
   async logout() {}
 
   async update(payload: IProfilePayload) {
     await this.call(`${this.RESOURCE}`, 'POST', payload)
   }
 
-  async registration(payload: registerPayload) {
-    return await this.call(`${this.RESOURCE}/login`, 'POST', payload)
+  async isEmailRegister(payload: IEmailPayload){
+    return await this.call(`${this.RESOURCE}/isEmailRegister`, 'POST', payload)
+  }
+
+  async registration(payload: IregisterPayload) {
+    return await this.call(`${this.RESOURCE}/sign_up`, 'POST', payload)
   }
 }
 

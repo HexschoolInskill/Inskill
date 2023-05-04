@@ -14,7 +14,7 @@
       name="密碼"
     ></InFormField>
 
-    <button type="button" class="w-20 rounded border bg-black text-white" @click="login">
+    <button type="button" class="mt-4 w-20 rounded border bg-black text-white" @click="login">
       登入
     </button>
 
@@ -57,7 +57,7 @@ const rules = {
 const v$ = useVuelidate(rules, formFields)
 
 const { $api } = useNuxtApp()
-// const router = useRouter()
+const router = useRouter()
 
 const login = async () => {
   if (
@@ -67,15 +67,23 @@ const login = async () => {
     !v$.value.userEmail.$errors.values.length
   ) {
     try {
-      const result = await $api.user.login({
+      const result: any = await $api.user.login({
         email: formFields.userEmail,
         password: formFields.password
       })
 
       console.log('login success :>>>', result)
 
-      // 登入成功，回首頁
-      // router.push('/')
+      if(result.success){
+        localStorage.setItem('access_token', result.accessToken)
+
+        // 登入成功，回首頁
+          router.push('/')        
+      }else{
+        formFieldErrorMessage.value = '信箱或密碼錯誤'
+        formFields.password = ''
+      }
+
     } catch (error) {
       console.log('failed to login :>>>', error)
     }

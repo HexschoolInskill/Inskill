@@ -1,14 +1,14 @@
 import { v4 as uuidv4 } from 'uuid'
-
+import { defineStore } from 'pinia'
 type NotificationType = 'success' | 'error'
 
-export default function () {
+export default defineStore('notification', () => {
   interface INotification {
     id: string
     type: NotificationType
     message: string
   }
-  const notifications: INotification[] = []
+  const notifications = ref<INotification[]>([])
 
   function createNotification(type: NotificationType, message: string, time = 5000) {
     const id = uuidv4()
@@ -19,10 +19,10 @@ export default function () {
       message
     }
 
-    notifications.push(notification)
+    notifications.value.push(notification)
 
     setTimeout(() => {
-      notifications.filter((notification) => notification.id !== id)
+      notifications.value = notifications.value.filter((notification) => notification.id !== id)
     }, time)
   }
 
@@ -38,4 +38,4 @@ export default function () {
     success,
     error
   }
-}
+})

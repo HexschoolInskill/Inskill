@@ -9,6 +9,7 @@
       <in-footer />
     </template>
   </nuxt-layout>
+  <in-notification />
 </template>
 <script setup lang="ts"></script>
 <style lang="scss">

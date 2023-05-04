@@ -9,15 +9,7 @@
         name="信箱"
       ></InFormField>
 
-      <button
-        type="button"
-        class="w-20 rounded border bg-black text-white"
-        @click="
-          ;async () => {
-            await nextStep()
-          }
-        "
-      >
+      <button type="button" class="w-20 rounded border bg-black text-white" @click="nextStep">
         繼續
       </button>
     </div>

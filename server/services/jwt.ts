@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import jwt from 'jsonwebtoken'
 
 export async function sign(payload: Object, secret: string, expiresIn: number) {

@@ -1,5 +1,5 @@
 <template>
-  <h1 class="my-4 text-3xl font-bold">登入</h1>
+  <h1 class="my-4 text-3xl font-bold text-white">登入</h1>
 
   <form class="flex flex-col">
     <InFormField
@@ -21,7 +21,7 @@
     <small class="mt-4 mb-2 text-sky-400 underline">
       <NuxtLink to="forgetpassword">忘記密碼?</NuxtLink>
     </small>
-    <small class="">
+    <small class="text-[#6C757D]">
       尚未成為會員?
       <NuxtLink class="text-sky-400 underline" to="register">申請帳號</NuxtLink>
     </small>
@@ -56,17 +56,29 @@ const rules = {
 
 const v$ = useVuelidate(rules, formFields)
 
-const router = useRouter()
+const { $api } = useNuxtApp()
+// const router = useRouter()
 
-const login = () => {
+const login = async () => {
   if (
     formFields.userEmail.length &&
     formFields.password.length &&
     !v$.value.userEmail.$errors.values.length &&
     !v$.value.userEmail.$errors.values.length
   ) {
-    // 登入
-    router.push('/')
+    try {
+      const result = await $api.user.login({
+        email: formFields.userEmail,
+        password: formFields.password
+      })
+
+      console.log('login success :>>>', result)
+
+      // 登入成功，回首頁
+      // router.push('/')
+    } catch (error) {
+      console.log('failed to login :>>>', error)
+    }
   } else {
     formFieldErrorMessage.value = '請填入資料'
     formFields.password = ''

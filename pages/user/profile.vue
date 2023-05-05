@@ -43,36 +43,36 @@
           <div>
             <in-profile-field
               placeholder="使用者名稱"
-              :value="name.data"
-              :loading="name.isLoading"
-              :disabled="name.isLoading"
-              :edit="name.isEditing"
-              :error="name.hasError"
-              @edit="name.isEditing = true"
-              @cancel="handleFieldCancel(name)"
-              @update="handleFieldSubmit(name, $event)"
+              :value="username.data"
+              :loading="username.isLoading"
+              :disabled="username.isLoading"
+              :edit="username.isEditing"
+              :error="username.hasError"
+              @edit="username.isEditing = true"
+              @cancel="handleFieldCancel(username)"
+              @update="handleFieldSubmit(username, $event)"
             />
-            <p v-if="name.hasError" class="mt-3 text-base text-red-600">使用者名稱為必填</p>
+            <p v-if="username.hasError" class="mt-3 text-base text-red-600">使用者名稱為必填</p>
           </div>
           <in-profile-field
             placeholder="專長"
-            :value="skill.data"
-            :loading="skill.isLoading"
-            :disabled="skill.isLoading"
-            :edit="skill.isEditing"
-            @edit="skill.isEditing = true"
-            @cancel="handleFieldCancel(skill)"
-            @update="handleFieldSubmit(skill, $event)"
+            :value="expertise.data"
+            :loading="expertise.isLoading"
+            :disabled="expertise.isLoading"
+            :edit="expertise.isEditing"
+            @edit="expertise.isEditing = true"
+            @cancel="handleFieldCancel(expertise)"
+            @update="handleFieldSubmit(expertise, $event)"
           />
           <in-profile-field
             placeholder="興趣"
-            :value="hobbit.data"
-            :loading="hobbit.isLoading"
-            :disabled="hobbit.isLoading"
-            :edit="hobbit.isEditing"
-            @edit="hobbit.isEditing = true"
-            @cancel="handleFieldCancel(hobbit)"
-            @update="handleFieldSubmit(hobbit, $event)"
+            :value="interests.data"
+            :loading="interests.isLoading"
+            :disabled="interests.isLoading"
+            :edit="interests.isEditing"
+            @edit="interests.isEditing = true"
+            @cancel="handleFieldCancel(interests)"
+            @update="handleFieldSubmit(interests, $event)"
           />
           <div>
             <div
@@ -86,10 +86,14 @@
               >
                 <i class="icon-pencil"></i>
               </div>
+              <in-spin v-if="links.isLoading" :size="16" />
             </div>
             <div class="mt-5">
               <div v-if="links.isEditing">
-                <table class="w-full text-base text-white">
+                <table
+                  class="w-full text-base text-white"
+                  :class="{ 'pointer-events-none opacity-50': links.isLoading }"
+                >
                   <tbody>
                     <tr>
                       <td class="p-2 font-medium">Facebook</td>
@@ -256,23 +260,34 @@
   </section>
 </template>
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import fieldWrapper from '~/utils/fieldWrapper'
+import useUSer from '~/stores/useUser'
+
+const app = useNuxtApp()
+
+await app.$api.user.fetchProfile()
+
 // import useNotification from '~~/stores/useNotification'
 
 // const { success, error } = useNotification()
 
+const { userProfile } = storeToRefs(useUSer())
+
 const avatar = reactive(fieldWrapper<string>(''))
-const name = reactive(fieldWrapper<string>('我是老師', 'name', true))
-const hobbit = reactive(fieldWrapper<string>('Coding', 'hobbit'))
-const skill = reactive(fieldWrapper<string>('Coding', 'skill'))
+const username = reactive(fieldWrapper<string>(userProfile.value.username, 'username', true))
+const interests = reactive(fieldWrapper<string>(userProfile.value.interests, 'interests'))
+const expertise = reactive(fieldWrapper<string>(userProfile.value.expertise, 'expertise'))
 
 const aboutInput = ref('')
-const about = reactive(
-  fieldWrapper<string>(
-    '關於我關於我關於我關於我關於我關於我關於我關於我關於我關於我關於我關於我關於我關於我關於我',
-    'about'
-  )
-)
+const about = reactive(fieldWrapper<string>(userProfile.value.about, 'about'))
+
+watch(userProfile, (profile) => {
+  username.data = profile.username
+  interests.data = profile.interests
+  expertise.data = profile.expertise
+  about.data = profile.about
+})
 
 watch(
   () => about.isEditing,
@@ -286,10 +301,10 @@ watch(
 const links = reactive({
   isLoading: false,
   isEditing: false,
-  facebook: 'a',
-  youtube: 'a',
-  personal: 'a',
-  github: 'a'
+  facebook: '',
+  youtube: '',
+  personal: '',
+  github: ''
 })
 const linksInput = reactive({
   facebook: '',
@@ -317,7 +332,7 @@ function handleFieldCancel(field: Field<string>) {
   field.hasError = false
 }
 
-function handleFieldSubmit(field: Field<string>, data: string) {
+async function handleFieldSubmit(field: Field<string>, data: string) {
   if (field.required && !data) {
     field.hasError = true
     return
@@ -326,15 +341,17 @@ function handleFieldSubmit(field: Field<string>, data: string) {
   }
 
   field.isLoading = true
-  field.data = data
+
+  await app.$api.user.update({
+    [field.key]: data
+  })
+
   field.isLoading = false
   field.isEditing = false
 }
 
 function handleLinksSubmit() {
   links.isLoading = true
-
-  Object.assign(links, linksInput)
 
   links.isLoading = false
   links.isEditing = false

@@ -1,22 +1,33 @@
 import HttpFactory from '../factory'
+import useUser, { IUserProfile } from '~/stores/useUser'
 
-interface IProfilePayload {
-  avatar?: File
-  username: string
-  hobbit?: string
-  facebookLink?: string
-  youtubeLink?: string
-  officialLink?: string
-  githubLink?: string
-  about?: string
+interface IProfileResponse extends IResponse {
+  user?: IUserProfile
 }
+
+type IProfilePayload = Partial<IUserProfile>
 
 class UserModule extends HttpFactory {
   private RESOURCE = '/user'
-  async login() {}
-  async logout() {}
+  async fetchProfile() {
+    const store = useUser()
+
+    const { data } = await useAsyncData<IProfileResponse>(() =>
+      this.call(`${this.RESOURCE}/profile`, 'GET')
+    )
+
+    if (data?.value?.user) {
+      store.userProfile = data.value.user
+    }
+  }
+
   async update(payload: IProfilePayload) {
-    await this.call(`${this.RESOURCE}`, 'POST', payload)
+    const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'POST', payload)
+    const store = useUser()
+
+    if (res.user) {
+      store.userProfile = res.user
+    }
   }
 }
 

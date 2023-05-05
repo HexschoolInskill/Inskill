@@ -63,7 +63,7 @@ const rules = {
 
 const v$ = useVuelidate(rules, formFields)
 
-const step = ref(2)
+const step = ref(1)
 const { $api } = useNuxtApp()
 
 const resetPassword = async () => {

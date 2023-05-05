@@ -35,7 +35,9 @@ export default defineStore('notification', () => {
 
   return {
     notifications,
-    success,
-    error
+    notification: {
+      success,
+      error
+    }
   }
 })

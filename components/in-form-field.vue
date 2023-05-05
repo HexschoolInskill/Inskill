@@ -1,10 +1,10 @@
 <template>
-  <label :for="name">{{ name }}</label>
+  <label class="text-white" :for="name">{{ name }}</label>
   <input
     v-model="field.$model"
     :type="name?.includes('密碼') ? 'password' : 'text'"
     class="rounded border p-1"
-    :class="{ 'mb-4': !field.$errors.length && !customError.length }"
+    :class="{ 'mb-4': !field.$errors.length && !showCustomErrorMessage }"
     :name="name"
     @keydown="hideCustomErrorMessageExist"
   />
@@ -41,6 +41,7 @@ const showCustomErrorMessage = ref(false)
 watch(
   () => props.customError,
   (newErrorMessage) => {
+    console.log(newErrorMessage)
     if (newErrorMessage?.length) showCustomErrorMessage.value = true
   }
 )

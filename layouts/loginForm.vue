@@ -1,7 +1,7 @@
 <template>
-  <div class="relative h-screen w-screen border">
+  <div>
     <div class="absolute top-[50%] left-[50%] w-1/4 translate-x-[-50%] translate-y-[-50%]">
-      <h1 class="text-5xl font-bold">LOGO</h1>
+      <img src="/images/logo-white.svg" alt="logo" />
       <slot />
     </div>
 

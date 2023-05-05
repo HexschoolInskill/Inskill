@@ -26,7 +26,7 @@
       name="確認密碼"
     ></InFormField>
 
-    <label for="agree" class="mb-4">
+    <label for="agree" class="mb-4 text-[#6C757D]">
       <input v-model="formFields.agree" type="checkbox" name="agree" />
       同意
       <span class="cursor-pointer text-sky-400 underline" @click="modalController('user')"
@@ -42,17 +42,17 @@
       建立帳號
     </button>
 
-    <small class="mt-4 mb-2">
+    <small class="mt-4 mb-2 text-[#6C757D]">
       已有帳號?
       <NuxtLink to="login" class="text-sky-400 underline">登入</NuxtLink>
     </small>
   </form>
 
   <div v-else>
-    <p>恭喜成功註冊 InSkill</p>
-    <p class="mt-2 mb-4 text-sm">任何技能，任何課程，任你探索!</p>
+    <p class="text-white">恭喜成功註冊 InSkill</p>
+    <p class="mt-2 mb-4 text-sm text-[#6C757D]">任何技能，任何課程，任你探索!</p>
     <NuxtLink to="/">
-      <button type="button" class="w-20 rounded bg-black text-white">繼續</button>
+      <button type="button" class="w-20 rounded border bg-black text-white">繼續</button>
     </NuxtLink>
   </div>
 </template>
@@ -96,10 +96,11 @@ const rules = {
 }
 
 const v$ = useVuelidate(rules, formFields)
+const { $api } = useNuxtApp()
 
 const step = ref(1)
 
-const register = () => {
+const register = async () => {
   if (
     formFields.userName.length &&
     formFields.userEmail.length &&
@@ -112,24 +113,26 @@ const register = () => {
     formFields.agree === true
   ) {
     // 檢查信箱是否使用過
-    // const emailExist = await $fetch('/api/user/isEmailRegister', { method: 'POST', body: { email: formFields.userEmail } })
-    // console.log(emailExist)
+    const emailExist: any = await $api.user.isEmailRegister({ email: formFields.userEmail })
+    console.log(emailExist)
 
-    // 組合表單資料
-    // const registerForm = new FormData()
-    // registerForm.append('name', formFields.userName)
-    // registerForm.append('email', formFields.userEmail)
-    // registerForm.append('password', formFields.password)
+    if (!emailExist.success) {
+      // 發送申請帳號表單
+      const registration: any = await $api.user.registration({
+        username: formFields.userName,
+        email: formFields.userEmail,
+        password: formFields.password,
+        confirmPassword: formFields.confirmPassword
+      })
 
-    // 發送申請帳號表單
-    // const registration = await $fetch('/api/user/sign_up', { method: 'POST', body: registerForm })
-    // console.log(registration)
+      console.log(registration)
 
-    // 往下一步
-    // router.push('registrationSuccess')
-    // if(registration){
-    step.value = 2
-    // }
+      // 往下一步
+      if (registration.success) {
+        step.value = 2
+        localStorage.setItem('access_token', registration.accessToken)
+      }
+    }
   } else {
     formFieldErrorMessage.value = '請填入資料'
   }

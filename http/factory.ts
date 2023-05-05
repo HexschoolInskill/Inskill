@@ -9,13 +9,17 @@ class HttpFactory {
     this.$fetch = fetcher
   }
 
-  protected async call<T>(
+  protected async call<T extends IResponse>(
     url: string,
     method: requestMethod,
     data?: object,
     extras = {}
   ): Promise<T> {
-    return await this.$fetch(url, { method, body: data, ...extras })
+    const res = (await this.$fetch(url, { method, body: data, ...extras })) as T
+
+    if (!res.success) return Promise.reject(res)
+
+    return res
   }
 }
 

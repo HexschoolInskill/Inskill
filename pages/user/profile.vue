@@ -349,10 +349,10 @@ async function handleFieldSubmit(field: Field<string>, data: string) {
   field.isLoading = true
 
   try {
-    console.log(field)
     await app.$api.user.update({
       [field.key]: data
     })
+    notification.success('更新成功')
   } catch (error) {
     notification.error((error as IResponse).message)
   } finally {

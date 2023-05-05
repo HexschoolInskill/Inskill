@@ -8,9 +8,9 @@ export default defineEventHandler(async (event) => {
   const request = event.node.req
   const { url, method } = request
   console.log(`Through authentication middleware : `, method, url)
-  const accessToken = getRequestHeader(event, 'Authorization')
-  // const accessToken = await sign({uid:"exampleUid"}, JWT_SECRET, 60*60*24*30)
-  // console.log(accessToken)
+  const headerAuth = getRequestHeader(event, 'Authorization')
+  const accessToken =
+    headerAuth?.split(' ')[0] === 'Bearer' ? headerAuth.split(' ')[1] : 'token invalid'
   const unProtectedRoutes = [/^\/api.*(?:\/(sign_up|sign_in|isEmailRegister))$/gi]
   if (url!.startsWith('/api') && !unProtectedRoutes.some((pattern) => url!.match(pattern))) {
     try {
@@ -28,7 +28,6 @@ export default defineEventHandler(async (event) => {
           message: 'Unauthorized : token expired'
         }
       event.context.auth = { userID: uid }
-      // console.log({ uid })
     } catch (err) {
       console.log(`Through authentication middleware error : `, err)
       return {

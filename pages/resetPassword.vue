@@ -1,8 +1,8 @@
 <template>
-  <h1 class="my-4 text-3xl font-bold">
+  <h1 class="my-4 text-3xl font-bold text-white">
     {{ step === 1 ? '重設密碼' : '密碼設定成功' }}
   </h1>
-  <p v-if="step === 2" class="text-2xl">您的密碼已經更新， 請重新登入</p>
+  <p v-if="step === 2" class="text-2xl text-white">您的密碼已經更新， 請重新登入</p>
 
   <div v-if="step === 1" class="flex flex-col">
     <InFormField
@@ -17,14 +17,18 @@
       name="確認新密碼"
     ></InFormField>
 
-    <button type="button" class="w-20 rounded border bg-black text-white" @click="resetPassword">
+    <button
+      type="button"
+      class="mt-2 w-20 rounded border border bg-black text-white"
+      @click="resetPassword"
+    >
       繼續
     </button>
   </div>
 
   <div v-else class="my-4 flex flex-col">
     <NuxtLink to="login">
-      <button type="button" class="w-20 rounded bg-black text-white">繼續</button>
+      <button type="button" class="w-20 rounded border bg-black text-white">繼續</button>
     </NuxtLink>
   </div>
 </template>
@@ -59,22 +63,27 @@ const rules = {
 
 const v$ = useVuelidate(rules, formFields)
 
-const step = ref(1)
+const step = ref(2)
+const { $api } = useNuxtApp()
 
 const resetPassword = async () => {
-  //   console.log('hi')
-
-  return await $fetch('/api/user/resetPassword', {
-    method: 'POST',
-    body: { newPassword: formFields.password }
+  const result: any = await $api.user.resetPassword({
+    password: formFields.password,
+    confirmPassword: formFields.confirmPassword
   })
+
+  console.log('resetPassword :>>>', result)
+
+  if (result.success) {
+    step.value = 2
+  }
 }
 
 onBeforeMount(() => {
-  //   console.log(route.query)
+  console.log(route.query)
 
   // 如果沒有攜帶一次性的 token， 返回首頁
-  if (!route.query) {
+  if (!Object.keys(route.query).length) {
     router.push('/')
   }
 })

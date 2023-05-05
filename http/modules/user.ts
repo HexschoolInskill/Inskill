@@ -19,12 +19,17 @@ interface IloginPayload {
 interface IregisterPayload {
   username: string
   email: string
-  password: string,
+  password: string
   confirmPassword: string
 }
 
 interface IEmailPayload {
   email: string
+}
+
+interface IpasswordPayload {
+  password: string
+  confirmPassword: string
 }
 
 class UserModule extends HttpFactory {
@@ -40,12 +45,16 @@ class UserModule extends HttpFactory {
     await this.call(`${this.RESOURCE}`, 'POST', payload)
   }
 
-  async isEmailRegister(payload: IEmailPayload){
+  async isEmailRegister(payload: IEmailPayload) {
     return await this.call(`${this.RESOURCE}/isEmailRegister`, 'POST', payload)
   }
 
   async registration(payload: IregisterPayload) {
     return await this.call(`${this.RESOURCE}/sign_up`, 'POST', payload)
+  }
+
+  async resetPassword(payload: IpasswordPayload) {
+    return await this.call(`${this.RESOURCE}/resetPassword`, 'POST', payload)
   }
 }
 

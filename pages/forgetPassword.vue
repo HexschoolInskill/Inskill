@@ -1,5 +1,5 @@
 <template>
-  <h1 class="my-4 text-3xl font-bold">忘記密碼</h1>
+  <h1 class="my-4 text-3xl font-bold text-white">忘記密碼</h1>
 
   <form>
     <div v-if="step === 1" class="flex flex-col">
@@ -9,13 +9,13 @@
         name="信箱"
       ></InFormField>
 
-      <button type="button" class="w-20 rounded border bg-black text-white" @click="nextStep">
+      <button type="button" class="mt-2 w-20 rounded border bg-black text-white" @click="nextStep">
         繼續
       </button>
     </div>
 
     <div v-if="step === 2" class="flex flex-col">
-      <p>請至信箱查收重設密碼的連結</p>
+      <p class="text-white">以寄送重設密碼的連結，請至信箱查收</p>
     </div>
   </form>
 </template>
@@ -53,16 +53,14 @@ const rules = {
 const v$ = useVuelidate(rules, formFields)
 
 const step = ref(1)
+const { $api } = useNuxtApp()
 
 // 往下一步移動
 const nextStep = async () => {
   if (formFields.userEmail.length && !v$.value.userEmail.$errors.values.length) {
-    const emailExist = await $fetch('/api/user/isEmailRegister', {
-      method: 'POST',
-      body: { email: formFields.userEmail }
-    })
+    const emailExist: any = await $api.user.isEmailRegister({ email: formFields.userEmail })
 
-    if (emailExist) {
+    if (emailExist.success) {
       sendVerificationEmail()
       step.value += 1
       formFieldErrorMessage.value = ''

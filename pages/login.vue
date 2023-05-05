@@ -74,16 +74,15 @@ const login = async () => {
 
       console.log('login success :>>>', result)
 
-      if(result.success){
+      if (result.success) {
         localStorage.setItem('access_token', result.accessToken)
 
         // 登入成功，回首頁
-          router.push('/')        
-      }else{
+        router.push('/')
+      } else {
         formFieldErrorMessage.value = '信箱或密碼錯誤'
         formFields.password = ''
       }
-
     } catch (error) {
       console.log('failed to login :>>>', error)
     }

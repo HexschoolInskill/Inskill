@@ -52,7 +52,7 @@
     <p class="text-white">恭喜成功註冊 InSkill</p>
     <p class="mt-2 mb-4 text-sm text-[#6C757D]">任何技能，任何課程，任你探索!</p>
     <NuxtLink to="/">
-      <button type="button" class="w-20 rounded bg-black text-white border">繼續</button>
+      <button type="button" class="w-20 rounded border bg-black text-white">繼續</button>
     </NuxtLink>
   </div>
 </template>
@@ -100,7 +100,7 @@ const { $api } = useNuxtApp()
 
 const step = ref(1)
 
-const register = async() => {
+const register = async () => {
   if (
     formFields.userName.length &&
     formFields.userEmail.length &&
@@ -113,11 +113,10 @@ const register = async() => {
     formFields.agree === true
   ) {
     // 檢查信箱是否使用過
-    const emailExist: any = await $api.user.isEmailRegister({ email: formFields.userEmail})
+    const emailExist: any = await $api.user.isEmailRegister({ email: formFields.userEmail })
     console.log(emailExist)
 
-    if(!emailExist.success){
-
+    if (!emailExist.success) {
       // 發送申請帳號表單
       const registration: any = await $api.user.registration({
         username: formFields.userName,
@@ -126,15 +125,14 @@ const register = async() => {
         confirmPassword: formFields.confirmPassword
       })
 
-      console.log(registration)   
+      console.log(registration)
 
       // 往下一步
-      if(registration.success){
+      if (registration.success) {
         step.value = 2
         localStorage.setItem('access_token', registration.accessToken)
       }
     }
-
   } else {
     formFieldErrorMessage.value = '請填入資料'
   }

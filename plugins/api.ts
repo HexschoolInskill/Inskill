@@ -23,15 +23,19 @@ export default defineNuxtPlugin(() => {
         // 檢查客戶端是否有 token
         const accessToken = localStorage.getItem('access_token')
 
-        if (accessToken === undefined) {
+        if (accessToken === null) {
           const router = useRouter()
           // console.log('router :>>>', router)
 
           router.push('/login')
         } else {
-          options.headers = { Authorization: `Berear ${accessToken}` }
+          options.headers = { Authorization: `Bearer ${accessToken}` }
         }
       }
+    },
+    // Error handling
+    onRequestError({ request, response }) {
+      console.log('fetch request error :>>>', request, response)
     }
   }
 

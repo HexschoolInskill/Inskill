@@ -96,10 +96,10 @@
                 >
                   <tbody>
                     <tr>
-                      <td class="p-2 font-medium">Facebook</td>
+                      <td class="p-2 font-medium">facebookLink</td>
                       <td class="p-2">
                         <input
-                          v-model="linksInput.facebook"
+                          v-model="linksInput.facebookLink"
                           type="text"
                           class="h-8 w-full rounded-1 px-3 text-black"
                           :class="{ 'pointer-events-none opacity-50': links.isLoading }"
@@ -107,10 +107,10 @@
                       </td>
                     </tr>
                     <tr>
-                      <td class="p-2 font-medium">Youtube</td>
+                      <td class="p-2 font-medium">youtubeLink</td>
                       <td class="p-2">
                         <input
-                          v-model="linksInput.youtube"
+                          v-model="linksInput.youtubeLink"
                           type="text"
                           class="h-8 w-full rounded-1 px-3 text-black"
                           :class="{ 'pointer-events-none opacity-50': links.isLoading }"
@@ -121,7 +121,7 @@
                       <td class="p-2 font-medium">個人網頁</td>
                       <td class="p-2">
                         <input
-                          v-model="linksInput.personal"
+                          v-model="linksInput.socialLink"
                           type="text"
                           class="h-8 w-full rounded-1 px-3 text-black"
                           :class="{ 'pointer-events-none opacity-50': links.isLoading }"
@@ -129,10 +129,10 @@
                       </td>
                     </tr>
                     <tr>
-                      <td class="p-2 font-medium">Github</td>
+                      <td class="p-2 font-medium">githubLink</td>
                       <td class="p-2">
                         <input
-                          v-model="linksInput.github"
+                          v-model="linksInput.githubLink"
                           type="text"
                           class="h-8 w-full rounded-1 px-3 text-black"
                           :class="{ 'pointer-events-none opacity-50': links.isLoading }"
@@ -157,60 +157,61 @@
                 </div>
               </div>
               <div v-else class="grid gap-3 text-white">
-                <div v-if="links.facebook" class="flex items-center">
+                <div v-if="links.facebookLink" class="flex items-center">
                   <div class="w-5 flex-shrink-0">
                     <img src="/images/facebook.svg" alt="" />
                   </div>
                   <div class="flex-1 pl-3">
                     <a
-                      :href="links.facebook"
+                      :href="links.facebookLink"
                       target="_blank"
-                      :title="links.facebook"
+                      :title="links.facebookLink"
                       class="user-profile__link"
-                      >Facebook
+                    >
+                      Facebook
                     </a>
                   </div>
                 </div>
-                <div v-if="links.youtube" class="flex items-center">
+                <div v-if="links.youtubeLink" class="flex items-center">
                   <div class="w-5 flex-shrink-0">
                     <img src="/images/youtube.svg" alt="" />
                   </div>
                   <div class="flex-1 pl-3">
                     <a
-                      :href="links.youtube"
+                      :href="links.youtubeLink"
                       target="_blank"
-                      :title="links.youtube"
+                      :title="links.youtubeLink"
                       class="user-profile__link"
                       >Youtube</a
                     >
                   </div>
                 </div>
-                <div v-if="links.personal" class="flex items-center">
+                <div v-if="links.socialLink" class="flex items-center">
                   <div class="w-5 flex-shrink-0">
                     <img src="/images/home.svg" alt="" />
                   </div>
                   <div class="flex-1 pl-3">
                     <a
-                      :href="links.personal"
+                      :href="links.socialLink"
                       target="_blank"
-                      :title="links.personal"
+                      :title="links.socialLink"
                       class="user-profile__link"
                       >個人網站</a
                     >
                   </div>
                 </div>
-                <div v-if="links.github" class="flex items-center">
+                <div v-if="links.githubLink" class="flex items-center">
                   <div class="w-5 flex-shrink-0">
                     <img src="/images/github.svg" alt="" />
                   </div>
                   <div class="flex-1 pl-3">
                     <a
-                      :href="links.github"
+                      :href="links.githubLink"
                       target="_blank"
-                      :title="links.github"
+                      :title="links.githubLink"
                       class="user-profile__link"
-                      >Github</a
-                    >
+                      >Github
+                    </a>
                   </div>
                 </div>
               </div>
@@ -229,6 +230,7 @@
             >
               <i class="icon-pencil"></i>
             </div>
+            <in-spin v-if="about.isLoading" :size="24" />
           </div>
           <div v-if="about.isEditing">
             <textarea
@@ -263,14 +265,13 @@
 import { storeToRefs } from 'pinia'
 import fieldWrapper from '~/utils/fieldWrapper'
 import useUSer from '~/stores/useUser'
+import useNotification from '~~/stores/useNotification'
 
 const app = useNuxtApp()
 
 await app.$api.user.fetchProfile()
 
-// import useNotification from '~~/stores/useNotification'
-
-// const { success, error } = useNotification()
+const { notification } = useNotification()
 
 const { userProfile } = storeToRefs(useUSer())
 
@@ -281,13 +282,6 @@ const expertise = reactive(fieldWrapper<string>(userProfile.value.expertise, 'ex
 
 const aboutInput = ref('')
 const about = reactive(fieldWrapper<string>(userProfile.value.about, 'about'))
-
-watch(userProfile, (profile) => {
-  username.data = profile.username
-  interests.data = profile.interests
-  expertise.data = profile.expertise
-  about.data = profile.about
-})
 
 watch(
   () => about.isEditing,
@@ -301,29 +295,41 @@ watch(
 const links = reactive({
   isLoading: false,
   isEditing: false,
-  facebook: '',
-  youtube: '',
-  personal: '',
-  github: ''
+  facebookLink: userProfile.value.facebookLink,
+  youtubeLink: userProfile.value.youtubeLink,
+  socialLink: userProfile.value.socialLink,
+  githubLink: userProfile.value.githubLink
 })
+
 const linksInput = reactive({
-  facebook: '',
-  youtube: '',
-  personal: '',
-  github: ''
+  facebookLink: '',
+  youtubeLink: '',
+  socialLink: '',
+  githubLink: ''
 })
 
 watch(
   () => links.isEditing,
   (editing) => {
     if (editing) {
-      linksInput.facebook = links.facebook
-      linksInput.youtube = links.youtube
-      linksInput.personal = links.personal
-      linksInput.github = links.github
+      linksInput.facebookLink = links.facebookLink
+      linksInput.youtubeLink = links.youtubeLink
+      linksInput.socialLink = links.socialLink
+      linksInput.githubLink = links.githubLink
     }
   }
 )
+
+watch(userProfile, (profile) => {
+  username.data = profile.username
+  interests.data = profile.interests
+  expertise.data = profile.expertise
+  about.data = profile.about
+  links.facebookLink = profile.facebookLink
+  links.youtubeLink = profile.youtubeLink
+  links.socialLink = profile.socialLink
+  links.githubLink = profile.githubLink
+})
 
 type Field<T> = ReturnType<typeof fieldWrapper<T>>
 
@@ -342,19 +348,31 @@ async function handleFieldSubmit(field: Field<string>, data: string) {
 
   field.isLoading = true
 
-  await app.$api.user.update({
-    [field.key]: data
-  })
-
-  field.isLoading = false
-  field.isEditing = false
+  try {
+    console.log(field)
+    await app.$api.user.update({
+      [field.key]: data
+    })
+  } catch (error) {
+    notification.error((error as IResponse).message)
+  } finally {
+    field.isLoading = false
+    field.isEditing = false
+  }
 }
 
-function handleLinksSubmit() {
+async function handleLinksSubmit() {
   links.isLoading = true
 
-  links.isLoading = false
-  links.isEditing = false
+  try {
+    await app.$api.user.update(linksInput)
+    notification.success('更新成功')
+  } catch (error) {
+    notification.error((error as IResponse).message)
+  } finally {
+    links.isLoading = false
+    links.isEditing = false
+  }
 }
 </script>
 <style lang="scss" scoped>

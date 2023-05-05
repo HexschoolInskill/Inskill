@@ -22,11 +22,16 @@ class UserModule extends HttpFactory {
   }
 
   async update(payload: IProfilePayload) {
-    const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'POST', payload)
-    const store = useUser()
+    try {
+      const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'POST', payload)
 
-    if (res.user) {
-      store.userProfile = res.user
+      const store = useUser()
+
+      if (res.user) {
+        store.userProfile = res.user
+      }
+    } catch (error) {
+      return Promise.reject(error)
     }
   }
 }

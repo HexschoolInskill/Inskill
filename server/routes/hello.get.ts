@@ -37,10 +37,9 @@ export default defineEventHandler(async (event) => {
       response
     }
   } catch (error: any) {
-    return {
-      success: false,
-      statusCode: 400,
+    throw createError({
+      statusCode: error.statusCode ? error.statusCode : 400,
       message: error.message
-    }
+    })
   }
 })

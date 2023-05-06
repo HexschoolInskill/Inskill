@@ -1,4 +1,5 @@
 import { FetchOptions } from 'ofetch'
+// import useUser from '~/stores/useUser'
 import UserModule from '~~/http/modules/user'
 
 interface IApiInstance {
@@ -10,36 +11,15 @@ export default defineNuxtPlugin(() => {
 
   const fetchOptions: FetchOptions = {
     baseURL: runtimeConfig.public.apiBase,
-    headers: {
-      Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDUzNGNlNjY0ODM2ZmYxYjRmMDA5ODgiLCJpYXQiOjE2ODMyMDg2NzAsImV4cCI6MTY4NTgwMDY3MH0.fAl1KbqQ6mibyEj-EruM5x0yLGiAJFmPLkGuH3s_PLA'
-    },
-    onRequest: ({ request, options }) => {
-      // console.log("request :>>>", request)
-      const route = String(request)
-
-      // 登入和忘記和重設密碼不用檢查 token
-      if (
-        !route.includes('login') ||
-        !route.includes('forgetPassword') ||
-        !route.includes('resetPassword')
-      ) {
-        // 檢查客戶端是否有 token
+    // headers: {
+    //   Authorization:
+    //     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDUzNGNlNjY0ODM2ZmYxYjRmMDA5ODgiLCJpYXQiOjE2ODMyMDg2NzAsImV4cCI6MTY4NTgwMDY3MH0.fAl1KbqQ6mibyEj-EruM5x0yLGiAJFmPLkGuH3s_PLA'
+    // },
+    onRequest: ({ request: _, options }) => {
+      if (process.client) {
         const accessToken = localStorage.getItem('access_token')
-
-        if (accessToken === null) {
-          const router = useRouter()
-          // console.log('router :>>>', router)
-
-          router.push('/login')
-        } else {
-          options.headers = { Authorization: `Bearer ${accessToken}` }
-        }
+        options.headers = { Authorization: `Bearer ${accessToken}` }
       }
-    },
-    // Error handling
-    onRequestError({ request, response }) {
-      console.log('fetch request error :>>>', request, response)
     }
   }
 

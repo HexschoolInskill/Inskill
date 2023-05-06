@@ -39,12 +39,20 @@ class UserModule extends HttpFactory {
   async fetchProfile() {
     const store = useUser()
 
-    const { data } = await useAsyncData<IProfileResponse>(() =>
-      this.call(`${this.RESOURCE}/profile`, 'GET')
-    )
+    if (process.client) {
+      // const { data } = await useAsyncData<IProfileResponse>(() =>
+      //   this.call(`${this.RESOURCE}/profile`, 'GET')
+      // )
 
-    if (data?.value?.user) {
-      store.userProfile = data.value.user
+      // if (data?.value?.user) {
+      //   store.userProfile = data.value.user
+      // }
+
+      const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'GET')
+
+      if (res?.user) {
+        store.userProfile = res.user
+      }
     }
   }
 

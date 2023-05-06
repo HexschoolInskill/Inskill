@@ -19,7 +19,7 @@
 
     <button
       type="button"
-      class="mt-2 w-20 rounded border border bg-black text-white"
+      class="mt-2 w-20 rounded border bg-black text-white"
       @click="resetPassword"
     >
       繼續

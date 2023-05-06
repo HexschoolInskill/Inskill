@@ -12,13 +12,3 @@
   <in-notification />
 </template>
 <script setup lang="ts"></script>
-<style lang="scss">
-html,
-body {
-  margin: 0;
-  padding: 0;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-</style>

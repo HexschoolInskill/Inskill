@@ -112,26 +112,27 @@ const register = async () => {
     !v$.value.confirmPassword.$errors.values.length &&
     formFields.agree === true
   ) {
-    // 檢查信箱是否使用過
-    const emailExist: any = await $api.user.isEmailRegister({ email: formFields.userEmail })
-    console.log(emailExist)
+    // 發送申請帳號表單
+    const registration: any = await $api.user.registration({
+      username: formFields.userName,
+      email: formFields.userEmail,
+      password: formFields.password,
+      confirmPassword: formFields.confirmPassword
+    })
+    // console.log(registration)
 
-    if (!emailExist.success) {
-      // 發送申請帳號表單
-      const registration: any = await $api.user.registration({
-        username: formFields.userName,
-        email: formFields.userEmail,
-        password: formFields.password,
-        confirmPassword: formFields.confirmPassword
-      })
+    // 往下一步
+    if (registration.success) {
+      step.value = 2
+      localStorage.setItem('access_token', registration.accessToken)
+    }
 
-      console.log(registration)
+    if(registration.statusCode === 400){
+      formFieldErrorMessage.value = registration.message
+    }
 
-      // 往下一步
-      if (registration.success) {
-        step.value = 2
-        localStorage.setItem('access_token', registration.accessToken)
-      }
+    if(registration.statusCode === 409){
+      formFieldErrorMessage.value = '信箱已經使用'
     }
   } else {
     formFieldErrorMessage.value = '請填入資料'

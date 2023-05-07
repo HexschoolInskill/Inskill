@@ -127,11 +127,11 @@ const register = async () => {
       localStorage.setItem('access_token', registration.accessToken)
     }
 
-    if(registration.statusCode === 400){
+    if (registration.statusCode === 400) {
       formFieldErrorMessage.value = registration.message
     }
 
-    if(registration.statusCode === 409){
+    if (registration.statusCode === 409) {
       formFieldErrorMessage.value = '信箱已經使用'
     }
   } else {

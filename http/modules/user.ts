@@ -1,15 +1,11 @@
 import HttpFactory from '../factory'
+import useUser, { IUserProfile } from '~/stores/useUser'
 
-interface IProfilePayload {
-  avatar?: File
-  username: string
-  hobbit?: string
-  facebookLink?: string
-  youtubeLink?: string
-  officialLink?: string
-  githubLink?: string
-  about?: string
+interface IProfileResponse extends IResponse {
+  user?: IUserProfile
 }
+
+type IProfilePayload = Partial<IUserProfile>
 
 interface IloginPayload {
   email: string
@@ -34,15 +30,44 @@ interface IpasswordPayload {
 
 class UserModule extends HttpFactory {
   private RESOURCE = '/user'
-
   async login(payload: IloginPayload) {
     return await this.call(`${this.RESOURCE}/sign_in`, 'POST', payload)
   }
 
   async logout() {}
 
+  async fetchProfile() {
+    const store = useUser()
+
+    if (process.client) {
+      // const { data } = await useAsyncData<IProfileResponse>(() =>
+      //   this.call(`${this.RESOURCE}/profile`, 'GET')
+      // )
+
+      // if (data?.value?.user) {
+      //   store.userProfile = data.value.user
+      // }
+
+      const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'GET')
+
+      if (res?.user) {
+        store.userProfile = res.user
+      }
+    }
+  }
+
   async update(payload: IProfilePayload) {
-    await this.call(`${this.RESOURCE}`, 'POST', payload)
+    try {
+      const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'POST', payload)
+
+      const store = useUser()
+
+      if (res.user) {
+        store.userProfile = res.user
+      }
+    } catch (error) {
+      return Promise.reject(error)
+    }
   }
 
   async isEmailRegister(payload: IEmailPayload) {

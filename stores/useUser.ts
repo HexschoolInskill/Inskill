@@ -1,0 +1,35 @@
+import { defineStore } from 'pinia'
+
+export interface IUserProfile {
+  username: string
+  email: string
+  expertise: string
+  interests: string
+  about: string
+  isTeacher: boolean
+  facebookLink: string
+  youtubeLink: string
+  githubLink: string
+  socialLink: string
+  purchasedCourses: []
+}
+
+export default defineStore('user', () => {
+  const userProfile = ref<IUserProfile>({
+    username: '',
+    email: '',
+    expertise: '',
+    interests: '',
+    about: '',
+    isTeacher: false,
+    facebookLink: '',
+    youtubeLink: '',
+    githubLink: '',
+    socialLink: '',
+    purchasedCourses: []
+  })
+
+  return {
+    userProfile
+  }
+})

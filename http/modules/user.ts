@@ -30,11 +30,18 @@ interface IpasswordPayload {
 
 class UserModule extends HttpFactory {
   private RESOURCE = '/user'
+
   async login(payload: IloginPayload) {
     return await this.call(`${this.RESOURCE}/sign_in`, 'POST', payload)
   }
 
-  async logout() {}
+  logout() {
+    localStorage.removeItem('access_token')
+    const store = useUser()
+    store.resetUserProfile()
+
+    navigateTo('/')
+  }
 
   async fetchProfile() {
     const store = useUser()

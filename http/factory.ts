@@ -17,7 +17,13 @@ class HttpFactory {
   ): Promise<T> {
     const res = (await this.$fetch(url, { method, body: data, ...extras })) as T
 
-    if (!res.success) return Promise.reject(res)
+    if (!res.success) {
+      if (res.statusCode === 401) {
+        navigateTo('/login')
+      } else {
+        return Promise.reject(res)
+      }
+    }
 
     return res
   }

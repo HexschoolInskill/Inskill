@@ -29,7 +29,24 @@ export default defineStore('user', () => {
     purchasedCourses: []
   })
 
+  function resetUserProfile() {
+    userProfile.value = {
+      username: '',
+      email: '',
+      expertise: '',
+      interests: '',
+      about: '',
+      isTeacher: false,
+      facebookLink: '',
+      youtubeLink: '',
+      githubLink: '',
+      socialLink: '',
+      purchasedCourses: []
+    }
+  }
+
   return {
-    userProfile
+    userProfile,
+    resetUserProfile
   }
 })

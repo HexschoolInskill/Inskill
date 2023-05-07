@@ -12,6 +12,7 @@
       v-model:field="v$.password"
       :custom-error="formFieldErrorMessage"
       name="密碼"
+      @form-submit="submitWithEnter"
     ></InFormField>
 
     <button type="button" class="mt-4 w-20 rounded border bg-black text-white" @click="login">
@@ -32,6 +33,8 @@
 import { reactive, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers } from '@vuelidate/validators'
+import { storeToRefs } from 'pinia'
+import useUSer from '~/stores/useUser'
 
 definePageMeta({
   layout: 'login-form'
@@ -56,6 +59,8 @@ const rules = {
 
 const v$ = useVuelidate(rules, formFields)
 
+const { userProfile } = storeToRefs(useUSer())
+
 const { $api } = useNuxtApp()
 const router = useRouter()
 
@@ -79,6 +84,8 @@ const login = async () => {
 
         // 登入成功，回首頁
         router.push('/')
+
+        userProfile.value.username = result.username
       } else {
         formFieldErrorMessage.value = '信箱或密碼錯誤'
         formFields.password = ''
@@ -89,6 +96,13 @@ const login = async () => {
   } else {
     formFieldErrorMessage.value = '請填入資料'
     formFields.password = ''
+  }
+}
+
+// enter 鍵送出
+const submitWithEnter = () => {
+  if (formFields.userEmail.length && formFields.password.length) {
+    login()
   }
 }
 </script>

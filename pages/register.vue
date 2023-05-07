@@ -24,6 +24,7 @@
       v-model:field="v$.confirmPassword"
       :custom-error="formFieldErrorMessage"
       name="確認密碼"
+      @form-submit="submitWithEnter"
     ></InFormField>
 
     <label for="agree" class="mb-4 text-[#6C757D]">
@@ -61,7 +62,8 @@
 import { reactive, ref, computed } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, sameAs, helpers } from '@vuelidate/validators'
-
+import { storeToRefs } from 'pinia'
+import useUSer from '~/stores/useUser'
 import { usePolicyStore } from '@/stores/policyStore'
 
 definePageMeta({
@@ -97,7 +99,7 @@ const rules = {
 
 const v$ = useVuelidate(rules, formFields)
 const { $api } = useNuxtApp()
-
+const { userProfile } = storeToRefs(useUSer())
 const step = ref(1)
 
 const register = async () => {
@@ -124,6 +126,7 @@ const register = async () => {
     // 往下一步
     if (registration.success) {
       step.value = 2
+      userProfile.value.username = registration.username
       localStorage.setItem('access_token', registration.accessToken)
     }
 
@@ -136,6 +139,18 @@ const register = async () => {
     }
   } else {
     formFieldErrorMessage.value = '請填入資料'
+  }
+}
+
+// enter 鍵送出
+const submitWithEnter = () => {
+  if (
+    formFields.userName.length &&
+    formFields.userEmail.length &&
+    formFields.password.length &&
+    formFields.confirmPassword.length
+  ) {
+    register()
   }
 }
 

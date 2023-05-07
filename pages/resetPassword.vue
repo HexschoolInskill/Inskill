@@ -15,6 +15,7 @@
       v-model:field="v$.confirmPassword"
       :custom-error="!v$.confirmPassword.$model.length ? formFieldErrorMessage : ''"
       name="確認新密碼"
+      @form-submit="submitWithEnter"
     ></InFormField>
 
     <button
@@ -34,7 +35,8 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, computed, onBeforeMount } from 'vue'
+// import { reactive, ref, computed, onBeforeMount } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, sameAs, helpers } from '@vuelidate/validators'
 
@@ -42,8 +44,8 @@ definePageMeta({
   layout: 'login-form'
 })
 
-const router = useRouter()
-const route = useRoute()
+// const router = useRouter()
+// const route = useRoute()
 
 const formFields = reactive({
   password: '',
@@ -79,12 +81,19 @@ const resetPassword = async () => {
   }
 }
 
-onBeforeMount(() => {
-  console.log(route.query)
-
-  // 如果沒有攜帶一次性的 token， 返回首頁
-  if (!Object.keys(route.query).length) {
-    router.push('/')
+// enter 鍵送出
+const submitWithEnter = () => {
+  if (formFields.password.length && formFields.confirmPassword.length) {
+    resetPassword()
   }
-})
+}
+
+// onBeforeMount(() => {
+//   console.log(route.query)
+
+//   // 如果沒有攜帶一次性的 token， 返回首頁
+//   if (!Object.keys(route.query).length) {
+//     router.push('/')
+//   }
+// })
 </script>

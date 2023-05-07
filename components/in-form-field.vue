@@ -7,6 +7,7 @@
     :class="{ 'mb-4': !field.$errors.length && !showCustomErrorMessage }"
     :name="name"
     @keydown="hideCustomErrorMessageExist"
+    @keypress.enter="emit('formSubmit')"
   />
 
   <div v-if="showCustomErrorMessage" class="mb-4 text-red-500">
@@ -34,6 +35,8 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['formSubmit'])
+
 const field = reactive(props.field)
 
 const showCustomErrorMessage = ref(false)
@@ -50,5 +53,5 @@ const hideCustomErrorMessageExist = () => {
   showCustomErrorMessage.value = false
 }
 
-// console.log(props)
+console.log(props)
 </script>

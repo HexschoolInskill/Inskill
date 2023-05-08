@@ -26,11 +26,10 @@ export default defineEventHandler(async (event) => {
     // 檢查 email 是否已經存在
     const existingUser = await models.User.findOne({ email: value.email })
     if (existingUser) {
-      return {
-        success: false,
+      throw createError({
         statusCode: 409,
         message: 'Email already exists'
-      }
+      })
     }
 
     // 使用 bcrypt 加密密碼
@@ -54,10 +53,9 @@ export default defineEventHandler(async (event) => {
       accessToken
     }
   } catch (error: any) {
-    return {
-      success: false,
-      statusCode: 400,
+    throw createError({
+      statusCode: error.statusCode ? error.statusCode : 400,
       message: error.message
-    }
+    })
   }
 })

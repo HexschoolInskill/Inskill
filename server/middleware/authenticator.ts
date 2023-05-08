@@ -15,26 +15,23 @@ export default defineEventHandler(async (event) => {
   if (url!.startsWith('/api') && !unProtectedRoutes.some((pattern) => url!.match(pattern))) {
     try {
       if (!accessToken)
-        return {
-          success: false,
+        throw createError({
           statusCode: 401,
           message: 'Unauthorized : must have Authorization header'
-        }
+        })
       const { uid, exp } = (await decoder(accessToken, JWT_SECRET)) as JwtPayload
       if (Date.now() >= exp * 1000)
-        return {
-          success: false,
+        throw createError({
           statusCode: 401,
           message: 'Unauthorized : token expired'
-        }
+        })
       event.context.auth = { userID: uid }
     } catch (err) {
       console.log(`Through authentication middleware error : `, err)
-      return {
-        success: false,
+      throw createError({
         statusCode: 401,
         message: 'Unauthorized : token invalid'
-      }
+      })
     }
   }
 })

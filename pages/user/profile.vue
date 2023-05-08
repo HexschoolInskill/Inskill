@@ -360,7 +360,7 @@ async function handleFieldSubmit(field: Field<string>, data: string) {
     })
     notification.success('更新成功')
   } catch (error) {
-    notification.error((error as IResponse).message)
+    notification.error((error as Error).message)
   } finally {
     field.isLoading = false
     field.isEditing = false
@@ -374,7 +374,7 @@ async function handleLinksSubmit() {
     await app.$api.user.update(linksInput)
     notification.success('更新成功')
   } catch (error) {
-    notification.error((error as IResponse).message)
+    notification.error((error as Error).message)
   } finally {
     links.isLoading = false
     links.isEditing = false

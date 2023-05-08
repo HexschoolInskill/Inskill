@@ -9,23 +9,17 @@ class HttpFactory {
     this.$fetch = fetcher
   }
 
-  protected async call<T extends IResponse>(
+  protected async call<T>(
     url: string,
     method: requestMethod,
     data?: object,
     extras = {}
   ): Promise<T> {
-    const res = (await this.$fetch(url, { method, body: data, ...extras })) as T
-
-    if (!res.success) {
-      if (res.statusCode === 401) {
-        navigateTo('/login')
-      } else {
-        return Promise.reject(res)
-      }
+    try {
+      return await this.$fetch(url, { method, body: data, ...extras })
+    } catch (error) {
+      return Promise.reject(error)
     }
-
-    return res
   }
 }
 

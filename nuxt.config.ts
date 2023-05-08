@@ -10,6 +10,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     mongodbUri: process.env.MONGODB_URI,
     JWT_SECRET: process.env.JWT_SECRET,
+    MAIL_ACCOUNT: process.env.MAIL_ACCOUNT,
+    MAIL_PASSWORD: process.env.MAIL_PASSWORD,
     public: {
       apiBase: '/api'
     }

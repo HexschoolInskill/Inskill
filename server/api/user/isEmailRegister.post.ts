@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import models from '../../model/schema'
+import mailService from '../../services/mailService'
 
 export default defineEventHandler(async (event) => {
   const isEmailSchema = Joi.object({
@@ -19,6 +20,12 @@ export default defineEventHandler(async (event) => {
 
     const existingUser = await models.User.findOne({ email: value.email })
     if (existingUser) {
+      await mailService({
+        title: 'Inskill test',
+        subject: 'Inskill test',
+        text: 'Inskill test',
+        to: 'alchin7748@gmail.com'
+      })
       return {
         success: true,
         statusCode: 200,
@@ -34,7 +41,7 @@ export default defineEventHandler(async (event) => {
   } catch (error: any) {
     return {
       success: false,
-      statusCode: 400,
+      statusCode: error.statusCode ? error.statusCode : 400,
       message: error.message
     }
   }

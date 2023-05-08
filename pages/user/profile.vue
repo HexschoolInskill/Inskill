@@ -24,7 +24,7 @@
                 </svg>
               </div>
               <div
-                class="text-blac absolute right-0 bottom-0 flex h-6 w-6 items-center justify-center rounded-full bg-white"
+                class="text-blac absolute bottom-0 right-0 flex h-6 w-6 items-center justify-center rounded-full bg-white"
               >
                 <svg
                   class="w-4"

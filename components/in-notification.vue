@@ -29,7 +29,7 @@ const { notifications } = storeToRefs(useNotification())
     align-self: start;
     justify-content: center;
     gap: 12px;
-    @apply rounded-1 py-1 px-4 text-white;
+    @apply rounded-1 px-4 py-1 text-white;
     &::before {
       content: '';
       display: block;

@@ -43,7 +43,7 @@
       建立帳號
     </button>
 
-    <small class="mt-4 mb-2 text-[#6C757D]">
+    <small class="mb-2 mt-4 text-[#6C757D]">
       已有帳號?
       <NuxtLink to="login" class="text-sky-400 underline">登入</NuxtLink>
     </small>
@@ -51,7 +51,7 @@
 
   <div v-else>
     <p class="text-white">恭喜成功註冊 InSkill</p>
-    <p class="mt-2 mb-4 text-sm text-[#6C757D]">任何技能，任何課程，任你探索!</p>
+    <p class="mb-4 mt-2 text-sm text-[#6C757D]">任何技能，任何課程，任你探索!</p>
     <NuxtLink to="/">
       <button type="button" class="w-20 rounded border bg-black text-white">繼續</button>
     </NuxtLink>

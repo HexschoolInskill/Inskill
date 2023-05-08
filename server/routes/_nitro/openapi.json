@@ -1,0 +1,524 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Nitro Server Routes",
+    "version": null
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Development Server",
+      "variables": {}
+    }
+  ],
+  "schemes": ["http"],
+  "components": {
+    "securitySchemes": {
+      "Authorization": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Some API needs accessToken"
+      }
+    },
+    "schemas": {
+      "sign_up_Request": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 30
+          },
+          "confirmPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 30
+          },
+          "username": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "password", "confirmPassword", "username"],
+        "example": {
+          "email": "user@example.com",
+          "password": "password123",
+          "confirmPassword": "password123",
+          "username": "user123"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/user/sign_up": {
+      "post": {
+        "tags": ["/api/user"],
+        "summary": "Create a new user",
+        "description": "Create a new user with the provided details",
+        "requestBody": {
+          "description": "User details",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/sign_up_Request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "帳號建立成功"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Email already exists"
+          }
+        }
+      }
+    },
+    "/api/user/isEmailRegister": {
+      "post": {
+        "tags": ["/api/user"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/user/sign_in": {
+      "post": {
+        "tags": ["/api/user"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/user/resetPassword": {
+      "post": {
+        "tags": ["/api/user"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/user/profile": {
+      "get": {
+        "tags": ["/api/user"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["/api/user"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/{courseId}": {
+      "get": {
+        "tags": ["API Routes"],
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/addCourse": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/addLecutre": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/cart": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/collect": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/data": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/data/{courseId}": {
+      "get": {
+        "tags": ["API Routes"],
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/drag/{courseId}": {
+      "patch": {
+        "tags": ["API Routes"],
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/drag/{lectureId}": {
+      "patch": {
+        "tags": ["API Routes"],
+        "parameters": [
+          {
+            "name": "lectureId",
+            "in": "path",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/image": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/myCourses": {
+      "get": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/order": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/price/{courseId}": {
+      "patch": {
+        "tags": ["API Routes"],
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/courses/search": {
+      "get": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/discuss/{courseId}": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/lecture/audio": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/lecture/data": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/lecture/image": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/lecture/pdf": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/lecture/video": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/liveCourses/{videoId}": {
+      "get": {
+        "tags": ["API Routes"],
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/liveCourses/data/{courseId}": {
+      "get": {
+        "tags": ["API Routes"],
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/myLiveCourses": {
+      "get": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/partner/apply": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/partner/review": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/star/{courseId}": {
+      "post": {
+        "tags": ["API Routes"],
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/hello": {
+      "get": {
+        "tags": ["App Routes"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/__nuxt_error": {
+      "get": {
+        "tags": ["Internal"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/_nitro/openapi.json": {
+      "get": {
+        "tags": ["Internal"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/_nitro/swagger": {
+      "get": {
+        "tags": ["Internal"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}

@@ -71,27 +71,23 @@ const login = async () => {
     !v$.value.userEmail.$errors.values.length &&
     !v$.value.userEmail.$errors.values.length
   ) {
-    try {
-      const result: any = await $api.user.login({
-        email: formFields.userEmail,
-        password: formFields.password
-      })
+    const result: any = await $api.user.login({
+      email: formFields.userEmail,
+      password: formFields.password
+    })
 
-      console.log('login success :>>>', result)
+    console.log('login success :>>>', result)
 
-      if (result.success) {
-        localStorage.setItem('access_token', result.accessToken)
+    if (result.success) {
+      localStorage.setItem('access_token', result.accessToken)
 
-        // 登入成功，回首頁
-        router.push('/')
+      // 登入成功，回首頁
+      router.push('/')
 
-        userProfile.value.username = result.username
-      } else {
-        formFieldErrorMessage.value = '信箱或密碼錯誤'
-        formFields.password = ''
-      }
-    } catch (error) {
-      console.log('failed to login :>>>', error)
+      userProfile.value.username = result.username
+    } else {
+      formFieldErrorMessage.value = result.message
+      formFields.password = ''
     }
   } else {
     formFieldErrorMessage.value = '請填入資料'

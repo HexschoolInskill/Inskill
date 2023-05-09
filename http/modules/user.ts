@@ -35,12 +35,13 @@ class UserModule extends HttpFactory {
     return await this.call(`${this.RESOURCE}/sign_in`, 'POST', payload)
   }
 
-  logout() {
+  async logout() {
     localStorage.removeItem('access_token')
     const store = useUser()
     store.resetUserProfile()
 
-    navigateTo('/')
+    await navigateTo('/')
+    location.reload()
   }
 
   async fetchProfile() {

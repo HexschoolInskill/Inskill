@@ -15,12 +15,13 @@ export default async (data: any): Promise<object> => {
         pass: MAIL_PASSWORD
       }
     })
-    const { title, subject, text, to } = data
+    const { title, subject, text, to, html } = data
     const mailOptions = {
-      from: `${title} | ${MAIL_ACCOUNT}`,
+      from: `${title} ${MAIL_ACCOUNT}`,
       to,
       subject,
-      text
+      text,
+      html
     }
     const response = await mailServeice.sendMail(mailOptions)
     console.log(`Email sent response : `, response)

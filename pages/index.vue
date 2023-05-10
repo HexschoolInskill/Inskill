@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-[500px] items-center justify-center">
     <div>
-      <h1 class="text-center text-lg font-bold">INDEX</h1>
+      <h1 class="text-center text-lg font-bold text-white">INDEX</h1>
     </div>
   </div>
 </template>

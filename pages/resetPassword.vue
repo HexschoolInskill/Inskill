@@ -96,7 +96,7 @@ onBeforeMount(() => {
   // 如果沒有攜帶一次性的 token， 返回首頁
   if (!route.query.token) {
     router.push('/')
-  }else{
+  } else {
     const temperaryToken = String(route.query.token)
     localStorage.setItem('access_token', temperaryToken)
   }

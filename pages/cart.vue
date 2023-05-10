@@ -78,7 +78,6 @@
             :class="[cart.length ? 'bg-black' : 'bg-slate-200']"
             class="w-full rounded border p-1 text-xl text-white"
             type="button"
-            :disabled="!cart.length"
           >
             前往結帳
           </button>

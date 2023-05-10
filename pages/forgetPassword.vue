@@ -48,7 +48,6 @@ const v$ = useVuelidate(rules, formFields)
 
 const step = ref(1)
 const { $api } = useNuxtApp()
-const router = useRouter()
 
 // 往下一步移動
 const nextStep = async () => {
@@ -56,12 +55,8 @@ const nextStep = async () => {
     const emailExist: any = await $api.user.isEmailRegister({ email: formFields.userEmail })
 
     if (emailExist.success) {
-      // sendVerificationEmail()
-      // step.value += 1
-      // formFieldErrorMessage.value = ''
-
-      // 尚無寄送信件的 api， 暫時先移動到下一步
-      router.push('resetPassword')
+      step.value += 1
+      formFieldErrorMessage.value = ''
     } else {
       formFieldErrorMessage.value = '查無信箱'
     }
@@ -76,9 +71,4 @@ const submitWithEnter = () => {
     nextStep()
   }
 }
-
-// const sendVerificationEmail = async () => {
-//   // 發送重設密碼的信件
-//   //   console.log('hi')
-// }
 </script>

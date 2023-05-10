@@ -35,8 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-// import { reactive, ref, computed, onBeforeMount } from 'vue'
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref, computed, onBeforeMount } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, sameAs, helpers } from '@vuelidate/validators'
 
@@ -44,8 +43,8 @@ definePageMeta({
   layout: 'login-form'
 })
 
-// const router = useRouter()
-// const route = useRoute()
+const router = useRouter()
+const route = useRoute()
 
 const formFields = reactive({
   password: '',
@@ -78,6 +77,9 @@ const resetPassword = async () => {
 
   if (result.success) {
     step.value = 2
+
+    // 清除一次性的 token
+    localStorage.removeItem('access_token')
   }
 }
 
@@ -88,12 +90,15 @@ const submitWithEnter = () => {
   }
 }
 
-// onBeforeMount(() => {
-//   console.log(route.query)
+onBeforeMount(() => {
+  console.log(route.query)
 
-//   // 如果沒有攜帶一次性的 token， 返回首頁
-//   if (!Object.keys(route.query).length) {
-//     router.push('/')
-//   }
-// })
+  // 如果沒有攜帶一次性的 token， 返回首頁
+  if (!route.query.token) {
+    router.push('/')
+  }else{
+    const temperaryToken = String(route.query.token)
+    localStorage.setItem('access_token', temperaryToken)
+  }
+})
 </script>

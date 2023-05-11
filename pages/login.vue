@@ -79,7 +79,14 @@ const login = async () => {
     console.log('login success :>>>', result)
 
     if (result.success) {
-      localStorage.setItem('access_token', result.accessToken)
+      // localStorage.setItem('access_token', result.accessToken)
+
+      const accessToken = useCookie('access_token',{
+        maxAge: 604800
+      })
+      accessToken.value = result.accessToken
+
+      console.log(accessToken)
 
       // 登入成功，回首頁
       router.push('/')

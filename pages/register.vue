@@ -127,7 +127,11 @@ const register = async () => {
     if (registration.success) {
       step.value = 2
       userProfile.value.username = registration.username
-      localStorage.setItem('access_token', registration.accessToken)
+
+      const accessToken = useCookie('access_token',{
+        maxAge: 604800
+      })
+      accessToken.value = registration.accessToken
     }
 
     if (registration.statusCode === 400) {

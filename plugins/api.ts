@@ -15,8 +15,9 @@ export default defineNuxtPlugin(() => {
     baseURL: runtimeConfig.public.apiBase,
     onRequest: ({ request: _, options }) => {
       if (process.client) {
-        const accessToken = localStorage.getItem('access_token')
-        options.headers = { Authorization: `Bearer ${accessToken}` }
+        const accessToken = useCookie('access_token')
+        // console.log(accessToken)
+        options.headers = { Authorization: `Bearer ${accessToken.value}` }
       }
     }
   }

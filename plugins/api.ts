@@ -1,9 +1,12 @@
 import { FetchOptions } from 'ofetch'
 // import useUser from '~/stores/useUser'
 import UserModule from '~~/http/modules/user'
+import CoursesModule from '~~/http/modules/courses'
+import tokenController from '~~/composables/token'
 
 interface IApiInstance {
   user: UserModule
+  course: CoursesModule
 }
 
 export default defineNuxtPlugin(() => {
@@ -11,13 +14,10 @@ export default defineNuxtPlugin(() => {
 
   const fetchOptions: FetchOptions = {
     baseURL: runtimeConfig.public.apiBase,
-    // headers: {
-    //   Authorization:
-    //     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDUzNGNlNjY0ODM2ZmYxYjRmMDA5ODgiLCJpYXQiOjE2ODMyMDg2NzAsImV4cCI6MTY4NTgwMDY3MH0.fAl1KbqQ6mibyEj-EruM5x0yLGiAJFmPLkGuH3s_PLAs'
-    // },
     onRequest: ({ request: _, options }) => {
       if (process.client) {
-        const accessToken = localStorage.getItem('access_token')
+        const accessToken = tokenController.useToken()
+        // console.log(accessToken)
         options.headers = { Authorization: `Bearer ${accessToken}` }
       }
     },
@@ -36,7 +36,8 @@ export default defineNuxtPlugin(() => {
   const fetcher = $fetch.create(fetchOptions)
 
   const modules: IApiInstance = {
-    user: new UserModule(fetcher)
+    user: new UserModule(fetcher),
+    course: new CoursesModule(fetcher)
   }
 
   return {

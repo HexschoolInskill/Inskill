@@ -1,5 +1,6 @@
 import HttpFactory from '../factory'
 import useUser, { IUserProfile } from '~/stores/useUser'
+import tokenController from '~~/composables/token'
 
 interface IProfileResponse extends IResponse {
   user?: IUserProfile
@@ -35,13 +36,15 @@ class UserModule extends HttpFactory {
     return await this.call(`${this.RESOURCE}/sign_in`, 'POST', payload)
   }
 
-  async logout() {
-    localStorage.removeItem('access_token')
+  logout() {
+    // localStorage.removeItem('access_token')
+
+    tokenController.deleteToken()
     const store = useUser()
     store.resetUserProfile()
 
-    await navigateTo('/')
-    location.reload()
+    navigateTo('/')
+    // location.reload()
   }
 
   async fetchProfile() {

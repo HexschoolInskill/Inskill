@@ -3,12 +3,18 @@
 
   <form>
     <div v-if="step === 1" class="flex flex-col">
-      <InFormField
-        v-model:field="v$.userEmail"
-        :custom-error="!v$.userEmail.$model.length ? formFieldErrorMessage : ''"
-        name="信箱"
-        @form-submit="submitWithEnter"
-      ></InFormField>
+      <label class="text-white" for="email">信箱</label>
+      <input
+        v-model="v$.userEmail.$model"
+        type="text"
+        class="rounded border p-1"
+        :class="{ 'mb-4': !v$.userEmail.$errors.length }"
+        name="email"
+        @keypress.enter="nextStep"
+      />
+      <div v-for="error of v$.userEmail.$errors" :key="error.$uid" class="mb-4 text-red-500">
+        {{ error.$message }}
+      </div>
 
       <button type="button" class="mt-2 w-20 rounded border bg-black text-white" @click="nextStep">
         繼續
@@ -25,17 +31,19 @@
 import { reactive, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers } from '@vuelidate/validators'
+import useNotification from '~~/stores/useNotification'
 
 definePageMeta({
   layout: 'login-form'
 })
+
+const { notification } = useNotification()
 
 const formFields = reactive({
   userEmail: '',
   password: '',
   confirmPassword: ''
 })
-const formFieldErrorMessage = ref('')
 
 const rules = {
   userEmail: {
@@ -48,37 +56,19 @@ const v$ = useVuelidate(rules, formFields)
 
 const step = ref(1)
 const { $api } = useNuxtApp()
-const router = useRouter()
 
 // 往下一步移動
 const nextStep = async () => {
-  if (formFields.userEmail.length && !v$.value.userEmail.$errors.values.length) {
+  try {
     const emailExist: any = await $api.user.isEmailRegister({ email: formFields.userEmail })
 
     if (emailExist.success) {
-      // sendVerificationEmail()
-      // step.value += 1
-      // formFieldErrorMessage.value = ''
-
-      // 尚無寄送信件的 api， 暫時先移動到下一步
-      router.push('resetPassword')
+      step.value += 1
     } else {
-      formFieldErrorMessage.value = '查無信箱'
+      notification.error(emailExist.message)
     }
-  } else {
-    formFieldErrorMessage.value = '請填入信箱'
+  } catch (err: any) {
+    notification.error(err.message)
   }
 }
-
-// enter 鍵送出
-const submitWithEnter = () => {
-  if (formFields.userEmail.length) {
-    nextStep()
-  }
-}
-
-// const sendVerificationEmail = async () => {
-//   // 發送重設密碼的信件
-//   //   console.log('hi')
-// }
 </script>

@@ -128,7 +128,7 @@ const register = async () => {
       step.value = 2
       userProfile.value.username = registration.username
 
-      const accessToken = useCookie('access_token',{
+      const accessToken = useCookie('access_token', {
         maxAge: 604800
       })
       accessToken.value = registration.accessToken

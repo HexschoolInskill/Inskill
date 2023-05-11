@@ -81,7 +81,7 @@ const login = async () => {
     if (result.success) {
       // localStorage.setItem('access_token', result.accessToken)
 
-      const accessToken = useCookie('access_token',{
+      const accessToken = useCookie('access_token', {
         maxAge: 604800
       })
       accessToken.value = result.accessToken

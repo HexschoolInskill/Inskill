@@ -15,7 +15,7 @@
     />
 
     <div v-for="error of v$.password.$errors" :key="error.$uid" class="mb-4 text-red-500">
-    {{ error.$message }}
+      {{ error.$message }}
     </div>
 
     <label class="text-white" for="confirmPassword">確認密碼</label>
@@ -29,7 +29,7 @@
     />
 
     <div v-for="error of v$.confirmPassword.$errors" :key="error.$uid" class="mb-4 text-red-500">
-    {{ error.$message }}
+      {{ error.$message }}
     </div>
 
     <button

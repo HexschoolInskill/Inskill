@@ -13,7 +13,7 @@
         @keypress.enter="nextStep"
       />
       <div v-for="error of v$.userEmail.$errors" :key="error.$uid" class="mb-4 text-red-500">
-      {{ error.$message }}
+        {{ error.$message }}
       </div>
 
       <button type="button" class="mt-2 w-20 rounded border bg-black text-white" @click="nextStep">
@@ -66,10 +66,9 @@ const nextStep = async () => {
       step.value += 1
     } else {
       notification.error(emailExist.message)
-    }    
+    }
   } catch (err: any) {
     notification.error(err.message)
   }
 }
-
 </script>

@@ -36,7 +36,7 @@
     />
 
     <div v-for="error of v$.password.$errors" :key="error.$uid" class="mb-4 text-red-500">
-    {{ error.$message }}
+      {{ error.$message }}
     </div>
 
     <label class="text-white" for="confirmPassword">確認密碼</label>
@@ -50,15 +50,11 @@
     />
 
     <div v-for="error of v$.confirmPassword.$errors" :key="error.$uid" class="mb-4 text-red-500">
-    {{ error.$message }}
+      {{ error.$message }}
     </div>
 
-    <label for="agree" class="text-[#6C757D]" :class="{ 'mb-4': !v$.agree.$errors.length }" >
-      <input 
-        v-model="v$.agree.$model" 
-        type="checkbox" 
-        name="agree"
-      />
+    <label for="agree" class="text-[#6C757D]" :class="{ 'mb-4': !v$.agree.$errors.length }">
+      <input v-model="v$.agree.$model" type="checkbox" name="agree" />
       同意
       <span class="cursor-pointer text-sky-400 underline" @click="modalController('user')"
         >使用者條款</span
@@ -69,8 +65,8 @@
       >
 
       <div v-for="error of v$.agree.$errors" :key="error.$uid" class="mb-4 text-red-500">
-      {{ error.$message }}
-      </div>      
+        {{ error.$message }}
+      </div>
     </label>
 
     <button type="button" class="w-20 rounded border bg-black text-white" @click="register">
@@ -142,7 +138,7 @@ const { userProfile } = storeToRefs(useUSer())
 const step = ref(1)
 
 const register = async () => {
-  if(formFields.agree){
+  if (formFields.agree) {
     try {
       // 發送申請帳號表單
       const registration: any = await $api.user.registration({
@@ -161,10 +157,10 @@ const register = async () => {
         tokenController.setToken(registration.accessToken)
       } else {
         notification.error(registration.message)
-      }   
-    } catch (err:any) {
+      }
+    } catch (err: any) {
       notification.error(err.message)
-    }    
+    }
   } else {
     notification.error('請同意使用者條款與政策')
   }

@@ -11,7 +11,7 @@
       name="email"
     />
     <div v-for="error of v$.userEmail.$errors" :key="error.$uid" class="mb-4 text-red-500">
-    {{ error.$message }}
+      {{ error.$message }}
     </div>
 
     <label class="text-white" for="password">密碼</label>
@@ -25,7 +25,7 @@
     />
 
     <div v-for="error of v$.password.$errors" :key="error.$uid" class="mb-4 text-red-500">
-    {{ error.$message }}
+      {{ error.$message }}
     </div>
 
     <button type="button" class="mt-4 w-20 rounded border bg-black text-white" @click="login">
@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers } from '@vuelidate/validators'
 import { storeToRefs } from 'pinia'
@@ -84,7 +84,7 @@ const login = async () => {
     const result: any = await $api.user.login({
       email: formFields.userEmail,
       password: formFields.password
-    })      
+    })
 
     if (result.success) {
       tokenController.setToken(result.accessToken)
@@ -95,7 +95,7 @@ const login = async () => {
     } else {
       notification.error(result.message)
       formFields.password = ''
-    }      
+    }
   } catch (err: any) {
     notification.error(err.message)
   }

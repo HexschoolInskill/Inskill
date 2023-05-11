@@ -6,9 +6,8 @@ export default defineNuxtRouteMiddleware((to) => {
     console.log(to)
 
     if (token?.length) {
-
       // 假設登入後關閉網頁再開啟
-      if(to.name === 'index'){
+      if (to.name === 'index') {
         const app = useNuxtApp()
         app.$api.user.fetchProfile()
       }

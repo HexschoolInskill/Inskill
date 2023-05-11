@@ -1,5 +1,6 @@
 import HttpFactory from '../factory'
 import useUser, { IUserProfile } from '~/stores/useUser'
+import tokenController from '~~/composables/token'
 
 interface IProfileResponse extends IResponse {
   user?: IUserProfile
@@ -36,7 +37,9 @@ class UserModule extends HttpFactory {
   }
 
   logout() {
-    localStorage.removeItem('access_token')
+    // localStorage.removeItem('access_token')
+
+    tokenController.deleteToken()
     const store = useUser()
     store.resetUserProfile()
 

@@ -5,18 +5,32 @@
   <p v-if="step === 2" class="text-2xl text-white">您的密碼已經更新， 請重新登入</p>
 
   <div v-if="step === 1" class="flex flex-col">
-    <InFormField
-      v-model:field="v$.password"
-      :custom-error="!v$.password.$model.length ? formFieldErrorMessage : ''"
-      name="新密碼"
-    ></InFormField>
+    <label class="text-white" for="password">密碼</label>
+    <input
+      v-model="v$.password.$model"
+      type="password"
+      class="rounded border p-1"
+      :class="{ 'mb-4': !v$.password.$errors.length }"
+      name="password"
+    />
 
-    <InFormField
-      v-model:field="v$.confirmPassword"
-      :custom-error="!v$.confirmPassword.$model.length ? formFieldErrorMessage : ''"
-      name="確認新密碼"
-      @form-submit="submitWithEnter"
-    ></InFormField>
+    <div v-for="error of v$.password.$errors" :key="error.$uid" class="mb-4 text-red-500">
+    {{ error.$message }}
+    </div>
+
+    <label class="text-white" for="confirmPassword">確認密碼</label>
+    <input
+      v-model="v$.confirmPassword.$model"
+      type="password"
+      class="rounded border p-1"
+      :class="{ 'mb-4': !v$.confirmPassword.$errors.length }"
+      name="confirmPassword"
+      @keypress.enter="resetPassword"
+    />
+
+    <div v-for="error of v$.confirmPassword.$errors" :key="error.$uid" class="mb-4 text-red-500">
+    {{ error.$message }}
+    </div>
 
     <button
       type="button"
@@ -38,10 +52,14 @@
 import { reactive, ref, computed, onBeforeMount } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, sameAs, helpers } from '@vuelidate/validators'
+import useNotification from '~~/stores/useNotification'
+import tokenController from '~~/composables/token'
 
 definePageMeta({
   layout: 'login-form'
 })
+
+const { notification } = useNotification()
 
 const router = useRouter()
 const route = useRoute()
@@ -50,7 +68,6 @@ const formFields = reactive({
   password: '',
   confirmPassword: ''
 })
-const formFieldErrorMessage = ref('')
 
 const rules = {
   password: {
@@ -68,25 +85,25 @@ const step = ref(1)
 const { $api } = useNuxtApp()
 
 const resetPassword = async () => {
-  const result: any = await $api.user.resetPassword({
-    password: formFields.password,
-    confirmPassword: formFields.confirmPassword
-  })
+  try {
+    const result: any = await $api.user.resetPassword({
+      password: formFields.password,
+      confirmPassword: formFields.confirmPassword
+    })
 
-  console.log('resetPassword :>>>', result)
+    console.log('resetPassword :>>>', result)
 
-  if (result.success) {
-    step.value = 2
+    if (result.success) {
+      step.value = 2
+      notification.success(result.message)
 
-    // 清除一次性的 token
-    localStorage.removeItem('access_token')
-  }
-}
-
-// enter 鍵送出
-const submitWithEnter = () => {
-  if (formFields.password.length && formFields.confirmPassword.length) {
-    resetPassword()
+      // 清除一次性的 token
+      tokenController.deleteToken()
+    } else {
+      notification.error(result.message)
+    }
+  } catch (err: any) {
+    notification.error(err.message)
   }
 }
 
@@ -97,8 +114,8 @@ onBeforeMount(() => {
   if (!route.query.token) {
     router.push('/')
   } else {
-    const temperaryToken = String(route.query.token)
-    localStorage.setItem('access_token', temperaryToken)
+    const temporaryToken = String(route.query.token)
+    tokenController.setToken(temporaryToken)
   }
 })
 </script>

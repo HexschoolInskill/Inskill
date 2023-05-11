@@ -2,18 +2,31 @@
   <h1 class="my-4 text-3xl font-bold text-white">登入</h1>
 
   <form class="flex flex-col">
-    <InFormField
-      v-model:field="v$.userEmail"
-      :custom-error="formFieldErrorMessage"
-      name="信箱"
-    ></InFormField>
+    <label class="text-white" for="email">信箱</label>
+    <input
+      v-model="v$.userEmail.$model"
+      type="text"
+      class="rounded border p-1"
+      :class="{ 'mb-4': !v$.userEmail.$errors.length }"
+      name="email"
+    />
+    <div v-for="error of v$.userEmail.$errors" :key="error.$uid" class="mb-4 text-red-500">
+    {{ error.$message }}
+    </div>
 
-    <InFormField
-      v-model:field="v$.password"
-      :custom-error="formFieldErrorMessage"
-      name="密碼"
-      @form-submit="submitWithEnter"
-    ></InFormField>
+    <label class="text-white" for="password">密碼</label>
+    <input
+      v-model="v$.password.$model"
+      type="password"
+      class="rounded border p-1"
+      :class="{ 'mb-4': !v$.password.$errors.length }"
+      name="password"
+      @keypress.enter="login"
+    />
+
+    <div v-for="error of v$.password.$errors" :key="error.$uid" class="mb-4 text-red-500">
+    {{ error.$message }}
+    </div>
 
     <button type="button" class="mt-4 w-20 rounded border bg-black text-white" @click="login">
       登入
@@ -35,17 +48,19 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers } from '@vuelidate/validators'
 import { storeToRefs } from 'pinia'
 import useUSer from '~/stores/useUser'
+import useNotification from '~~/stores/useNotification'
+import tokenController from '~~/composables/token'
 
 definePageMeta({
   layout: 'login-form'
 })
 
+const { notification } = useNotification()
+
 const formFields = reactive({
   userEmail: '',
   password: ''
 })
-
-const formFieldErrorMessage = ref('')
 
 const rules = {
   userEmail: {
@@ -65,47 +80,24 @@ const { $api } = useNuxtApp()
 const router = useRouter()
 
 const login = async () => {
-  if (
-    formFields.userEmail.length &&
-    formFields.password.length &&
-    !v$.value.userEmail.$errors.values.length &&
-    !v$.value.userEmail.$errors.values.length
-  ) {
+  try {
     const result: any = await $api.user.login({
       email: formFields.userEmail,
       password: formFields.password
-    })
-
-    console.log('login success :>>>', result)
+    })      
 
     if (result.success) {
-      // localStorage.setItem('access_token', result.accessToken)
-
-      const accessToken = useCookie('access_token', {
-        maxAge: 604800
-      })
-      accessToken.value = result.accessToken
-
-      console.log(accessToken)
+      tokenController.setToken(result.accessToken)
+      userProfile.value.username = result.username
 
       // 登入成功，回首頁
       router.push('/')
-
-      userProfile.value.username = result.username
     } else {
-      formFieldErrorMessage.value = result.message
+      notification.error(result.message)
       formFields.password = ''
-    }
-  } else {
-    formFieldErrorMessage.value = '請填入資料'
-    formFields.password = ''
-  }
-}
-
-// enter 鍵送出
-const submitWithEnter = () => {
-  if (formFields.userEmail.length && formFields.password.length) {
-    login()
+    }      
+  } catch (err: any) {
+    notification.error(err.message)
   }
 }
 </script>

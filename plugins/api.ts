@@ -2,6 +2,7 @@ import { FetchOptions } from 'ofetch'
 // import useUser from '~/stores/useUser'
 import UserModule from '~~/http/modules/user'
 import CoursesModule from '~~/http/modules/courses'
+import tokenController from '~~/composables/token'
 
 interface IApiInstance {
   user: UserModule
@@ -15,9 +16,9 @@ export default defineNuxtPlugin(() => {
     baseURL: runtimeConfig.public.apiBase,
     onRequest: ({ request: _, options }) => {
       if (process.client) {
-        const accessToken = useCookie('access_token')
+        const accessToken = tokenController.useToken()
         // console.log(accessToken)
-        options.headers = { Authorization: `Bearer ${accessToken.value}` }
+        options.headers = { Authorization: `Bearer ${accessToken}` }
       }
     }
   }

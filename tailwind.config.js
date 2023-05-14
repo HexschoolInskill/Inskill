@@ -2,11 +2,23 @@ module.exports = {
   mode: 'jit',
   theme: {
     extend: {
+      colors: {
+        blue: '#0C18A0'
+      },
       spacing: {
         15: '3.75rem',
         18: '4.5rem',
         21: '5.25rem',
-        22: '5.5rem'
+        22: '5.5rem',
+        '1/10': '10%',
+        '2/10': '20%',
+        '3/10': '30%',
+        '4/10': '40%',
+        '5/10': '50%',
+        '6/10': '60%',
+        '7/10': '70%',
+        '8/10': '80%',
+        '9/10': '90%'
       },
       borderRadius: {
         1: '4px',
@@ -14,5 +26,5 @@ module.exports = {
       }
     }
   },
-  plugins: []
+  plugins: [require('@tailwindcss/line-clamp')]
 }

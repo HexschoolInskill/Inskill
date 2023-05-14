@@ -1,6 +1,11 @@
 <template>
   <client-only>
-    <header class="in-header fixed left-0 top-10 z-10 w-screen">
+    <header
+      class="in-header transition-base fixed left-0 top-10 z-10 w-screen"
+      :class="{
+        '-translate-y-[calc(100%+40px)]': isScrolled
+      }"
+    >
       <in-container>
         <div
           class="relative flex h-14 items-center justify-between rounded-6 bg-white py-5 pl-7 pr-6 lg:h-21"
@@ -41,7 +46,10 @@
             </form>
             <nuxt-link>合作申請</nuxt-link>
           </div>
-          <div class="relative flex flex-shrink-0 items-center" @click="togglePopup('user')">
+          <div
+            class="relative flex flex-shrink-0 items-center lg:ml-5 2xl:ml-8"
+            @click="togglePopup('user')"
+          >
             <div
               class="h-10 w-10 overflow-hidden rounded-full"
               :class="{ 'lg:hidden': !store.userProfile.username }"
@@ -54,7 +62,7 @@
             >
               Hi, {{ store.userProfile.username }}
             </p>
-            <div v-else class="hidden items-center gap-5 lg:ml-5 lg:flex 2xl:ml-8 2xl:gap-6">
+            <div v-else class="hidden items-center gap-5 lg:flex 2xl:gap-6">
               <nuxt-link v-slot="{ navigate }" to="/login">
                 <button
                   class="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-1 bg-black px-6 text-base leading-6 text-white"
@@ -160,6 +168,21 @@ function togglePopup(name: string) {
     currentPopup.value = name
   }
 }
+
+const isScrolled = ref(false)
+
+let prevScrollTop = 0
+function handleScroll() {
+  const currentScrollTop = document.documentElement.scrollTop
+  isScrolled.value = currentScrollTop > prevScrollTop
+  prevScrollTop = currentScrollTop
+}
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 <style lang="scss">
 .in-header {

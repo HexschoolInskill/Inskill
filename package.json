@@ -48,6 +48,7 @@
     "@vuelidate/core": "^2.0.2",
     "@vuelidate/validators": "^2.0.2",
     "bcrypt": "^5.1.0",
+    "firebase-admin": "^11.8.0",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.3.0",

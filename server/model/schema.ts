@@ -8,6 +8,7 @@ export interface User extends Document {
   interests: string
   about: string
   isTeacher: boolean
+  avatar: string
   facebookLink: string
   youtubeLink: string
   githubLink: string
@@ -26,6 +27,7 @@ const userSchema = new Schema<User>(
     interests: { type: String, default: '' },
     about: { type: String, default: '' },
     isTeacher: { type: Boolean, default: false },
+    avatar: { type: String, default: '' },
     facebookLink: { type: String, default: '' },
     youtubeLink: { type: String, default: '' },
     githubLink: { type: String, default: '' },

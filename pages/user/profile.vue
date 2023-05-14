@@ -8,7 +8,13 @@
           <div class="grid gap-8 md:w-1/2">
             <label class="relative block h-20 w-20 cursor-pointer">
               <div class="relative h-full w-full rounded-full bg-gray-500">
-                <input type="file" class="hidden" />
+                <input
+                  ref="fileInput"
+                  type="file"
+                  accept="image/jpeg, image/png"
+                  class="hidden"
+                  @change="onFileChange"
+                />
                 <img v-if="avatar.data" :src="avatar.data" alt="" />
                 <svg
                   v-else
@@ -280,6 +286,12 @@ await app.$api.user.fetchProfile()
 const { notification } = useNotification()
 
 const { userProfile } = storeToRefs(useUSer())
+
+const onFileChange = (e: Event) => {
+  const inputElement = e.target as HTMLInputElement // 類型斷言
+  const files = inputElement.files
+  console.log(files)
+}
 
 const avatar = reactive(fieldWrapper<string>(''))
 const username = reactive(fieldWrapper<string>(userProfile.value.username, 'username', true))

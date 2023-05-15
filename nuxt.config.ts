@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     typeCheck: true
   },
   nitro: {
-    plugins: ['~/server/plugin/mongooseInit.ts', '~/server/plugin/firebaseInit.ts']
+    plugins: ['~/server/plugin/mongooseInit.ts']
   },
   runtimeConfig: {
     mongodbUri: process.env.MONGODB_URI,

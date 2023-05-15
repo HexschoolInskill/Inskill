@@ -1,25 +1,23 @@
 import Joi from 'joi'
+import multer from 'multer'
+import { callNodeListener } from 'h3'
+import { v4 } from 'uuid'
 import models from '../../model/schema'
-// import path from 'path'
-// import multer from 'multer'
-// import { callNodeListener } from 'h3'
-// import { v4 } from 'uuid'
-// import firebaseAdmin from '../../plugin/firebaseInit'
+import firebaseAdmin from '../../plugin/firebaseInit'
 
-// const upload = multer({
-//   storage: multer.memoryStorage(),
-//   limits: {
-//     fileSize: 2 * 1024 * 1024
-//   },
-//   fileFilter(req, file, cb) {
-//     const ext = path.extname(file.originalname).toLowerCase()
-//     console.log(ext)
-//     if (ext !== '.jpg' && ext !== '.png' && ext !== '.jpeg') {
-//       cb(new Error('檔案格式錯誤，僅限上傳 jpg、jpeg 與 png 格式。'))
-//     }
-//     cb(null, true)
-//   }
-// })
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 2 * 1024 * 1024
+  },
+  fileFilter: (_, file, cb) => {
+    if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') {
+      cb(null, true)
+    } else {
+      cb(new Error('檔案格式錯誤，僅限上傳 jpg、jpeg 與 png 格式。'))
+    }
+  }
+})
 
 export default defineEventHandler(async (event) => {
   const profileSchema = Joi.object({
@@ -47,30 +45,31 @@ export default defineEventHandler(async (event) => {
             .join(', ')
         )
     } else if (contenType?.includes('multipart/form-data')) {
-      const file = readMultipartFormData(event)
-      console.log(file)
-      // try {
-      //   await callNodeListener(upload.single('file'), event.node.req, event.node.res)
-      //   return { success: true }
-      // } catch (e) {
-      //   throw createError({
-      //     statusCode: 422,
-      //     message: 'Unprocessable Entity'
-      //   })
-      // }
+      // @ts-expect-error: Nuxt 3
+      await callNodeListener(upload.single('image'), event.node.req, event.node.res)
 
-      // const bucket = firebaseAdmin.storage().bucket()
-      // const blob = bucket.file(`images/${v4()}.${file.originalname.split('.').pop()}`)
-      // const blobStream = blob.createWriteStream()
+      const readFile = await readMultipartFormData(event)
+      const bucket = firebaseAdmin.storage().bucket()
+      const file = readFile![0]
+      const blob = bucket.file(`images/${v4()}.${file!.filename!.split('.').pop()}`)
+      const blobStream = blob.createWriteStream()
 
-      // blobStream.on('finish', () => {
-      //   const config = {
-      //     action: 'read',
-      //     expires: '12-31-2500'
-      //   }
-      //   // 取得檔案的網址
-      //   blob.getSignedUrl(config, (err, fileUrl) => { console.log(fileUrl) })
-      // })
+      blobStream.on('finish', () => {
+        blob.getSignedUrl({ action: 'read', expires: '12-31-2500' }, (fileUrl) => {
+          return {
+            success: true,
+            statusCode: 200,
+            fileUrl
+          }
+        })
+      })
+      blobStream.on('error', () => {
+        return createError({
+          statusCode: 500,
+          message: '上傳圖像失敗'
+        })
+      })
+      blobStream.end(file.data)
     }
 
     const {
@@ -126,13 +125,13 @@ export default defineEventHandler(async (event) => {
         user
       }
     } else {
-      throw createError({
+      return createError({
         statusCode: 404,
         message: '更新 user 資料失敗'
       })
     }
   } catch (error: any) {
-    throw createError({
+    return createError({
       statusCode: error.statusCode ? error.statusCode : 400,
       message: error.message
     })

@@ -21,9 +21,9 @@ import Comments from './components/comments.vue'
 import PopularCourse from './components/popular-course.vue'
 import PraiseCourse from './components/praise-course.vue'
 
-gsap.registerPlugin(ScrollTrigger)
-
 onMounted(() => {
+  gsap.registerPlugin(ScrollTrigger)
+
   new Rellax('.rellax', {
     center: true
   })

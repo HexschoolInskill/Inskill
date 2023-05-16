@@ -130,10 +130,11 @@ export default defineEventHandler(async (event) => {
       })
     }
   } catch (error: any) {
-    const message = error.message === 'File too large' ? '檔案大小超過限制，僅限 2MB 以下。' : error.message
+    const message =
+      error.message === 'File too large' ? '檔案大小超過限制，僅限 2MB 以下。' : error.message
     return createError({
       statusCode: error.statusCode ? error.statusCode : 400,
-      message: message
+      message
     })
   }
 })

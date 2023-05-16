@@ -115,16 +115,15 @@ export default defineEventHandler(async (event) => {
         message: '該 email 已註冊'
       }
     } else {
-      throw createError({
+      return createError({
         statusCode: 404,
         message: '該 email 未註冊'
       })
     }
   } catch (error: any) {
-    return {
-      success: false,
+    return createError({
       statusCode: error.statusCode ? error.statusCode : 400,
       message: error.message
-    }
+    })
   }
 })

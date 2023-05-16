@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     // 檢查 email 是否已經存在
     const existingUser = await models.User.findOne({ email: value.email })
     if (existingUser) {
-      throw createError({
+      return createError({
         statusCode: 409,
         message: 'Email already exists'
       })
@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
       accessToken
     }
   } catch (error: any) {
-    throw createError({
+    return createError({
       statusCode: error.statusCode ? error.statusCode : 400,
       message: error.message
     })

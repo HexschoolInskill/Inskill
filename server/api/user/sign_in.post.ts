@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
 
     const user = await models.User.findOne({ email: value.email }).select('+password')
     if (!user) {
-      throw createError({
+      return createError({
         statusCode: 404,
         message: '帳號或密碼錯誤'
       })
@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
 
     const auth = await compare(value.password, user.password)
     if (!auth) {
-      throw createError({
+      return createError({
         statusCode: 404,
         message: '帳號或密碼錯誤'
       })
@@ -49,7 +49,7 @@ export default defineEventHandler(async (event) => {
       }
     }
   } catch (error: any) {
-    throw createError({
+    return createError({
       statusCode: error.statusCode ? error.statusCode : 400,
       message: error.message
     })

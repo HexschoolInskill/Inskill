@@ -7,8 +7,15 @@
         >
           <div class="grid gap-8 md:w-1/2">
             <label class="relative block h-20 w-20 cursor-pointer">
-              <div class="relative h-full w-full rounded-full bg-gray-500">
-                <input type="file" class="hidden" />
+              <in-spin v-if="avatar.isLoading" :size="80" />
+              <div v-else class="relative h-full w-full rounded-full bg-gray-500">
+                <input
+                  ref="fileInput"
+                  type="file"
+                  accept="image/jpeg, image/png"
+                  class="hidden"
+                  @change="handleFileChange"
+                />
                 <img v-if="avatar.data" :src="avatar.data" alt="" />
                 <svg
                   v-else
@@ -281,7 +288,7 @@ const { notification } = useNotification()
 
 const { userProfile } = storeToRefs(useUSer())
 
-const avatar = reactive(fieldWrapper<string>(''))
+const avatar = reactive(fieldWrapper<string>(userProfile.value.avatar, 'avatar'))
 const username = reactive(fieldWrapper<string>(userProfile.value.username, 'username', true))
 const interests = reactive(fieldWrapper<string>(userProfile.value.interests, 'interests'))
 const expertise = reactive(fieldWrapper<string>(userProfile.value.expertise, 'expertise'))
@@ -331,6 +338,7 @@ watch(userProfile, (profile) => {
   interests.data = profile.interests
   expertise.data = profile.expertise
   about.data = profile.about
+  avatar.data = profile.avatar
   links.facebookLink = profile.facebookLink
   links.youtubeLink = profile.youtubeLink
   links.socialLink = profile.socialLink
@@ -378,6 +386,22 @@ async function handleLinksSubmit() {
   } finally {
     links.isLoading = false
     links.isEditing = false
+  }
+}
+
+const handleFileChange = async (e: Event) => {
+  avatar.isLoading = true
+  const inputElement = e.target as HTMLInputElement
+  const files = inputElement.files![0]
+  const formData = new FormData()
+  formData.append('image', files)
+  try {
+    await app.$api.user.updateAvatar(formData)
+    notification.success('更新成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    avatar.isLoading = false
   }
 }
 </script>

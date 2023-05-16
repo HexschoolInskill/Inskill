@@ -31,7 +31,7 @@ export default async (data: any): Promise<object> => {
     }
   } catch (err: any) {
     console.log(`Email sent error : `, err)
-    throw createError({
+    return createError({
       statusCode: 424,
       message: err.message || err
     })

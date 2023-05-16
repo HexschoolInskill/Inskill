@@ -6,9 +6,9 @@
           class="mx-auto rounded-6 border border-solid border-gray-500 bg-gray-900 px-8 py-12 md:w-8/12"
         >
           <div class="grid gap-8 md:w-1/2">
-            <label class="relative block h-20 w-20 cursor-pointer">
-              <in-spin v-if="avatar.isLoading" :size="80" />
-              <div v-else class="relative h-full w-full rounded-full bg-gray-500">
+            <label class="relative flex h-20 w-20 cursor-pointer items-center justify-center">
+              <in-spin v-if="avatar.isLoading" :size="40" color="#fff" />
+              <div v-else class="relative h-full w-full overflow-hidden rounded-full bg-gray-500">
                 <input
                   ref="fileInput"
                   type="file"
@@ -31,7 +31,7 @@
                 </svg>
               </div>
               <div
-                class="text-blac absolute right-0 bottom-0 flex h-6 w-6 items-center justify-center rounded-full bg-white"
+                class="absolute right-0 bottom-0 flex h-6 w-6 items-center justify-center rounded-full bg-white text-black"
               >
                 <svg
                   class="w-4"
@@ -104,7 +104,7 @@
                   >
                     <tbody>
                       <tr>
-                        <td class="p-2 font-medium">facebookLink</td>
+                        <td class="p-2 font-medium">Facebook</td>
                         <td class="p-2">
                           <input
                             v-model="linksInput.facebookLink"
@@ -115,7 +115,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td class="p-2 font-medium">youtubeLink</td>
+                        <td class="p-2 font-medium">Youtube</td>
                         <td class="p-2">
                           <input
                             v-model="linksInput.youtubeLink"
@@ -137,7 +137,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td class="p-2 font-medium">githubLink</td>
+                        <td class="p-2 font-medium">Github</td>
                         <td class="p-2">
                           <input
                             v-model="linksInput.githubLink"
@@ -263,7 +263,9 @@
                 </button>
               </div>
             </div>
-            <p v-else class="text-base leading-normal text-white">{{ about.data }}</p>
+            <p v-else class="whitespace-pre-line text-base leading-normal text-white">
+              {{ about.data }}
+            </p>
           </div>
         </div>
       </in-container>

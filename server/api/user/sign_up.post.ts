@@ -43,14 +43,20 @@ export default defineEventHandler(async (event) => {
     })
 
     const { JWT_SECRET } = useRuntimeConfig()
+    const maxAge = 60 * 60 * 24 * 30
     const accessToken = await sign({ uid: newUser._id }, JWT_SECRET, 60 * 60 * 24 * 30)
+
+    setCookie(event, 'access_token', accessToken!, {
+      httpOnly: true,
+      sameSite: 'strict',
+      maxAge
+    })
 
     return {
       success: true,
       statusCode: 200,
       message: '帳號建立成功',
-      username: newUser.username,
-      accessToken
+      username: newUser.username
     }
   } catch (error: any) {
     return createError({

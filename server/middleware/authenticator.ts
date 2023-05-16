@@ -8,17 +8,20 @@ export default defineEventHandler(async (event) => {
   const request = event.node.req
   const { url, method } = request
   console.log(`Through authentication middleware : `, method, url)
-  const headerAuth = getRequestHeader(event, 'Authorization')
-  const accessToken =
-    headerAuth?.split(' ')[0] === 'Bearer' ? headerAuth.split(' ')[1] : 'token invalid'
+
+  const accessToken = getCookie(event, 'access_token')
+
   const unProtectedRoutes = [/^\/api.*(?:\/(sign_up|sign_in|isEmailRegister))$/gi]
+
   if (url!.startsWith('/api') && !unProtectedRoutes.some((pattern) => url!.match(pattern))) {
     try {
-      if (!accessToken)
+      if (!accessToken) {
         return createError({
           statusCode: 401,
           message: 'Unauthorized : must have Authorization header'
         })
+      }
+
       const { uid, exp } = (await decoder(accessToken, JWT_SECRET)) as JwtPayload
       if (Date.now() >= exp * 1000)
         return createError({

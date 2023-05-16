@@ -1,8 +1,6 @@
 import { FetchOptions } from 'ofetch'
-// import useUser from '~/stores/useUser'
 import UserModule from '~~/http/modules/user'
 import CoursesModule from '~~/http/modules/courses'
-import tokenController from '~~/composables/token'
 
 interface IApiInstance {
   user: UserModule
@@ -14,13 +12,6 @@ export default defineNuxtPlugin(() => {
 
   const fetchOptions: FetchOptions = {
     baseURL: runtimeConfig.public.apiBase,
-    onRequest: ({ request: _, options }) => {
-      if (process.client) {
-        const accessToken = tokenController.useToken()
-        // console.log(accessToken)
-        options.headers = { Authorization: `Bearer ${accessToken}` }
-      }
-    },
     onRequestError() {
       throw new Error('請求失敗，請檢查網路連線後重試')
     },
@@ -31,6 +22,10 @@ export default defineNuxtPlugin(() => {
         throw new Error(response._data.message)
       }
     }
+  }
+
+  if (process.server) {
+    fetchOptions.headers = useRequestHeaders()
   }
 
   const fetcher = $fetch.create(fetchOptions)

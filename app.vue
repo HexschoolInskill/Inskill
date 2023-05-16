@@ -19,9 +19,4 @@
   </nuxt-layout>
   <in-notification />
 </template>
-<script setup lang="ts">
-if (process.client && localStorage.getItem('access_token')) {
-  const app = useNuxtApp()
-  await app.$api.user.fetchProfile()
-}
-</script>
+<script setup lang="ts"></script>

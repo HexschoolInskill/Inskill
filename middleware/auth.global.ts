@@ -1,22 +1,15 @@
-import tokenController from '~~/composables/token'
+import useUser from '~/stores/useUser'
 
-export default defineNuxtRouteMiddleware((to) => {
-  if (process.client) {
-    const token = tokenController.useToken()
-    console.log(to)
+export default defineNuxtRouteMiddleware(async (to) => {
+  if (process.server) {
+    const app = useNuxtApp()
+    await app.$api.user.fetchProfile()
+  }
 
-    if (token?.length) {
-      // 假設登入後關閉網頁再開啟
-      if (to.name === 'index') {
-        const app = useNuxtApp()
-        app.$api.user.fetchProfile()
-      }
-
-      if (to.name === 'login' || to.name === 'register') {
-        return '/'
-      }
-    } else if (to.meta.auth) {
-      return '/login'
+  if (to.meta.auth) {
+    const store = useUser()
+    if (!store.userProfile.username) {
+      return navigateTo('/login')
     }
   }
 })

@@ -1,8 +1,8 @@
 <template>
-  <in-container>
+  <in-container style="margin-top: 15vh;">
     <div class="flex h-[62vh] justify-between py-5">
       <main
-        class="relative mr-1 w-9/12 rounded bg-white p-5"
+        class="relative mr-4 w-9/12 rounded bg-white p-5"
         :class="{ 'overflow-y-scroll': cart.length > 3 }"
       >
         <h2

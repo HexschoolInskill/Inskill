@@ -1,24 +1,24 @@
 <template>
-  <in-container>
+  <in-container style="margin-top: 15vh;">
     <div class="flex h-[62vh] justify-between py-5">
       <main
-        class="relative mr-1 w-9/12 rounded bg-white p-5"
-        :class="{ 'overflow-y-scroll': cart.length > 3 }"
+        class="mr-4 w-9/12 rounded bg-white p-5"
       >
         <h2
-          class="cart_header mb-4 border-4 border-t-0 border-l-0 border-r-0 border-black text-3xl"
+          class="cart_header border-4 border-t-0 border-l-0 border-r-0 border-black text-3xl"
         >
           購物車
         </h2>
 
         <div
           v-if="cart.length"
-          class="cart_content border-4 border-t-0 border-l-0 border-r-0 border-black"
+          class="cart_content border-4 border-t-0 border-l-0 border-r-0 border-black max-h-[350px]"
+          :class="{ 'overflow-y-scroll': cart.length > 3 }"
         >
           <div
             v-for="(item, index) in cart"
             :key="item.id"
-            class="cart_item mb-4 flex items-center"
+            class="cart_item my-4 flex items-center"
           >
             <img class="mr-2 border" :src="item.img" alt="img" />
             <div class="w-2/12">
@@ -114,7 +114,13 @@ const cart = reactive([
     img: 'https://fakeimg.pl/100x100/',
     name: 'test',
     price: 150
-  }
+  },
+  // {
+  //   id: 1,
+  //   img: 'https://fakeimg.pl/100x100/',
+  //   name: 'test',
+  //   price: 150
+  // }  
 ])
 
 const getTotal = computed(() => {

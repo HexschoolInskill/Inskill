@@ -89,6 +89,7 @@ const login = async () => {
     if (result.success) {
       tokenController.setToken(result.accessToken)
       userProfile.value.username = result.username
+      userProfile.value.avatar = result.avatar
 
       // 登入成功，回首頁
       router.push('/')

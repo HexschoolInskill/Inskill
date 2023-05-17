@@ -50,10 +50,15 @@
           @click="togglePopup('user')"
         >
           <div
-            class="h-10 w-10 overflow-hidden rounded-full"
+            class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full"
             :class="{ 'lg:hidden': !store.userProfile.username }"
           >
-            <img src="/images/avatar-fallback.svg" alt="" />
+            <img
+              :src="
+                store.userProfile.avatar ? store.userProfile.avatar : '/images/avatar-fallback.svg'
+              "
+              alt=""
+            />
           </div>
           <p
             v-if="store.userProfile.username"

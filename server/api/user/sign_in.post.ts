@@ -52,7 +52,8 @@ export default defineEventHandler(async (event) => {
         success: true,
         statusCode: 200,
         message: '登入成功',
-        username: user.username
+        username: user.username,
+        avatar: user.avatar
       }
     }
   } catch (error: any) {

@@ -7,7 +7,10 @@
         <div class="grid gap-8 md:w-1/2">
           <label class="relative flex h-20 w-20 cursor-pointer items-center justify-center">
             <in-spin v-if="avatar.isLoading" :size="40" color="#fff" />
-            <div v-else class="relative h-full w-full overflow-hidden rounded-full bg-gray-500">
+            <div
+              v-else
+              class="relative flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-gray-500"
+            >
               <input
                 ref="fileInput"
                 type="file"

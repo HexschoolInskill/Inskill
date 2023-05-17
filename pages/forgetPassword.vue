@@ -12,17 +12,23 @@
         name="email"
         @keypress.enter="nextStep"
       />
+      <in-spin v-show="isLoading" :size="40" class="absolute right-3 top-[70%] -translate-y-1/2" />
       <div v-for="error of v$.userEmail.$errors" :key="error.$uid" class="mb-4 text-red-500">
         {{ error.$message }}
       </div>
 
-      <button type="button" class="mt-2 w-20 rounded border bg-black text-white" @click="nextStep">
+      <button
+        type="button"
+        :disabled="isLoading"
+        class="mt-2 w-20 rounded border bg-black text-white"
+        @click="nextStep"
+      >
         繼續
       </button>
     </div>
 
     <div v-if="step === 2" class="flex flex-col">
-      <p class="text-white">以寄送重設密碼的連結，請至信箱查收</p>
+      <p class="text-white">已寄送重設密碼的連結，請至信箱查收</p>
     </div>
   </form>
 </template>
@@ -56,10 +62,12 @@ const v$ = useVuelidate(rules, formFields)
 
 const step = ref(1)
 const { $api } = useNuxtApp()
+const isLoading = ref(false)
 
 // 往下一步移動
 const nextStep = async () => {
   try {
+    isLoading.value = true
     const emailExist: any = await $api.user.isEmailRegister({ email: formFields.userEmail })
 
     if (emailExist.success) {
@@ -69,6 +77,8 @@ const nextStep = async () => {
     }
   } catch (err: any) {
     notification.error(err.message)
+  } finally {
+    isLoading.value = false
   }
 }
 </script>

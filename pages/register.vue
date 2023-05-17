@@ -1,5 +1,5 @@
 <template>
-  <h1 class="my-4 text-3xl font-bold">申請帳號</h1>
+  <h1 class="my-4 text-3xl font-bold text-white">申請帳號</h1>
 
   <form v-if="step === 1" class="flex flex-col">
     <label class="text-white" for="userName">使用者名稱</label>

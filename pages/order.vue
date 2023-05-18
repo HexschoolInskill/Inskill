@@ -1,8 +1,8 @@
 <template>
-  <in-container style="margin-top: 15vh;">
-    <div class="flex h-[62vh] justify-between py-5">
+  <in-container class="mt-[11vh] sm:mt-[15vh]">
+    <div class="flex flex-col sm:flex-row h-auto sm:h-[62vh] justify-between py-5">
       <main
-        class="relative mr-4 w-9/12 rounded bg-white p-5"
+        class="relative mr-4 rounded bg-white p-5 w-full sm:w-9/12"
         :class="{ 'overflow-y-scroll': cart.length > 3 }"
       >
         <h2
@@ -35,7 +35,7 @@
           <div class="mt-4 text-right text-3xl font-bold">NT$ {{ getTotal }}</div>
         </div>
       </main>
-      <aside class="ml-1 flex w-3/12 flex-col rounded bg-white p-5">
+      <aside class="ml-1 flex flex-col rounded bg-white p-5 mt-4 sm:mt-0 w-full sm:w-3/12">
         <h2
           class="cart_header mb-4 border-4 border-t-0 border-l-0 border-r-0 border-black text-3xl"
         >
@@ -49,7 +49,7 @@
         <!-- 接後端去藍新金流 -->
         <button
           :class="[cart.length ? 'bg-black' : 'bg-slate-200']"
-          class="mb-2 w-full rounded border p-1 text-xl text-white"
+          class="mb-2 w-full rounded border p-1 text-xl text-white mt-4"
           type="button"
           :disabled="!cart.length"
         >

@@ -1,7 +1,6 @@
-import tokenController from '~~/composables/token'
-
 export default defineNuxtRouteMiddleware((to) => {
   if (process.client) {
+    const tokenController = useToken()
     const token = tokenController.useToken()
     console.log(to)
 

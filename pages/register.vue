@@ -96,7 +96,6 @@ import { storeToRefs } from 'pinia'
 import useUSer from '~/stores/useUser'
 import { usePolicyStore } from '@/stores/policyStore'
 import useNotification from '~~/stores/useNotification'
-import tokenController from '~~/composables/token'
 
 definePageMeta({
   layout: 'login-form'
@@ -134,6 +133,7 @@ const rules = {
 
 const v$ = useVuelidate(rules, formFields)
 const { $api } = useNuxtApp()
+const token = useToken()
 const { userProfile } = storeToRefs(useUSer())
 const step = ref(1)
 
@@ -154,7 +154,7 @@ const register = async () => {
         step.value = 2
         userProfile.value.username = registration.username
 
-        tokenController.setToken(registration.accessToken)
+        token.setToken(registration.accessToken)
       } else {
         notification.error(registration.message)
       }

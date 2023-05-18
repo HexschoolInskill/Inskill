@@ -49,7 +49,7 @@ import { required, email, helpers } from '@vuelidate/validators'
 import { storeToRefs } from 'pinia'
 import useUSer from '~/stores/useUser'
 import useNotification from '~~/stores/useNotification'
-import tokenController from '~~/composables/token'
+import useToken from '~/composables/useToken'
 
 definePageMeta({
   layout: 'login-form'
@@ -78,6 +78,7 @@ const { userProfile } = storeToRefs(useUSer())
 
 const { $api } = useNuxtApp()
 const router = useRouter()
+const token = useToken()
 
 const login = async () => {
   try {
@@ -87,7 +88,7 @@ const login = async () => {
     })
 
     if (result.success) {
-      tokenController.setToken(result.accessToken)
+      token.setToken(result.accessToken)
       userProfile.value.username = result.username
 
       // 登入成功，回首頁

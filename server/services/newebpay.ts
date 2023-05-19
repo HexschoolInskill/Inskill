@@ -1,5 +1,3 @@
-const APIENDPOINT_DEV = "https://ccore.newebpay.com/"
-const APIENDPOINT_PROD = "https://core.newebpay.com/"
 import { createHmac, createCipheriv, createDecipheriv, createHash } from 'crypto'
 const Version = "2.0"
 // 字串組合
@@ -62,10 +60,10 @@ export async function createPayment (order: Record<string, unknown>, isProd: boo
         'Amt': order.total,
         'ItemDesc': order.description,
         'ReturnURL': 'https://timesdev.demoto.me',
-        'NotifyURL': 'https://timesdev.demoto.me/hello',
-        'ClientBackURL': 'https://timesdev.demoto.me/hello',
+        'NotifyURL': 'https://timesdev.demoto.me/newebpay/notify',
+        'ClientBackURL': 'https://timesdev.demoto.me/login',
         'Email' : order.email,
-        'EmailModify' : 0,
+        'EmailModify' : 1,
         'LoginType' : 0,
         'CREDIT' : 1,
         'LINEPAY' : 1,
@@ -89,35 +87,41 @@ export async function createPayment (order: Record<string, unknown>, isProd: boo
 
   return {
     order,
+    MerchantID : NEWEBPAY_MERCHANT_ID,
     aesEncrypt,
     shaEncrypt,
   }
 }
 
 
-// export async function spgatewayNotify (order: Record<string, unknown>, isProd: boolean) {
-//     console.log('req.body notify data', req.body);
-//     const response = req.body;
+export async function spgatewayNotify (order: Record<string, unknown>, isProd: boolean) {
 
-//     const thisShaEncrypt = create_mpg_sha_encrypt(response.TradeInfo);
-//     // 使用 HASH 再次 SHA 加密字串，確保比對一致（確保不正確的請求觸發交易成功）
-//     if (!thisShaEncrypt === response.TradeSha) {
-//       console.log('付款失敗：TradeSha 不一致');
-//       return res.end();
-//     }
+  const thisShaEncrypt = create_mpg_sha_encrypt(order.TradeInfo);
+    // 使用 HASH 再次 SHA 加密字串，確保比對一致（確保不正確的請求觸發交易成功）
+    if (!thisShaEncrypt === order.TradeSha) {
+      return {
+        success : false,
+        message : '付款失敗：TradeSha 不一致'
+      }
+    }
 
-//     // 解密交易內容
-//     const data = create_mpg_aes_decrypt(response.TradeInfo);
-//     console.log('data:', data);
+    // 解密交易內容
+    const data = create_mpg_aes_decrypt(order.TradeInfo);
+    console.log('decode original order data:', data);
 
-//     // 取得交易內容，並查詢本地端資料庫是否有相符的訂單
-//     if (!orders[data?.Result?.MerchantOrderNo]) {
-//       console.log('找不到訂單');
-//       return res.end();
-//     }
+    // TODO : 取得交易內容，並查詢本地端資料庫是否有相符的訂單
+    // if (!orders[data?.Result?.MerchantOrderNo]) {
+    //   console.log('找不到訂單');
+    //   return {
+    //     success : false,
+    //   }
+    // }
 
-//     // 交易完成，將成功資訊儲存於資料庫
-//     console.log('付款完成，訂單：', orders[data?.Result?.MerchantOrderNo]);
+    // 交易完成，將成功資訊儲存於資料庫
+    console.log();
 
-//     return res.end();
-// }
+    return {
+      success : true, 
+      message : `付款完成，訂單： id`
+    }
+}

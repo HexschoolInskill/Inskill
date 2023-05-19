@@ -6,7 +6,7 @@
         <div class="form">
             {{ order }}
             <form :action="apiEndpoint" method="post">
-                <input type="text" name="MerchantID" value="MS3129040116" />
+                <input type="text" name="MerchantID" :value="order.MerchantID" />
                 <input type="text" name="TradeSha" :value="order.shaEncrypt" />
                 <input
                 type="text"
@@ -31,6 +31,7 @@ import { defineComponent, ref, computed } from 'vue'
 const order = ref({
   aesEncrypt: '',
   shaEncrypt: '',
+  MerchantID : "MS3129040116",
   order: {
     TimeStamp: Math.floor(Date.now() / 1000),
     MerchantOrderNo: '',
@@ -44,18 +45,21 @@ const apiEndpoint = computed(() => {
   if (process.env.NODE_ENV === 'production') {
     return 'https://core.spgateway.com/MPG/mpg_gateway'
   } else {
-    return 'https://core.spgateway.com/MPG/mpg_gateway'
+    return 'https://ccore.newebpay.com/MPG/mpg_gateway'
   }
 })
 
 // 使用 nuxt fetch 呼叫後端 hello api 來取得 order, aesEncrypt, shaEncrypt
-const { data } = await useAsyncData('orderFetch', () => $fetch('/hello'))
-console.log(`data : `, data.value.response)
-order.value.aesEncrypt = data.value.response.aesEncrypt
-order.value.shaEncrypt = data.value.response.shaEncrypt
-order.value.order.MerchantOrderNo = data.value.response.order.id
-order.value.order.Amt = data.value.response.order.total
-order.value.order.Email = data.value.response.order.email
+const randomOrderId = Date.now()
+const { data } = await useAsyncData('orderFetch', () => $fetch(`/newebpay/${randomOrderId}`))
+console.log(`data : `, data.value.data)
+const payment = data.value.data
+order.value.aesEncrypt = payment.aesEncrypt
+order.value.shaEncrypt = payment.shaEncrypt
+order.value.order.MerchantOrderNo = payment.order.id
+order.value.order.Amt = payment.order.total
+order.value.order.Email = payment.order.email
+order.value.MerchantID = payment.MerchantID
 </script>
 
 

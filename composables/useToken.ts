@@ -15,10 +15,10 @@ export default function () {
     const accessToken = useCookie('access_token')
     return accessToken.value
   }
-  
+
   return {
     setToken,
     deleteToken,
     useToken
-  }  
+  }
 }

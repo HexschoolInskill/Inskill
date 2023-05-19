@@ -1,7 +1,7 @@
 <template>
   <in-container class="mt-[11vh] sm:mt-[15vh]">
-    <div class="flex flex-col sm:flex-row h-auto sm:h-[62vh] justify-between py-5">
-      <main class="mr-4 rounded bg-white p-5 w-full sm:w-9/12">
+    <div class="flex h-auto flex-col justify-between py-5 sm:h-[62vh] sm:flex-row">
+      <main class="mr-4 w-full rounded bg-white p-5 sm:w-9/12">
         <h2 class="cart_header border-4 border-t-0 border-l-0 border-r-0 border-black text-3xl">
           購物車
         </h2>
@@ -53,7 +53,7 @@
           </NuxtLink>
         </div>
       </main>
-      <aside class="ml-1 flex flex-col rounded bg-white p-5 mt-4 sm:mt-0 w-full sm:w-3/12">
+      <aside class="ml-1 mt-4 flex w-full flex-col rounded bg-white p-5 sm:mt-0 sm:w-3/12">
         <h2
           class="cart_header mb-4 border-4 border-t-0 border-l-0 border-r-0 border-black text-3xl"
         >
@@ -69,10 +69,10 @@
           <div class="mt-4 text-right text-3xl font-bold">NT$ {{ getTotal }}</div>
         </div>
 
-        <NuxtLink to="/order">
+        <NuxtLink to="/checkout">
           <button
             :class="[cart.length ? 'bg-black' : 'bg-slate-200']"
-            class="w-full rounded border p-1 text-xl text-white mt-4"
+            class="mt-4 w-full rounded border p-1 text-xl text-white"
             type="button"
           >
             前往結帳
@@ -132,7 +132,3 @@ onMounted(async () => {
   // console.log('cartData :>>>', cartData)
 })
 </script>
-
-<style lang="scss" scoped>
-  
-</style>

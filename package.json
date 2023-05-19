@@ -47,10 +47,12 @@
     "@vuelidate/core": "^2.0.2",
     "@vuelidate/validators": "^2.0.2",
     "bcrypt": "^5.1.0",
+    "crypto": "^1.0.1",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.3.0",
     "mongoose": "^7.1.0",
+    "qs": "^6.11.2",
     "ws": "^8.13.0"
   }
 }

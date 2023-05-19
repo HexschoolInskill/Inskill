@@ -10,6 +10,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     mongodbUri: process.env.MONGODB_URI,
     JWT_SECRET: process.env.JWT_SECRET,
+    NEWEBPAY_MERCHANT_ID : process.env.NEWEBPAY_MERCHANT_ID,
+    NEWEBPAY_HASH_KEY : process.env.NEWEBPAY_HASH_KEY,
+    NEWEBPAY_HASH_IV : process.env.NEWEBPAY_HASH_IV,
     public: {
       apiBase: '/api'
     }

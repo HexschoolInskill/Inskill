@@ -1,22 +1,22 @@
 <template>
   <in-container class="mt-[11vh] sm:mt-[15vh]">
-
     <form
-    class="flex h-auto flex-col justify-between py-5 sm:h-[62vh] sm:flex-row"
-    :action="apiEndpoint"
-    method="post">
+      class="flex h-auto flex-col justify-between py-5 sm:h-[62vh] sm:flex-row"
+      :action="apiEndpoint"
+      method="post"
+    >
       <!-- 隱藏表單內容-->
       <input class="hidden" type="text" name="MerchantID" value="MS3129040116" />
       <input class="hidden" type="text" name="TradeSha" :value="order.shaEncrypt" />
-      <input
-      class="hidden"
-      type="text"
-      name="TradeInfo"
-      :value="order.aesEncrypt"
-      />
+      <input class="hidden" type="text" name="TradeInfo" :value="order.aesEncrypt" />
       <input class="hidden" type="text" name="TimeStamp" :value="order.order.TimeStamp" />
       <input class="hidden" type="text" name="Version" value="1.5" />
-      <input class="hidden" type="text" name="MerchantOrderNo" :value="order.order.MerchantOrderNo" />
+      <input
+        class="hidden"
+        type="text"
+        name="MerchantOrderNo"
+        :value="order.order.MerchantOrderNo"
+      />
       <input class="hidden" type="text" name="Amt" :value="order.order.Amt" />
       <input class="hidden" type="text" name="ItemDesc'" :value="order.order.Desc" />
       <input class="hidden" type="email" name="Email" :value="order.order.Email" />
@@ -91,7 +91,6 @@
         </NuxtLink>
       </aside>
     </form>
-
   </in-container>
 </template>
 
@@ -135,7 +134,8 @@ const getTotal = computed(() => {
 // 需要call hello api 來取得上方template 需要的資料
 // 定義order data
 const order = ref({
-  aesEncrypt: '1e2944c682af037c77c15a79b6ab0150c51da6260c5f268748de6936cc3c15189edacc5bffeb1a7324c432a21c4a9e4545f250dcb128021fbd08e1d5b60794cb16913225b56a2647841fbffbab9048e9890eb078175eb64723124c4668ff06067ca0ab4561e5cd5a51f1d0ede74ee78a6d6dd40cd756569b97b51bc62337c693db7ba5ba1097d53e42424b01e68256ca',
+  aesEncrypt:
+    '1e2944c682af037c77c15a79b6ab0150c51da6260c5f268748de6936cc3c15189edacc5bffeb1a7324c432a21c4a9e4545f250dcb128021fbd08e1d5b60794cb16913225b56a2647841fbffbab9048e9890eb078175eb64723124c4668ff06067ca0ab4561e5cd5a51f1d0ede74ee78a6d6dd40cd756569b97b51bc62337c693db7ba5ba1097d53e42424b01e68256ca',
   shaEncrypt: '314C80D2794AA3C8EBB53344B6F53F341F62656CCEC0CC422B9D5735A9614A2C',
   order: {
     TimeStamp: Math.floor(Date.now() / 1000),

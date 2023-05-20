@@ -13,6 +13,7 @@
           v-for="item in list"
           :key="item.id"
           perspective
+          xs-white
           class="group flex cursor-pointer flex-col font-bold text-gray"
         >
           <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">

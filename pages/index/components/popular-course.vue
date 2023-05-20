@@ -12,6 +12,7 @@
         <in-card
           v-for="item in list"
           :key="item.id"
+          xs-white
           perspective
           class="group flex cursor-pointer flex-col font-bold text-gray"
         >

@@ -30,9 +30,13 @@ module.exports = {
         4: '16px',
         6: '24px'
       },
+      minWidth: {
+        15: '3.75rem'
+      },
       minHeight: {
         '50vh': '50vh',
-        '80vh': '80vh'
+        '80vh': '80vh',
+        15: '3.75rem'
       }
     }
   },

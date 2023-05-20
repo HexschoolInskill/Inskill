@@ -16,6 +16,8 @@ defineProps({
 </script>
 <style lang="scss" scoped>
 .in-btn {
-  @apply inline-flex cursor-pointer select-none items-center whitespace-nowrap rounded-sm bg-gray-800 px-3 py-2 text-base text-white hover:bg-gray-900;
+  max-width: 196px;
+  padding: 8px 12px;
+  @apply inline-flex h-10 w-full cursor-pointer select-none items-center justify-center rounded-1 bg-white text-black hover:bg-gray-l;
 }
 </style>

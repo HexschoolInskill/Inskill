@@ -7,7 +7,7 @@
           <div class="swiper-wrapper">
             <div v-for="item in list" :key="item.id" class="swiper-slide">
               <div class="group">
-                <in-card>
+                <in-card xs-white>
                   <div class="relative pt-7/10 sm:pt-5/10">
                     <img
                       :src="item.thumbnail"

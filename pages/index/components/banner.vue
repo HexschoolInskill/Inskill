@@ -13,13 +13,13 @@
       </h1>
       <div class="w-full sm:w-8/12 lg:w-5/12">
         <form
-          class="transition-base mt-6 flex h-11 w-full flex-1 rounded-1 border-2 border-solid border-[#DEE2E6] bg-white py-2 hover:border-black focus:border-black"
+          class="transition-base mt-6 flex h-11 w-full flex-1 rounded-1 border-2 border-solid border-gray-l bg-white py-2 hover:border-black focus:border-black"
         >
           <input class="flex-1 px-4 outline-none" type="text" placeholder="開始探索、你的硬技能" />
           <button
-            class="borders-solid flex w-11 flex-shrink-0 items-center justify-center border-l-2 border-[#DEE2E6]"
+            class="borders-solid flex w-11 flex-shrink-0 items-center justify-center border-l-2 border-gray-l"
           >
-            <i class="icon-search text-[20px] text-[#6C757D]"></i>
+            <i class="icon-search text-[20px] text-gray"></i>
           </button>
         </form>
       </div>

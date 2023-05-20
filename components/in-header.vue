@@ -27,7 +27,7 @@
           </div>
           <nuxt-link class="whitespace-nowrap">直播</nuxt-link>
           <form
-            class="transition-base flex h-11 flex-1 rounded-1 border-2 border-solid border-[#DEE2E6] py-2 hover:border-black focus:border-black"
+            class="transition-base flex h-11 flex-1 rounded-1 border-2 border-solid border-gray-l py-2 hover:border-black focus:border-black"
             @submit.prevent="handleSearch"
             @keyup.enter="handleSearch"
           >
@@ -38,9 +38,9 @@
               placeholder="開始探索、你的硬技能"
             />
             <button
-              class="borders-solid flex w-11 flex-shrink-0 items-center justify-center border-l-2 border-[#DEE2E6]"
+              class="borders-solid flex w-11 flex-shrink-0 items-center justify-center border-l-2 border-gray-l"
             >
-              <i class="icon-search text-[20px] text-[#6C757D]"></i>
+              <i class="icon-search text-[20px] text-gray"></i>
             </button>
           </form>
           <nuxt-link>合作申請</nuxt-link>

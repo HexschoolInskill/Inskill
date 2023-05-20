@@ -13,7 +13,7 @@
           v-for="item in list"
           :key="item.id"
           perspective
-          class="group flex cursor-pointer flex-col font-bold text-[#6C757D]"
+          class="group flex cursor-pointer flex-col font-bold text-gray"
         >
           <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
             <img
@@ -23,15 +23,15 @@
             />
           </div>
           <div class="flex-1 p-8 xl:py-4 xl:px-6">
-            <h3 class="text-[28px] text-blue line-clamp-1 sm:text-[#6C757D]">
+            <h3 class="text-[28px] text-blue line-clamp-1 sm:text-gray">
               {{ item.title }}
             </h3>
             <div class="mt-2 flex gap-3 xl:block">
-              <div class="flex gap-3 text-[#DEE2E6]/50">
+              <div class="flex gap-3 text-gray-l/50">
                 <i
                   v-for="score in item.score.value"
                   :key="score"
-                  class="icon-star text-[22px] text-[#FFC107]"
+                  class="icon-star text-[22px] text-yellow"
                 ></i>
                 <i
                   v-for="score in 5 - item.score.value"

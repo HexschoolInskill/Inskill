@@ -35,7 +35,7 @@
     <small class="mt-4 mb-2 text-sky-400 underline">
       <NuxtLink to="forgetpassword">忘記密碼?</NuxtLink>
     </small>
-    <small class="text-[#6C757D]">
+    <small class="text-gray">
       尚未成為會員?
       <NuxtLink class="text-sky-400 underline" to="register">申請帳號</NuxtLink>
     </small>

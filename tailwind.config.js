@@ -3,7 +3,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        blue: '#0C18A0'
+        blue: '#0C18A0',
+        yellow: '#FFC107',
+        gray: {
+          l: '#DEE2E6',
+          DEFAULT: '#6C757D'
+        }
       },
       spacing: {
         15: '3.75rem',
@@ -22,7 +27,16 @@ module.exports = {
       },
       borderRadius: {
         1: '4px',
+        4: '16px',
         6: '24px'
+      },
+      minWidth: {
+        15: '3.75rem'
+      },
+      minHeight: {
+        '50vh': '50vh',
+        '80vh': '80vh',
+        15: '3.75rem'
       }
     }
   },

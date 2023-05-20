@@ -19,35 +19,12 @@
                 @change="handleFileChange"
               />
               <img v-if="avatar.data" :src="avatar.data" alt="" />
-              <svg
-                v-else
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                viewBox="0 0 32 32"
-              >
-                <defs></defs>
-                <path
-                  d="M26.749 24.93A13.99 13.99 0 1 0 2 16a13.899 13.899 0 0 0 3.251 8.93l-.02.017c.07.084.15.156.222.239c.09.103.187.2.28.3c.28.304.568.596.87.87c.092.084.187.162.28.242c.32.276.649.538.99.782c.044.03.084.069.128.1v-.012a13.901 13.901 0 0 0 16 0v.012c.044-.031.083-.07.128-.1c.34-.245.67-.506.99-.782c.093-.08.188-.159.28-.242c.302-.275.59-.566.87-.87c.093-.1.189-.197.28-.3c.071-.083.152-.155.222-.24zM16 8a4.5 4.5 0 1 1-4.5 4.5A4.5 4.5 0 0 1 16 8zM8.007 24.93A4.996 4.996 0 0 1 13 20h6a4.996 4.996 0 0 1 4.993 4.93a11.94 11.94 0 0 1-15.986 0z"
-                  fill="currentColor"
-                ></path>
-              </svg>
+              <img v-else src="/images/avatar-fallback.svg" alt="" />
             </div>
             <div
               class="absolute right-0 bottom-0 flex h-6 w-6 items-center justify-center rounded-full bg-white text-black"
             >
-              <svg
-                class="w-4"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                viewBox="0 0 16 16"
-              >
-                <g fill="none">
-                  <path
-                    d="M3.75 2a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5zm4.78 2.72a.75.75 0 0 0-1.06 0L4.22 7.97a.75.75 0 0 0 1.06 1.06l1.97-1.97v6.19a.75.75 0 0 0 1.5 0V7.06l1.97 1.97a.75.75 0 1 0 1.06-1.06L8.53 4.72z"
-                    fill="currentColor"
-                  ></path>
-                </g>
-              </svg>
+              <i class="icon-upload text-[12px]"></i>
             </div>
           </label>
           <div>

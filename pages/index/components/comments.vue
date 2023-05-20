@@ -6,15 +6,15 @@
         <p class="mt-4 text-xl">我們的學生都這麼說⋯⋯</p>
       </div>
       <div class="gsap-slide-up mt-10 grid gap-6 xl:grid-cols-3">
-        <in-card perspective class="flex h-full flex-col justify-between p-11">
+        <in-card xs-white perspective class="flex h-full flex-col justify-between p-11">
           <div>
-            <i class="icon-quote text-[20px] text-black sm:text-[#6C757D]"></i>
+            <i class="icon-quote text-[20px] text-black sm:text-gray"></i>
           </div>
-          <div class="flex-1 px-10 py-8 text-[#6C757D] sm:text-white">
+          <div class="flex-1 px-10 py-8 text-gray sm:text-white">
             這是最短的段落，外層高度不變。
           </div>
           <div class="rotate-180">
-            <i class="icon-quote text-right text-[20px] text-black sm:text-[#6C757D]"></i>
+            <i class="icon-quote text-right text-[20px] text-black sm:text-gray"></i>
           </div>
           <div class="flex items-center gap-3">
             <img
@@ -22,18 +22,18 @@
               src="/images/avatar-fallback.svg"
               alt=""
             />
-            <p class="font-bold leading-normal text-[#6C757D]">我是學生</p>
+            <p class="font-bold leading-normal text-gray">我是學生</p>
           </div>
         </in-card>
-        <in-card perspective class="flex h-full flex-col justify-between p-11">
+        <in-card xs-white perspective class="flex h-full flex-col justify-between p-11">
           <div>
-            <i class="icon-quote text-[20px] text-black sm:text-[#6C757D]"></i>
+            <i class="icon-quote text-[20px] text-black sm:text-gray"></i>
           </div>
-          <div class="flex-1 px-10 py-8 text-[#6C757D] sm:text-white">
+          <div class="flex-1 px-10 py-8 text-gray sm:text-white">
             網頁的操作清楚明瞭，介面清爽乾淨，老師的教學也深入淺出，用最簡單的語言講解最困難的概念，而且居然有直播功能，在課堂上直接詢問老師，這是中等長的段落。
           </div>
           <div class="rotate-180">
-            <i class="icon-quote text-right text-[20px] text-black sm:text-[#6C757D]"></i>
+            <i class="icon-quote text-right text-[20px] text-black sm:text-gray"></i>
           </div>
           <div class="flex items-center gap-3">
             <img
@@ -41,18 +41,18 @@
               src="/images/avatar-fallback.svg"
               alt=""
             />
-            <p class="font-bold leading-normal text-[#6C757D]">我是學生</p>
+            <p class="font-bold leading-normal text-gray">我是學生</p>
           </div>
         </in-card>
-        <in-card perspective class="flex h-full flex-col justify-between p-11">
+        <in-card xs-white perspective class="flex h-full flex-col justify-between p-11">
           <div>
-            <i class="icon-quote text-[20px] text-black sm:text-[#6C757D]"></i>
+            <i class="icon-quote text-[20px] text-black sm:text-gray"></i>
           </div>
-          <div class="flex-1 px-10 py-8 text-[#6C757D] sm:text-white">
+          <div class="flex-1 px-10 py-8 text-gray sm:text-white">
             網頁的操作清楚明瞭，介面清爽乾淨，老師的教學也深入淺出，用最簡單的語言講解最困難的概念，而且居然有直播功能，在課堂上直接詢問老師，讓我的學習效率倍增，我不是什麼線上課程評論家，但這聽起來很酷是吧。
           </div>
           <div class="rotate-180">
-            <i class="icon-quote text-right text-[20px] text-black sm:text-[#6C757D]"></i>
+            <i class="icon-quote text-right text-[20px] text-black sm:text-gray"></i>
           </div>
           <div class="flex items-center gap-3">
             <img
@@ -60,7 +60,7 @@
               src="/images/avatar-fallback.svg"
               alt=""
             />
-            <p class="font-bold leading-normal text-[#6C757D]">我是學生</p>
+            <p class="font-bold leading-normal text-gray">我是學生</p>
           </div>
         </in-card>
       </div>

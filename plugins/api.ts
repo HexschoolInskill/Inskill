@@ -1,10 +1,12 @@
 import { FetchOptions } from 'ofetch'
 import UserModule from '~~/http/modules/user'
 import CoursesModule from '~~/http/modules/courses'
+import PartnerModule from '~/http/modules/partner'
 
 interface IApiInstance {
   user: UserModule
   course: CoursesModule
+  partner: PartnerModule
 }
 
 export default defineNuxtPlugin(() => {
@@ -32,7 +34,8 @@ export default defineNuxtPlugin(() => {
 
   const modules: IApiInstance = {
     user: new UserModule(fetcher),
-    course: new CoursesModule(fetcher)
+    course: new CoursesModule(fetcher),
+    partner: new PartnerModule(fetcher)
   }
 
   return {

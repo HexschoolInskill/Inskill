@@ -2,7 +2,7 @@
   <div
     ref="cardRef"
     class="in-card"
-    :class="{ 'in-card--perspective': perspective }"
+    :class="{ 'in-card--perspective': perspective, 'in-card--xs-white': xsWhite }"
     :style="{
       '--x': `${axisRotate.x}deg`,
       '--y': `${axisRotate.y}deg`
@@ -24,6 +24,10 @@ export default {
 const props = defineProps({
   perspective: {
     type: Boolean
+  },
+  xsWhite: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -53,13 +57,19 @@ function handleMouseOver(event: MouseEvent) {
 <style lang="scss">
 .in-card {
   &__wrapper {
-    background-color: #fff;
+    background-image: linear-gradient(90deg, #262b2f, #000);
     border-radius: 24px;
     overflow: hidden;
     will-change: transform;
     transition: transform 0.3s;
-    @media (min-width: 640px) {
-      background-image: linear-gradient(90deg, #262b2f, #000);
+  }
+  &--xs-white {
+    .in-card__wrapper {
+      background-color: #fff;
+      background-image: none;
+      @media (min-width: 640px) {
+        background-image: linear-gradient(90deg, #262b2f, #000);
+      }
     }
   }
   &--perspective {

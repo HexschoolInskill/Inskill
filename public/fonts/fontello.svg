@@ -25,6 +25,8 @@
 <glyph glyph-name="bookmark" unicode="&#xe808;" d="M250 28v583a60 60 0 0 0 60 61h362a60 60 0 0 0 60-61v-583l-241 141z" horiz-adv-x="1000" />
 
 <glyph glyph-name="bookmark-outline" unicode="&#xe809;" d="M681 672h-362a60 60 0 0 1-60-61v-583l241 141 241-141v583a60 60 0 0 1-60 61z m0-539l-181 106-181-106v471a8 8 0 0 0 8 7h346a8 8 0 0 0 8-7z" horiz-adv-x="1000" />
+
+<glyph glyph-name="upload" unicode="&#xe80a;" d="M168 819a59 59 0 0 1 0-117h664a59 59 0 1 1 0 117z m373-213a59 59 0 0 1-82 0l-254-254a59 59 0 0 1 83-82l153 153v-483a59 59 0 1 1 118 0v483l153-153a59 59 0 1 1 83 82l-254 254z" horiz-adv-x="1000" />
 </font>
 </defs>
 </svg>

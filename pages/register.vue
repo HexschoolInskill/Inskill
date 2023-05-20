@@ -53,7 +53,7 @@
       {{ error.$message }}
     </div>
 
-    <label for="agree" class="text-[#6C757D]" :class="{ 'mb-4': !v$.agree.$errors.length }">
+    <label for="agree" class="text-gray" :class="{ 'mb-4': !v$.agree.$errors.length }">
       <input v-model="v$.agree.$model" type="checkbox" name="agree" />
       同意
       <span class="cursor-pointer text-sky-400 underline" @click="modalController('user')"
@@ -73,7 +73,7 @@
       建立帳號
     </button>
 
-    <small class="mt-4 mb-2 text-[#6C757D]">
+    <small class="mt-4 mb-2 text-gray">
       已有帳號?
       <NuxtLink to="login" class="text-sky-400 underline">登入</NuxtLink>
     </small>
@@ -81,7 +81,7 @@
 
   <div v-else>
     <p class="text-white">恭喜成功註冊 InSkill</p>
-    <p class="mt-2 mb-4 text-sm text-[#6C757D]">任何技能，任何課程，任你探索!</p>
+    <p class="mt-2 mb-4 text-sm text-gray">任何技能，任何課程，任你探索!</p>
     <NuxtLink to="/">
       <button type="button" class="w-20 rounded border bg-black text-white">繼續</button>
     </NuxtLink>

@@ -16,6 +16,7 @@ export interface User extends Document {
   collectCourses: Object[]
   cartCourses: Object[]
   purchasedCourses: Object[]
+  apply: Object
   createdAt: Date
   updatedAt: Date
 }
@@ -36,7 +37,22 @@ const userSchema = new Schema<User>(
     socialLink: { type: String, default: '' },
     collectCourses: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
     cartCourses: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
-    purchasedCourses: [{ type: Schema.Types.ObjectId, ref: 'Course' }]
+    purchasedCourses: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
+    apply: {
+      realName: { type: String, required: true },
+      gender: { type: String, required: true },
+      unit: { type: String, required: true },
+      phone: { type: Number, required: true },
+      postNumber: { type: Number, required: true },
+      address: { type: String, required: true },
+      description: { type: String, required: true },
+      longDescription: { type: String, required: true },
+      facebookLink: { type: String, default: '' },
+      youtubeLink: { type: String, default: '' },
+      githubLink: { type: String, default: '' },
+      socialLink: { type: String, default: '' },
+      selfMedia: { type: String, default: '' }
+    }
   },
   { timestamps: true }
 )

@@ -2,9 +2,11 @@
   <in-container>
     <section class="py-10">
       <h1 class="text-[40px] font-black text-white">
-        <span>有關</span>
-        <span class="mx-5">程式</span>
-        <span>的課程</span>
+        <template v-if="route.query.q">
+          <span>有關</span>
+          <span class="mx-5">{{ route.query.q }}</span>
+          <span>的課程</span>
+        </template>
       </h1>
     </section>
     <section>
@@ -174,6 +176,8 @@
   </in-container>
 </template>
 <script lang="ts" setup>
+const route = useRoute()
+
 const list = ref([
   {
     id: 1,

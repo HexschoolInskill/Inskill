@@ -133,13 +133,17 @@
             class="absolute left-0 top-18 grid w-[calc(100vw-24px)] gap-2 rounded-6 bg-white p-4 sm:w-[375px] lg:left-20 lg:top-28"
           >
             <li class="in-header__popup-link">
-              <nuxt-link class="block whitespace-nowrap px-3 py-2">所有類別課程</nuxt-link>
+              <nuxt-link class="block whitespace-nowrap px-3 py-2" to="/search"
+                >所有類別課程</nuxt-link
+              >
             </li>
             <li class="in-header__popup-link">
-              <nuxt-link class="block whitespace-nowrap px-3 py-2">AI</nuxt-link>
+              <nuxt-link class="block whitespace-nowrap px-3 py-2" to="/search?q=AI">AI</nuxt-link>
             </li>
             <li class="in-header__popup-link">
-              <nuxt-link class="block whitespace-nowrap px-3 py-2">程式設計</nuxt-link>
+              <nuxt-link class="block whitespace-nowrap px-3 py-2" to="/search?q=程式設計">
+                程式設計
+              </nuxt-link>
             </li>
           </ul>
         </transition>

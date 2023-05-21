@@ -15,9 +15,15 @@
         <form
           class="transition-base mt-6 flex h-11 w-full flex-1 rounded-1 border-2 border-solid border-gray-l bg-white py-2 hover:border-black focus:border-black"
         >
-          <input class="flex-1 px-4 outline-none" type="text" placeholder="開始探索、你的硬技能" />
+          <input
+            v-model="searchInput"
+            class="flex-1 px-4 outline-none"
+            type="text"
+            placeholder="開始探索、你的硬技能"
+          />
           <button
             class="borders-solid flex w-11 flex-shrink-0 items-center justify-center border-l-2 border-gray-l"
+            @click.prevent="handleSearch"
           >
             <i class="icon-search text-[20px] text-gray"></i>
           </button>
@@ -26,7 +32,16 @@
     </in-container>
   </section>
 </template>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const searchInput = ref('')
+function handleSearch() {
+  const query = searchInput.value.trim()
+
+  if (query) {
+    navigateTo(`/search?q=${query}`)
+  }
+}
+</script>
 <style lang="scss">
 .banner {
   background: url('/images/index-banner-bg.jpg') no-repeat center/cover;

@@ -1,12 +1,16 @@
+// checkout page using vue 3
 <template>
   <in-container class="mt-[11vh] sm:mt-[15vh]">
+    <!-- <div v-if="$fetchState.pending">Loading...</div>
+    <div v-else-if="$fetchState.error">Error loading data</div> -->
+
     <form
       class="flex h-auto flex-col justify-between py-5 sm:h-[62vh] sm:flex-row"
       :action="apiEndpoint"
       method="post"
     >
       <!-- 隱藏表單內容-->
-      <input class="hidden" type="text" name="MerchantID" value="MS3129040116" />
+      <input class="hidden" type="text" name="MerchantID" :value="order.MerchantID" />
       <input class="hidden" type="text" name="TradeSha" :value="order.shaEncrypt" />
       <input class="hidden" type="text" name="TradeInfo" :value="order.aesEncrypt" />
       <input class="hidden" type="text" name="TimeStamp" :value="order.order.TimeStamp" />
@@ -18,10 +22,7 @@
         :value="order.order.MerchantOrderNo"
       />
       <input class="hidden" type="text" name="Amt" :value="order.order.Amt" />
-      <input class="hidden" type="text" name="ItemDesc'" :value="order.order.Desc" />
       <input class="hidden" type="email" name="Email" :value="order.order.Email" />
-      <input class="hidden" type="text" name="ReturnURL" :value="order.order.ReturnURL" />
-      <input class="hidden" type="text" name="NotifyURL" :value="order.order.NotifyURL" />
 
       <main
         class="relative mr-4 w-full rounded bg-white p-5 sm:w-9/12"
@@ -95,7 +96,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted, computed } from 'vue'
+import { reactive, ref, computed } from 'vue'
 // import { storeToRefs } from 'pinia'
 // import coursesStore from '~/stores/courses'
 import userUser from '~/stores/useUser'
@@ -134,31 +135,43 @@ const getTotal = computed(() => {
 // 需要call hello api 來取得上方template 需要的資料
 // 定義order data
 const order = ref({
-  aesEncrypt:
-    '1e2944c682af037c77c15a79b6ab0150c51da6260c5f268748de6936cc3c15189edacc5bffeb1a7324c432a21c4a9e4545f250dcb128021fbd08e1d5b60794cb16913225b56a2647841fbffbab9048e9890eb078175eb64723124c4668ff06067ca0ab4561e5cd5a51f1d0ede74ee78a6d6dd40cd756569b97b51bc62337c693db7ba5ba1097d53e42424b01e68256ca',
-  shaEncrypt: '314C80D2794AA3C8EBB53344B6F53F341F62656CCEC0CC422B9D5735A9614A2C',
+  aesEncrypt: '',
+  shaEncrypt: '',
+  MerchantID: 'MS3129040116',
   order: {
     TimeStamp: Math.floor(Date.now() / 1000),
-    MerchantOrderNo: '123',
-    Amt: getTotal,
-    Desc: 'testing',
-    Email: 'senxsen@gmail.com',
-    ReturnURL: '', // 前端回課程列表
-    NotifyURL: '' // 後端接收付款結果
+    MerchantOrderNo: '',
+    Amt: '',
+    Email: ''
   }
 })
 
 // 定義apiendpoint 如果是 production 就是正式環境 如果是 development 就是開發環境
 const apiEndpoint = computed(() => {
   if (process.env.NODE_ENV === 'production') {
-    return 'https://core.newebpay.com/MPG/mpg_gateway'
+    return 'https://core.spgateway.com/MPG/mpg_gateway'
   } else {
     return 'https://ccore.newebpay.com/MPG/mpg_gateway'
   }
 })
 
-onMounted(async () => {
-  // const cartData = await $api.course.getCart()
-  // console.log('cartData :>>>', cartData)
-})
+// 使用 nuxt fetch 呼叫後端 hello api 來取得 order, aesEncrypt, shaEncrypt
+const randomOrderId = Date.now()
+
+try {
+  const newebpay: any = await useAsyncData('orderFetch', () => $fetch(`/newebpay/${randomOrderId}`))
+  console.log(`data : `, newebpay)
+
+  if (newebpay.data.value) {
+    const payment = newebpay.data.value.data
+    order.value.aesEncrypt = payment.aesEncrypt
+    order.value.shaEncrypt = payment.shaEncrypt
+    order.value.order.MerchantOrderNo = payment.order.id
+    order.value.order.Amt = payment.order.total
+    order.value.order.Email = payment.order.email
+    order.value.MerchantID = payment.MerchantID
+  }
+} catch (error) {
+  console.log(error)
+}
 </script>

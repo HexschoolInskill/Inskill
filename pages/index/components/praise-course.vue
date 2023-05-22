@@ -22,7 +22,7 @@
               class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
             />
           </div>
-          <div class="flex-1 p-8 xl:py-4 xl:px-6">
+          <div class="flex-1 p-8 xl:px-6 xl:py-4">
             <h3 class="text-[28px] text-blue line-clamp-1 sm:text-[#6C757D]">
               {{ item.title }}
             </h3>

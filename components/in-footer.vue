@@ -1,5 +1,5 @@
 <template>
-  <footer class="pt-18 pb-16 lg:pb-15 lg:pt-10">
+  <footer class="pb-16 pt-18 lg:pb-15 lg:pt-10">
     <in-container>
       <div class="flex flex-col items-center">
         <div class="w-40">

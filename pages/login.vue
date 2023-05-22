@@ -32,7 +32,7 @@
       登入
     </button>
 
-    <small class="mt-4 mb-2 text-sky-400 underline">
+    <small class="mb-2 mt-4 text-sky-400 underline">
       <NuxtLink to="forgetpassword">忘記密碼?</NuxtLink>
     </small>
     <small class="text-[#6C757D]">

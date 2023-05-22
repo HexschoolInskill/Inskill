@@ -29,14 +29,14 @@
         :class="{ 'overflow-y-scroll': cart.length > 3 }"
       >
         <h2
-          class="cart_header mb-4 border-4 border-t-0 border-l-0 border-r-0 border-black text-3xl"
+          class="cart_header mb-4 border-4 border-l-0 border-r-0 border-t-0 border-black text-3xl"
         >
           確認訂單
         </h2>
 
         <div
           v-if="cart.length"
-          class="cart_content border-4 border-t-0 border-l-0 border-r-0 border-black"
+          class="cart_content border-4 border-l-0 border-r-0 border-t-0 border-black"
         >
           <div v-for="item in cart" :key="item.id" class="cart_item mb-4 flex items-center">
             <img class="mr-2 border" :src="item.img" alt="img" />
@@ -60,7 +60,7 @@
       </main>
       <aside class="ml-1 mt-4 flex w-full flex-col rounded bg-white p-5 sm:mt-0 sm:w-3/12">
         <h2
-          class="cart_header mb-4 border-4 border-t-0 border-l-0 border-r-0 border-black text-3xl"
+          class="cart_header mb-4 border-4 border-l-0 border-r-0 border-t-0 border-black text-3xl"
         >
           購買人資訊
         </h2>

@@ -37,6 +37,82 @@ module.exports = {
         '50vh': '50vh',
         '80vh': '80vh',
         15: '3.75rem'
+      },
+      fontSize: {
+        h1: [
+          '40px',
+          {
+            lineHeight: '48px',
+            letterSpacing: '0.08em'
+          }
+        ],
+        h2: [
+          'clamp(24px, 2vw, 32px)',
+          {
+            lineHeight: '38.4px',
+            letterSpacing: '0.1em'
+          }
+        ],
+        h3: [
+          '28px',
+          {
+            lineHeight: '33.6px'
+          }
+        ],
+        h4: [
+          '24px',
+          {
+            lineHeight: '28.8px'
+          }
+        ],
+        h5: [
+          '20px',
+          {
+            lineHeight: '24px'
+          }
+        ],
+        h6: [
+          '16px',
+          {
+            lineHeight: '19.6px'
+          }
+        ],
+        'fs-1': [
+          '40px',
+          {
+            lineHeight: '60px'
+          }
+        ],
+        'fs-2': [
+          '32px',
+          {
+            lineHeight: '48px'
+          }
+        ],
+        'fs-3': [
+          '28px',
+          {
+            lineHeight: '42px'
+          }
+        ],
+        'fs-4': [
+          '24px',
+          {
+            lineHeight: '36px'
+          }
+        ],
+        'fs-5': [
+          '16px',
+          {
+            lineHeight: '24px'
+          }
+        ],
+        hint: [
+          '12px',
+          {
+            lineHeight: '20px'
+          }
+        ]
       }
     }
   },

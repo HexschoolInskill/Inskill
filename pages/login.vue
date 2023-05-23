@@ -51,8 +51,7 @@ import useUSer from '~/stores/useUser'
 import useNotification from '~~/stores/useNotification'
 
 definePageMeta({
-  layout: 'login-form',
-  middleware: 'login'
+  layout: 'login-form'
 })
 
 const { notification } = useNotification()

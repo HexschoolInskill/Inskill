@@ -1,5 +1,14 @@
 import mongoose, { Schema, Document } from 'mongoose'
 
+export interface CourseContent extends Document {
+  courseId: Object
+  courseType: string
+}
+const courseContent = new Schema<CourseContent>({
+  courseId: { type: Schema.Types.ObjectId, required: true },
+  courseType: { type: String, required: true }
+})
+
 export interface User extends Document {
   username: string
   email: string
@@ -13,9 +22,9 @@ export interface User extends Document {
   youtubeLink: string
   githubLink: string
   socialLink: string
-  collectCourses: Object[]
-  cartCourses: Object[]
-  purchasedCourses: Object[]
+  collectCourses: CourseContent[]
+  cartCourses: CourseContent[]
+  purchasedCourses: CourseContent[]
   apply: Object
   createdAt: Date
   updatedAt: Date
@@ -35,9 +44,9 @@ const userSchema = new Schema<User>(
     youtubeLink: { type: String, default: '' },
     githubLink: { type: String, default: '' },
     socialLink: { type: String, default: '' },
-    collectCourses: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
-    cartCourses: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
-    purchasedCourses: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
+    collectCourses: [courseContent],
+    cartCourses: [courseContent],
+    purchasedCourses: [courseContent],
     apply: {
       realName: { type: String, required: true },
       gender: { type: String, required: true },
@@ -77,11 +86,13 @@ export interface Lesson extends Document {
   contentType: string
   content: string
   duration: number
+  sort: number
 }
 
 export interface Chapter extends Document {
   title: string
   description: string
+  sort: number
   lessons: Lesson[]
 }
 
@@ -107,12 +118,14 @@ const lessonSchema = new Schema<Lesson>({
   description: { type: String, required: true },
   contentType: { type: String, required: true },
   content: { type: String, default: '' },
-  duration: { type: Number, default: 0 }
+  duration: { type: Number, default: 0 },
+  sort: { type: Number, required: true }
 })
 
 const chapterSchema = new Schema<Chapter>({
   title: { type: String, required: true },
   description: { type: String, required: true },
+  sort: { type: Number, required: true },
   lessons: [lessonSchema]
 })
 
@@ -142,6 +155,7 @@ export interface LiveCourse extends Document {
   videoUrl: string
   startTime: Date
   endTime: Date
+  reviews: Review[]
 }
 
 const liveCourseSchema = new Schema<LiveCourse>({
@@ -152,7 +166,8 @@ const liveCourseSchema = new Schema<LiveCourse>({
   teacherId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   videoUrl: { type: String, default: '' },
   startTime: { type: Date, required: true },
-  endTime: { type: Date, required: true }
+  endTime: { type: Date, required: true },
+  reviews: [reviewSchema]
 })
 
 export interface ChatMessage extends Document {

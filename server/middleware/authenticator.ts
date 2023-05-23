@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
       if (!accessToken) {
         return createError({
           statusCode: 401,
-          message: 'Unauthorized : must have Authorization header'
+          message: 'Unauthorized : must have Authorization'
         })
       }
 

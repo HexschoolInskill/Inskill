@@ -52,35 +52,27 @@ class UserModule extends HttpFactory {
   }
 
   async update(payload: IProfilePayload) {
-    try {
-      const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'POST', payload)
+    const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'POST', payload)
 
-      const store = useUser()
+    const store = useUser()
 
-      if (res.user) {
-        store.userProfile = res.user
-      }
-    } catch (error) {
-      return Promise.reject(error)
+    if (res.user) {
+      store.userProfile = res.user
     }
   }
 
   async updateAvatar(avatarFormData: FormData) {
-    try {
-      const res = await this.call<IProfileResponse>(
-        `${this.RESOURCE}/profile`,
-        'POST',
-        avatarFormData,
-        {
-          'Content-Type': 'multipart/form-data'
-        }
-      )
-      const store = useUser()
-      if (res.user) {
-        store.userProfile = res.user
+    const res = await this.call<IProfileResponse>(
+      `${this.RESOURCE}/profile`,
+      'POST',
+      avatarFormData,
+      {
+        'Content-Type': 'multipart/form-data'
       }
-    } catch (error) {
-      return Promise.reject(error)
+    )
+    const store = useUser()
+    if (res.user) {
+      store.userProfile = res.user
     }
   }
 

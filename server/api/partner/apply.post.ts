@@ -10,11 +10,11 @@ export default defineEventHandler(async (event) => {
     phone: Joi.number().required(),
     postNumber: Joi.number().required().min(100).max(999),
     address: Joi.string().required(),
-    facebookLink: Joi.string().uri(),
-    youtubeLink: Joi.string().uri(),
-    socialLink: Joi.string().uri(),
-    githubLink: Joi.string().uri(),
-    selfMedia: Joi.string().uri(),
+    facebookLink: Joi.string().allow('').uri(),
+    youtubeLink: Joi.string().allow('').uri(),
+    socialLink: Joi.string().allow('').uri(),
+    githubLink: Joi.string().allow('').uri(),
+    selfMedia: Joi.string().allow('').uri(),
     description: Joi.string().required(),
     longDescription: Joi.string().required()
   })

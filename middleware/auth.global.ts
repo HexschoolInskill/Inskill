@@ -5,11 +5,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
     const app = useNuxtApp()
     await app.$api.user.fetchProfile()
   }
-
   if (to.meta.auth) {
     const store = useUser()
     if (!store.userProfile.username) {
-      return navigateTo('/login')
+      return '/login'
     }
   }
 })

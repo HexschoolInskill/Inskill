@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
   const accessToken = getCookie(event, 'access_token')
 
-  const unProtectedRoutes = [/^\/api.*(?:\/(sign_up|sign_in|isEmailRegister))$/gi]
+  const unProtectedRoutes = [/^\/api.*(?:\/(sign_up|sign_in|isEmailRegister|search))$/gi]
 
   if (url!.startsWith('/api') && !unProtectedRoutes.some((pattern) => url!.match(pattern))) {
     try {

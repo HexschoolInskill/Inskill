@@ -1,4 +1,5 @@
 import { FetchOptions } from 'ofetch'
+import useUser from '~/stores/useUser'
 import UserModule from '~~/http/modules/user'
 import CoursesModule from '~~/http/modules/courses'
 import PartnerModule from '~/http/modules/partner'
@@ -19,7 +20,10 @@ export default defineNuxtPlugin(() => {
     },
     onResponseError({ response }) {
       if (response.status === 401) {
-        navigateTo('/login')
+        const route = useRoute()
+        const userStore = useUser()
+        userStore.resetUserProfile()
+        if (route.name !== 'login') navigateTo(`/login?redirect=${route.fullPath}`)
       } else {
         throw new Error(response._data.message)
       }

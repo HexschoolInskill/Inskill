@@ -6,7 +6,7 @@
       <img class="h-full w-full object-contain" src="/images/index-banner-bg-1.png" alt="" />
     </div>
     <in-container class="relative">
-      <h1 class="text-[40px] font-bold leading-normal text-white">
+      <h1 class="text-fs-1 font-black text-white">
         <span>做最好的自己，</span>
         <br />
         <span>學習最硬的技能</span>
@@ -42,7 +42,7 @@ function handleSearch() {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .banner {
   background: url('/images/index-banner-bg.jpg') no-repeat center/cover;
   &__letter {

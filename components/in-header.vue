@@ -160,7 +160,7 @@ const store = userUser()
 const searchInput = ref('')
 
 function handleSearch() {
-  const value = searchInput.value.trim()
+  const value = encodeURIComponent(searchInput.value.trim())
   if (value) {
     navigateTo(`/search?q=${value}`)
   }

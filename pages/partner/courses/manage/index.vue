@@ -3,9 +3,15 @@
     <section class="mb-10 flex">
       <h1 class="section-title">課程資訊</h1>
       <span class="item-center ml-4 rounded border border-dotted px-5 pt-1">{{
-        publish ? '發布' : '未發布'
+        currentCourse.isPublic ? '發布' : '未發布'
       }}</span>
-      <button type="button" class="ml-auto rounded border bg-black px-10">儲存</button>
+      <button
+        type="button"
+        class="ml-auto rounded border bg-black px-10"
+        @click="saveCourseContent"
+      >
+        儲存
+      </button>
     </section>
     <section class="border-bottom mb-10">
       <h1 class="section-title">發佈與預覽</h1>
@@ -48,6 +54,7 @@
       <h2 class="text-xl">課程圖片</h2>
 
       <div
+        v-if="!currentCourse.thumbnail.length"
         class="my-10 w-4/12 cursor-pointer rounded border border-dotted p-5 text-center"
         @click="initHiddenUploader"
       >
@@ -68,6 +75,8 @@
           @change="getBrandImage"
         />
       </div>
+
+      <img v-else :src="currentCourse.thumbnail" alt="thumbnail" />
     </section>
     <section class="border-bottom flex w-4/12 flex-col">
       <h1 class="section-title">細節資訊</h1>
@@ -75,7 +84,7 @@
 
       <label for="title" class="mb-1">課程標題 <span class="text-red-700">*</span></label>
       <input
-        v-model="courseTitle"
+        v-model="currentCourse.title"
         class="mb-4 rounded border p-1 text-black"
         type="text"
         name="title"
@@ -115,16 +124,16 @@
         </select> -->
 
       <label for="title">詳細說明</label>
-      <in-text-editor v-model="content" :max-limit="280" />
+      <in-text-editor v-model="currentCourse.description" :max-limit="280" />
     </section>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import coursesStore from '~/stores/courses'
 import useNotification from '~~/stores/useNotification'
-// import { storeToRefs } from 'pinia'
-// import coursesStore from '~/stores/courses'
 
 definePageMeta({
   layout: 'create-courses'
@@ -134,24 +143,27 @@ definePageMeta({
 const route = useRoute()
 const { $api } = useNuxtApp()
 const { notification } = useNotification()
-// const { currentCourse, setCurrentCourse } = storeToRefs(coursesStore())
+const { currentCourse } = storeToRefs(coursesStore())
+const { setCurrentCourse } = coursesStore()
 
 // Form fields
-const publish = ref(false)
 const brand = ref('web')
 const brandImage = ref([
   { brand: 'web', file: '' },
   { brand: 'ios', file: '' }
 ]) // { brand: '', file: '' }?
-const courseTitle = ref('')
+
 const courseSubtitle = ref('')
-const content = ref('')
 
 // course type input
 const coursetype = ref('')
 const typeTips: any = ref([])
 
 const hiddenUpload: any = ref(null)
+
+const saveCourseContent = () => {
+  setCurrentCourse(currentCourse.value)
+}
 
 const initHiddenUploader = () => {
   hiddenUpload.value.click()
@@ -179,7 +191,7 @@ const removeType = (index: number) => {
 
 onMounted(async () => {
   if (!route.query.id) {
-    // router.push('/')
+    // 新課程
   } else {
     // 發動獲取單一課程資料的 api
     const courseId = String(route.query.id)

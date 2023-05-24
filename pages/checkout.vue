@@ -137,7 +137,7 @@ const getTotal = computed(() => {
 const order = ref({
   aesEncrypt: '',
   shaEncrypt: '',
-  MerchantID: 'MS3129040116',
+  MerchantID: '',
   order: {
     TimeStamp: Math.floor(Date.now() / 1000),
     MerchantOrderNo: '',

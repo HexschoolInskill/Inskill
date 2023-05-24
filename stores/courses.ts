@@ -3,6 +3,8 @@ import { ref, reactive } from 'vue'
 
 interface course {
   _id: string
+  teacherId: string
+  isPublic: boolean
   title: string
   description: string
   price: number
@@ -22,6 +24,8 @@ export default defineStore('courses', () => {
   // 建立/編輯的課程
   let currentCourse = reactive<course>({
     _id: '',
+    teacherId: '',
+    isPublic: false,
     title: '',
     description: '',
     price: 0,

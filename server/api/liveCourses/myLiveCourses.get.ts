@@ -5,20 +5,17 @@ export default defineEventHandler(async (event) => {
     const userID = event.context.auth.userID
     const purchasedCourses = await models.User.aggregate([
       { $match: { $expr: { $eq: ['$_id', { $toObjectId: userID }] } } },
-      // 過濾出 purchasedCourses 中的 Course 課程
       { $unwind: '$purchasedCourses' },
-      { $match: { 'purchasedCourses.courseType': 'Course' } },
-      // 使用課程 ID 聯結 courses 資料表，取出需要的資料
+      { $match: { 'purchasedCourses.courseType': 'LiveCourse' } },
       {
         $lookup: {
-          from: 'courses',
+          from: 'livecourses',
           localField: 'purchasedCourses.courseId',
           foreignField: '_id',
           as: 'course'
         }
       },
       { $unwind: '$course' },
-      // 整理資料格式
       {
         $group: {
           _id: '$purchasedCourses.courseType',

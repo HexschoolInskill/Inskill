@@ -2,8 +2,8 @@
   <!-- <slot name="header"></slot> -->
 
   <div class="flex">
-    <aside class="w-1/12 whitespace-nowrap p-4 text-white">
-      <div class="p-5 text-center">課程名稱</div>
+    <aside class="w-1/12 p-4 text-white">
+      <div class="py-5 text-center">{{ currentCourse.title }}</div>
       <ul class="py-4">
         <li class="mb-4">
           <NuxtLink>課程資訊</NuxtLink>
@@ -17,10 +17,17 @@
       </ul>
     </aside>
 
-    <main class="w-11/12">
+    <main class="w-11/12 text-white">
       <slot />
     </main>
   </div>
 
   <slot name="footer"></slot>
 </template>
+
+<script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+import coursesStore from '~/stores/courses'
+
+const { currentCourse } = storeToRefs(coursesStore())
+</script>

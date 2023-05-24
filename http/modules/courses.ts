@@ -9,6 +9,10 @@ class CoursesModule extends HttpFactory {
     return await this.call(`${this.RESOURCE}/courses/teacher`, 'GET')
   }
 
+  async getCourseContent(id: string) {
+    return await this.call(`${this.RESOURCE}/courses/${id}`, 'GET')
+  }
+
   async createCourseTitle() {
     return await this.call(`${this.RESOURCE}/courses/create`, 'POST')
   }

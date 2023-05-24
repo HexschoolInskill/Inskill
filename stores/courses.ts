@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 
 interface course {
   _id: string
@@ -9,19 +9,29 @@ interface course {
   thumbnail: string
   theacherId: string
   chapters: object[]
-  reviews: object[]
+  reviews?: object[]
 }
 
-type course_object = course[]
+type courseArray = course[]
 
 export default defineStore('courses', () => {
   // 會員購買的課程
-  const courseStudent = ref<course_object>([])
+  const courseStudent = ref<courseArray>([])
   // 老師開設的課程
-  const courseTeacher = ref<course_object>([])
+  const courseTeacher = ref<courseArray>([])
+  // 建立/編輯的課程
+  let currentCourse = reactive<course>({
+    _id: '',
+    title: '',
+    description: '',
+    price: 0,
+    thumbnail: '',
+    theacherId: '',
+    chapters: []
+  })
   const cart = ref<Object[]>([])
 
-  const setCourse = (type: string, coursesFromBackend: course_object) => {
+  const setCourse = (type: string, coursesFromBackend: courseArray) => {
     if (type === 'student') {
       courseStudent.value = coursesFromBackend
     } else {
@@ -33,11 +43,17 @@ export default defineStore('courses', () => {
     cart.value = cartFromBackend
   }
 
+  const setCurrentCourse = (course: course) => {
+    currentCourse = course
+  }
+
   return {
     courseStudent,
     setCourse,
     courseTeacher,
+    currentCourse,
     cart,
-    setCart
+    setCart,
+    setCurrentCourse
   }
 })

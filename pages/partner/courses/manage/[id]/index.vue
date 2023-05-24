@@ -110,9 +110,9 @@
         </li>
       </ul>
       <!-- <input class="rounded border" type="text" name="type" v-model="coursetype" @focus="showHiddenTypeOption" @change="getCourseType"/>
-      <select id="type" class="rounded mb-4 hidden" name="type">
-        <option value="new">新增 {{ coursetype }}</option>
-      </select> -->
+        <select id="type" class="rounded mb-4 hidden" name="type">
+          <option value="new">新增 {{ coursetype }}</option>
+        </select> -->
 
       <label for="title">詳細說明</label>
       <in-text-editor v-model="content" :max-limit="280" />
@@ -122,10 +122,19 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
+import useNotification from '~~/stores/useNotification'
+// import { storeToRefs } from 'pinia'
+// import coursesStore from '~/stores/courses'
 
 definePageMeta({
   layout: 'create-courses'
 })
+
+// const router = useRouter()
+const route = useRoute()
+const { $api } = useNuxtApp()
+const { notification } = useNotification()
+// const { currentCourse, setCurrentCourse } = storeToRefs(coursesStore())
 
 // Form fields
 const publish = ref(false)
@@ -168,8 +177,25 @@ const removeType = (index: number) => {
   typeTips.value.splice(index, 1)
 }
 
-onMounted(() => {
-  console.log(hiddenUpload.value)
+onMounted(async () => {
+  if (!route.query.id) {
+    // router.push('/')
+  } else {
+    // 發動獲取單一課程資料的 api
+    const courseId = String(route.query.id)
+
+    try {
+      const courseContent: any = await $api.course.getCourseContent(courseId)
+
+      if (courseContent.success) {
+        // 把取得的資料放入對應的欄位
+      } else {
+        notification.error(courseContent.message)
+      }
+    } catch (err: any) {
+      notification.error(err)
+    }
+  }
 })
 </script>
 

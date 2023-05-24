@@ -58,7 +58,11 @@
 
       <div class="mx-auto mt-4 flex w-6/12 flex-col">
         <label for="title" class="mb-1">課程名稱 <span class="text-red-700">*</span></label>
-        <input v-model="newCourse" class="border p-1" type="text" name="title" />
+        <input v-model="v$.newCourse.$model" class="border p-1" type="text" name="title" />
+
+        <div v-for="error of v$.newCourse.$errors" :key="error.$uid" class="mb-4 text-red-500">
+          {{ error.$message }}
+        </div>
 
         <button
           class="my-4 w-4/12 rounded bg-black px-10 py-1 text-white"
@@ -73,18 +77,30 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useVuelidate } from '@vuelidate/core'
+import { required, helpers } from '@vuelidate/validators'
 import coursesStore from '~/stores/courses'
-// import useNotification from '~~/stores/useNotification'
+import useNotification from '~~/stores/useNotification'
 
 const { $api } = useNuxtApp()
 const router = useRouter()
-// const { notification } = useNotification()
+const { notification } = useNotification()
 const { courseTeacher } = storeToRefs(coursesStore())
 
-const newCourse = ref('')
+const formFields = reactive({
+  newCourse: ''
+})
 const showModal = ref(false)
+
+const rules = {
+  newCourse: {
+    required: helpers.withMessage('請輸入名稱', required)
+  }
+}
+
+const v$ = useVuelidate(rules, formFields)
 
 const openModal = () => {
   showModal.value = true
@@ -96,13 +112,20 @@ const closeModal = () => {
 
 const createNewCourse = async () => {
   // 發動建立課程的 api
-  try {
-    const newCourse: any = await $api.course.createCourseTitle()
-    // 移動到課程編輯頁面
-    if(newCourse._id) router.push(`/manage/${newCourse._id}`)
-    // notification.error(newCourse.message)
-  } catch (error) {
-    console.log('create course error:>>>', error)
+  if (formFields.newCourse.length) {
+    try {
+      const newCourse: any = await $api.course.createCourseTitle()
+      // 移動到課程編輯頁面
+      if (newCourse._id) {
+        router.push(`/manage/${newCourse._id}`)
+      } else {
+        notification.error(newCourse.message)
+      }
+    } catch (error) {
+      console.log('create course error:>>>', error)
+    }
+  } else {
+    notification.error('請輸入名稱')
   }
 }
 

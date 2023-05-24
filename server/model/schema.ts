@@ -107,6 +107,7 @@ export interface Course extends Document {
   title: string
   description: string
   price: number
+  purchasedCount: number
   thumbnail: string
   teacherId: Object
   chapters: Chapter[]
@@ -140,6 +141,7 @@ const courseSchema = new Schema<Course>({
   title: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
+  purchasedCount: { type: Number, default: 0 },
   thumbnail: { type: String, default: '' },
   teacherId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   chapters: [chapterSchema],
@@ -150,6 +152,7 @@ export interface LiveCourse extends Document {
   title: string
   description: string
   price: number
+  purchasedCount: number
   thumbnail: string
   teacherId: Object
   videoUrl: string
@@ -162,6 +165,7 @@ const liveCourseSchema = new Schema<LiveCourse>({
   title: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
+  purchasedCount: { type: Number, default: 0 },
   thumbnail: { type: String, default: '' },
   teacherId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   videoUrl: { type: String, default: '' },

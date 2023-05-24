@@ -62,6 +62,7 @@ function handleMouseOver(event: MouseEvent) {
     overflow: hidden;
     will-change: transform;
     transition: transform 0.3s;
+    height: 100%;
   }
   &--xs-white {
     .in-card__wrapper {

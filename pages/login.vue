@@ -32,7 +32,7 @@
       登入
     </button>
 
-    <small class="mt-4 mb-2 text-sky-400 underline">
+    <small class="mb-2 mt-4 text-sky-400 underline">
       <NuxtLink to="forgetpassword">忘記密碼?</NuxtLink>
     </small>
     <small class="text-gray">
@@ -49,6 +49,7 @@ import { required, email, helpers } from '@vuelidate/validators'
 import { storeToRefs } from 'pinia'
 import useUSer from '~/stores/useUser'
 import useNotification from '~~/stores/useNotification'
+import useToken from '~/composables/useToken'
 
 definePageMeta({
   layout: 'login-form'
@@ -78,6 +79,7 @@ const { userProfile } = storeToRefs(useUSer())
 const { $api } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
+const token = useToken()
 
 const login = async () => {
   try {
@@ -87,6 +89,7 @@ const login = async () => {
     })
 
     if (result.success) {
+      token.setToken(result.accessToken)
       userProfile.value.username = result.username
       userProfile.value.avatar = result.avatar
 

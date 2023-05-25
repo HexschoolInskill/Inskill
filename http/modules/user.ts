@@ -38,7 +38,10 @@ class UserModule extends HttpFactory {
   async logout() {
     await this.call(`${this.RESOURCE}/sign_out`, 'POST')
     const userStore = useUser()
+    const token = useToken()
     userStore.resetUserProfile()
+    token.deleteToken()
+
     navigateTo('/')
   }
 

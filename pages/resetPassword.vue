@@ -53,7 +53,6 @@ import { reactive, ref, computed, onBeforeMount } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, sameAs, helpers } from '@vuelidate/validators'
 import useNotification from '~~/stores/useNotification'
-import tokenController from '~~/composables/token'
 
 definePageMeta({
   layout: 'login-form'
@@ -63,6 +62,7 @@ const { notification } = useNotification()
 
 const router = useRouter()
 const route = useRoute()
+const token = useToken()
 
 const formFields = reactive({
   password: '',
@@ -98,7 +98,7 @@ const resetPassword = async () => {
       notification.success(result.message)
 
       // 清除一次性的 token
-      tokenController.deleteToken()
+      token.deleteToken()
     } else {
       notification.error(result.message)
     }
@@ -115,7 +115,7 @@ onBeforeMount(() => {
     router.push('/')
   } else {
     const temporaryToken = String(route.query.token)
-    tokenController.setToken(temporaryToken)
+    token.setToken(temporaryToken)
   }
 })
 </script>

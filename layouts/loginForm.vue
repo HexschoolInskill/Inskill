@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="absolute top-[50%] left-[50%] w-1/4 translate-x-[-50%] translate-y-[-50%]">
+    <div class="absolute left-[50%] top-[50%] w-1/4 translate-x-[-50%] translate-y-[-50%]">
       <img src="/images/logo-white.svg" alt="logo" />
       <slot />
     </div>
@@ -10,9 +10,9 @@
       class="modalWrapper absolute z-10 h-[100%] w-[100%] bg-black bg-opacity-50"
     >
       <div
-        class="modal relative top-[50%] left-[50%] w-[50%] translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded bg-white"
+        class="modal relative left-[50%] top-[50%] w-[50%] translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded bg-white"
       >
-        <div class="modalHeader border border-t-0 border-r-0 border-l-0 p-2 px-4">
+        <div class="modalHeader border border-l-0 border-r-0 border-t-0 p-2 px-4">
           <button
             type="button"
             class="float-right mt-3 rounded-full bg-slate-400"

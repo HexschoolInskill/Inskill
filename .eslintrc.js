@@ -14,7 +14,8 @@ module.exports = {
     'no-console': 'off',
     'import/no-named-as-default-member': 'off',
     'import/no-named-as-default': 'off',
-    'no-new': 'off'
+    'no-new': 'off',
+    'no-control-regex': 0
   },
   overrides: [
     {

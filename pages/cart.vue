@@ -1,24 +1,20 @@
 <template>
-  <in-container>
-    <div class="flex h-[62vh] justify-between py-5">
-      <main
-        class="relative mr-1 w-9/12 rounded bg-white p-5"
-        :class="{ 'overflow-y-scroll': cart.length > 3 }"
-      >
-        <h2
-          class="cart_header mb-4 border-4 border-t-0 border-l-0 border-r-0 border-black text-3xl"
-        >
+  <in-container class="mt-[11vh] sm:mt-[15vh]">
+    <div class="flex h-auto flex-col justify-between py-5 sm:h-[62vh] sm:flex-row">
+      <main class="mr-4 w-full rounded bg-white p-5 sm:w-9/12">
+        <h2 class="cart_header border-4 border-l-0 border-r-0 border-t-0 border-black text-3xl">
           購物車
         </h2>
 
         <div
           v-if="cart.length"
-          class="cart_content border-4 border-t-0 border-l-0 border-r-0 border-black"
+          class="cart_content max-h-[350px] border-4 border-l-0 border-r-0 border-t-0 border-black"
+          :class="{ 'overflow-y-scroll': cart.length > 3 }"
         >
           <div
             v-for="(item, index) in cart"
             :key="item.id"
-            class="cart_item mb-4 flex items-center"
+            class="cart_item my-4 flex items-center"
           >
             <img class="mr-2 border" :src="item.img" alt="img" />
             <div class="w-2/12">
@@ -42,7 +38,7 @@
 
         <div
           v-else
-          class="absolute top-[50%] left-[50%] w-[50%] translate-x-[-50%] translate-y-[-50%] text-center"
+          class="absolute left-[50%] top-[50%] w-[50%] translate-x-[-50%] translate-y-[-50%] text-center"
         >
           <img
             class="ml-auto mr-auto w-4/12"
@@ -57,9 +53,9 @@
           </NuxtLink>
         </div>
       </main>
-      <aside class="ml-1 flex w-3/12 flex-col rounded bg-white p-5">
+      <aside class="ml-1 mt-4 flex w-full flex-col rounded bg-white p-5 sm:mt-0 sm:w-3/12">
         <h2
-          class="cart_header mb-4 border-4 border-t-0 border-l-0 border-r-0 border-black text-3xl"
+          class="cart_header mb-4 border-4 border-l-0 border-r-0 border-t-0 border-black text-3xl"
         >
           總計{{ cart.length }}堂課程
         </h2>
@@ -73,10 +69,10 @@
           <div class="mt-4 text-right text-3xl font-bold">NT$ {{ getTotal }}</div>
         </div>
 
-        <NuxtLink to="/order">
+        <NuxtLink to="/checkout">
           <button
             :class="[cart.length ? 'bg-black' : 'bg-slate-200']"
-            class="w-full rounded border p-1 text-xl text-white"
+            class="mt-4 w-full rounded border p-1 text-xl text-white"
             type="button"
           >
             前往結帳
@@ -115,6 +111,12 @@ const cart = reactive([
     name: 'test',
     price: 150
   }
+  // {
+  //   id: 1,
+  //   img: 'https://fakeimg.pl/100x100/',
+  //   name: 'test',
+  //   price: 150
+  // }
 ])
 
 const getTotal = computed(() => {

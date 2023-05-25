@@ -17,7 +17,7 @@
         >
           <p>一般課程</p>
           <div
-            class="transition-base absolute left-0 bottom-0 h-1 w-full scale-x-0 bg-white group-hover:scale-x-100"
+            class="transition-base absolute bottom-0 left-0 h-1 w-full scale-x-0 bg-white group-hover:scale-x-100"
             :class="{ '!scale-x-100': category === 'normal' }"
           ></div>
         </div>
@@ -27,7 +27,7 @@
         >
           <p>直播課程</p>
           <div
-            class="transition-base absolute left-0 bottom-0 h-1 w-full scale-x-0 bg-white group-hover:scale-x-100"
+            class="transition-base absolute bottom-0 left-0 h-1 w-full scale-x-0 bg-white group-hover:scale-x-100"
             :class="{ '!scale-x-100': category === 'stream' }"
           ></div>
         </div>
@@ -79,7 +79,7 @@
               <i class="icon-bookmark-outline -mt-px text-[32px]"></i>
             </div>
           </div>
-          <div class="flex-1 p-8 xl:py-4 xl:px-6">
+          <div class="flex-1 p-8 xl:px-6 xl:py-4">
             <h3 class="text-[28px] text-blue line-clamp-1 sm:text-[#6C757D]">
               {{ item.title }}
             </h3>

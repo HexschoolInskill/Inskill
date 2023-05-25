@@ -80,7 +80,7 @@
               label="Email(此為您註冊時的Email)"
               disabled
             />
-            <div class="mt-5 flex flex-wrap gap-y-2 gap-x-6">
+            <div class="mt-5 flex flex-wrap gap-x-6 gap-y-2">
               <div>
                 <p class="text-white">性別</p>
                 <div class="mt-3 flex gap-3">

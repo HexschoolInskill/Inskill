@@ -22,7 +22,7 @@
               <img v-else src="/images/avatar-fallback.svg" alt="" />
             </div>
             <div
-              class="absolute right-0 bottom-0 flex h-6 w-6 items-center justify-center rounded-full bg-white text-black"
+              class="absolute bottom-0 right-0 flex h-6 w-6 items-center justify-center rounded-full bg-white text-black"
             >
               <i class="icon-upload text-[12px]"></i>
             </div>

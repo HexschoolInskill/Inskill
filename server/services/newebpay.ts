@@ -93,7 +93,7 @@ export async function createPayment(order: Record<string, unknown>, isProd: bool
 }
 
 export async function spgatewayNotify(order: Record<string, unknown>, isProd: boolean) {
-  const thisShaEncrypt = await createMpgShaEncrypt(order.TradeInfo)
+  const thisShaEncrypt = await createMpgShaEncrypt(order.TradeInfo as string)
   // 使用 HASH 再次 SHA 加密字串，確保比對一致（確保不正確的請求觸發交易成功）
   if (!thisShaEncrypt === order.TradeSha) {
     return {

@@ -190,17 +190,16 @@ const removeType = (index: number) => {
 }
 
 onMounted(async () => {
-  if (!route.query.id) {
-    // 新課程
-  } else {
-    // 發動獲取單一課程資料的 api
+  // 如果有代課程id進來
+  if (route.query.id !== undefined) {
     const courseId = String(route.query.id)
-
+    // 發動獲取單一課程資料的 api
     try {
       const courseContent: any = await $api.course.getCourseContent(courseId)
 
       if (courseContent.success) {
         // 把取得的資料放入對應的欄位
+        // setCurrentCourse()
       } else {
         notification.error(courseContent.message)
       }

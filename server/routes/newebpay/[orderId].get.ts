@@ -2,12 +2,14 @@ import { createPayment } from '../../services/newebpay'
 export default defineEventHandler(async (event) => {
   try {
     const { orderId } = getRouterParams(event)
+    const { total } = getQuery(event)
     console.log(`gotopay orderId : `, orderId)
+    console.log(`gotopay total : `, total)
     // TODO : 更改 下列參數 來自資料庫order
     const data = await createPayment(
       {
         id: orderId,
-        total: 199,
+        total,
         description: 'test',
         email: 'hexschoolinskill@gmail.com'
       },

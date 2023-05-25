@@ -159,7 +159,9 @@ const apiEndpoint = computed(() => {
 const randomOrderId = Date.now()
 
 try {
-  const newebpay: any = await useAsyncData('orderFetch', () => $fetch(`/newebpay/${randomOrderId}`))
+  const newebpay: any = await useAsyncData('orderFetch', () =>
+    $fetch(`/newebpay/${randomOrderId}?total=${getTotal.value}`)
+  )
   console.log(`data : `, newebpay)
 
   if (newebpay.data.value) {

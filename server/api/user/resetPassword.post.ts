@@ -35,13 +35,13 @@ export default defineEventHandler(async (event) => {
         message: '密碼重置成功'
       }
     } else {
-      throw createError({
+      return createError({
         statusCode: 404,
         message: '密碼重置失敗'
       })
     }
   } catch (error: any) {
-    throw createError({
+    return createError({
       statusCode: error.statusCode ? error.statusCode : 400,
       message: error.message
     })

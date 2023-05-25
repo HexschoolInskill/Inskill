@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     // 檢查 email 是否已經存在
     const existingUser = await models.User.findOne({ email: value.email })
     if (existingUser) {
-      throw createError({
+      return createError({
         statusCode: 409,
         message: 'Email already exists'
       })
@@ -43,17 +43,23 @@ export default defineEventHandler(async (event) => {
     })
 
     const { JWT_SECRET } = useRuntimeConfig()
+    const maxAge = 60 * 60 * 24 * 30
     const accessToken = await sign({ uid: newUser._id }, JWT_SECRET, 60 * 60 * 24 * 30)
+
+    setCookie(event, 'access_token', accessToken!, {
+      httpOnly: true,
+      sameSite: 'strict',
+      maxAge
+    })
 
     return {
       success: true,
       statusCode: 200,
       message: '帳號建立成功',
-      username: newUser.username,
-      accessToken
+      username: newUser.username
     }
   } catch (error: any) {
-    throw createError({
+    return createError({
       statusCode: error.statusCode ? error.statusCode : 400,
       message: error.message
     })

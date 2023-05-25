@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
 
     const user = await models.User.findOne({ email: value.email }).select('+password')
     if (!user) {
-      throw createError({
+      return createError({
         statusCode: 404,
         message: '帳號或密碼錯誤'
       })
@@ -33,23 +33,31 @@ export default defineEventHandler(async (event) => {
 
     const auth = await compare(value.password, user.password)
     if (!auth) {
-      throw createError({
+      return createError({
         statusCode: 404,
         message: '帳號或密碼錯誤'
       })
     } else {
       const { JWT_SECRET } = useRuntimeConfig()
-      const accessToken = await sign({ uid: user._id }, JWT_SECRET, 60 * 60 * 24 * 30)
+      const maxAge = 60 * 60 * 24 * 30
+      const accessToken = await sign({ uid: user._id }, JWT_SECRET, maxAge)
+
+      setCookie(event, 'access_token', accessToken!, {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge
+      })
+
       return {
         success: true,
         statusCode: 200,
         message: '登入成功',
         username: user.username,
-        accessToken
+        avatar: user.avatar
       }
     }
   } catch (error: any) {
-    throw createError({
+    return createError({
       statusCode: error.statusCode ? error.statusCode : 400,
       message: error.message
     })

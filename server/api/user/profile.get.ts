@@ -12,13 +12,13 @@ export default defineEventHandler(async (event) => {
         user
       }
     } else {
-      throw createError({
+      return createError({
         statusCode: 404,
         message: '取得 user 資料失敗'
       })
     }
   } catch (error: any) {
-    throw createError({
+    return createError({
       statusCode: error.statusCode ? error.statusCode : 400,
       message: error.message
     })

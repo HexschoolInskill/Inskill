@@ -1,5 +1,5 @@
 <template>
-  <h1 class="my-4 text-3xl font-bold">申請帳號</h1>
+  <h1 class="my-4 text-3xl font-bold text-white">申請帳號</h1>
 
   <form v-if="step === 1" class="flex flex-col">
     <label class="text-white" for="userName">使用者名稱</label>
@@ -53,7 +53,7 @@
       {{ error.$message }}
     </div>
 
-    <label for="agree" class="text-[#6C757D]" :class="{ 'mb-4': !v$.agree.$errors.length }">
+    <label for="agree" class="text-gray" :class="{ 'mb-4': !v$.agree.$errors.length }">
       <input v-model="v$.agree.$model" type="checkbox" name="agree" />
       同意
       <span class="cursor-pointer text-sky-400 underline" @click="modalController('user')"
@@ -73,7 +73,7 @@
       建立帳號
     </button>
 
-    <small class="mb-2 mt-4 text-[#6C757D]">
+    <small class="mb-2 mt-4 text-gray">
       已有帳號?
       <NuxtLink to="login" class="text-sky-400 underline">登入</NuxtLink>
     </small>
@@ -81,7 +81,7 @@
 
   <div v-else>
     <p class="text-white">恭喜成功註冊 InSkill</p>
-    <p class="mb-4 mt-2 text-sm text-[#6C757D]">任何技能，任何課程，任你探索!</p>
+    <p class="mb-4 mt-2 text-sm text-gray">任何技能，任何課程，任你探索!</p>
     <NuxtLink to="/">
       <button type="button" class="w-20 rounded border bg-black text-white">繼續</button>
     </NuxtLink>

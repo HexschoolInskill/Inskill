@@ -35,7 +35,7 @@
     <small class="mb-2 mt-4 text-sky-400 underline">
       <NuxtLink to="forgetpassword">忘記密碼?</NuxtLink>
     </small>
-    <small class="text-[#6C757D]">
+    <small class="text-gray">
       尚未成為會員?
       <NuxtLink class="text-sky-400 underline" to="register">申請帳號</NuxtLink>
     </small>
@@ -78,6 +78,7 @@ const { userProfile } = storeToRefs(useUSer())
 
 const { $api } = useNuxtApp()
 const router = useRouter()
+const route = useRoute()
 const token = useToken()
 
 const login = async () => {
@@ -90,9 +91,13 @@ const login = async () => {
     if (result.success) {
       token.setToken(result.accessToken)
       userProfile.value.username = result.username
+      userProfile.value.avatar = result.avatar
 
-      // 登入成功，回首頁
-      router.push('/')
+      if (route.query.redirect) {
+        router.push(route.query.redirect as string)
+      } else {
+        router.push('/')
+      }
     } else {
       notification.error(result.message)
       formFields.password = ''

@@ -7,6 +7,7 @@ export interface IUserProfile {
   interests: string
   about: string
   isTeacher: boolean
+  avatar: string
   facebookLink: string
   youtubeLink: string
   githubLink: string
@@ -22,6 +23,7 @@ export default defineStore('user', () => {
     interests: '',
     about: '',
     isTeacher: false,
+    avatar: '',
     facebookLink: '',
     youtubeLink: '',
     githubLink: '',
@@ -37,6 +39,7 @@ export default defineStore('user', () => {
       interests: '',
       about: '',
       isTeacher: false,
+      avatar: '',
       facebookLink: '',
       youtubeLink: '',
       githubLink: '',

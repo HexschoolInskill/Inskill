@@ -5,8 +5,8 @@
         <div class="w-40">
           <img src="/images/logo-white.svg" alt="" />
         </div>
-        <p class="mt-5 text-base text-[#6C757D]">InSkill © All Rights Reserved.</p>
-        <p class="mt-3 text-base text-[#6C757D]">僅供學習使用，無商業用途。</p>
+        <p class="mt-5 text-base text-gray">InSkill © All Rights Reserved.</p>
+        <p class="mt-3 text-base text-gray">僅供學習使用，無商業用途。</p>
       </div>
     </in-container>
   </footer>

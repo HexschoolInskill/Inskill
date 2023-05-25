@@ -8,27 +8,30 @@ export default defineEventHandler(async (event) => {
   const request = event.node.req
   const { url, method } = request
   console.log(`Through authentication middleware : `, method, url)
-  const headerAuth = getRequestHeader(event, 'Authorization')
-  const accessToken =
-    headerAuth?.split(' ')[0] === 'Bearer' ? headerAuth.split(' ')[1] : 'token invalid'
-  const unProtectedRoutes = [/^\/api.*(?:\/(sign_up|sign_in|isEmailRegister))$/gi]
+
+  const accessToken = getCookie(event, 'access_token')
+
+  const unProtectedRoutes = [/^\/api.*(?:\/(sign_up|sign_in|isEmailRegister|search))$/gi]
+
   if (url!.startsWith('/api') && !unProtectedRoutes.some((pattern) => url!.match(pattern))) {
     try {
-      if (!accessToken)
-        throw createError({
+      if (!accessToken) {
+        return createError({
           statusCode: 401,
-          message: 'Unauthorized : must have Authorization header'
+          message: 'Unauthorized : must have Authorization'
         })
+      }
+
       const { uid, exp } = (await decoder(accessToken, JWT_SECRET)) as JwtPayload
       if (Date.now() >= exp * 1000)
-        throw createError({
+        return createError({
           statusCode: 401,
           message: 'Unauthorized : token expired'
         })
       event.context.auth = { userID: uid }
     } catch (err) {
       console.log(`Through authentication middleware error : `, err)
-      throw createError({
+      return createError({
         statusCode: 401,
         message: 'Unauthorized : token invalid'
       })

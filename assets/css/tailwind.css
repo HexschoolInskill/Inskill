@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer utilities {
+  .transition-2 {
+    transition: 0.2s ease-in-out;
+  }
   .transition-base {
     transition: 0.3s ease-in-out;
   }

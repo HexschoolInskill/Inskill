@@ -35,48 +35,49 @@ class UserModule extends HttpFactory {
     return await this.call(`${this.RESOURCE}/sign_in`, 'POST', payload)
   }
 
-  logout() {
+  async logout() {
+    await this.call(`${this.RESOURCE}/sign_out`, 'POST')
+    const userStore = useUser()
     const token = useToken()
-    const store = useUser()
-
+    userStore.resetUserProfile()
     token.deleteToken()
-    store.resetUserProfile()
 
     navigateTo('/')
-    // location.reload()
   }
 
   async fetchProfile() {
     const store = useUser()
+    const { data } = await useAsyncData<IProfileResponse>(() =>
+      this.call(`${this.RESOURCE}/profile`, 'GET')
+    )
 
-    if (process.client) {
-      // const { data } = await useAsyncData<IProfileResponse>(() =>
-      //   this.call(`${this.RESOURCE}/profile`, 'GET')
-      // )
-
-      // if (data?.value?.user) {
-      //   store.userProfile = data.value.user
-      // }
-
-      const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'GET')
-
-      if (res?.user) {
-        store.userProfile = res.user
-      }
+    if (data?.value?.user) {
+      store.userProfile = data.value.user
     }
   }
 
   async update(payload: IProfilePayload) {
-    try {
-      const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'POST', payload)
+    const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'POST', payload)
 
-      const store = useUser()
+    const store = useUser()
 
-      if (res.user) {
-        store.userProfile = res.user
+    if (res.user) {
+      store.userProfile = res.user
+    }
+  }
+
+  async updateAvatar(avatarFormData: FormData) {
+    const res = await this.call<IProfileResponse>(
+      `${this.RESOURCE}/profile`,
+      'POST',
+      avatarFormData,
+      {
+        'Content-Type': 'multipart/form-data'
       }
-    } catch (error) {
-      return Promise.reject(error)
+    )
+    const store = useUser()
+    if (res.user) {
+      store.userProfile = res.user
     }
   }
 

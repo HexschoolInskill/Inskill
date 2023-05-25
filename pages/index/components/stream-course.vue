@@ -7,7 +7,7 @@
           <div class="swiper-wrapper">
             <div v-for="item in list" :key="item.id" class="swiper-slide">
               <div class="group">
-                <in-card>
+                <in-card xs-white>
                   <div class="relative pt-7/10 sm:pt-5/10">
                     <img
                       :src="item.thumbnail"
@@ -15,7 +15,7 @@
                       :alt="item.title"
                     />
                   </div>
-                  <div class="p-6 font-bold text-[#6C757D] sm:p-12 sm:text-white">
+                  <div class="p-6 font-bold text-gray sm:p-12 sm:text-white">
                     <h3 class="text-[28px] text-blue line-clamp-1 sm:text-white">
                       {{ item.title }}
                     </h3>
@@ -52,7 +52,7 @@
                       </div>
                       <div class="mt-4 sm:mt-0 sm:self-end">
                         <p class="flex items-center gap-5 text-2xl font-bold sm:justify-between">
-                          <span class="text-[#6C757D] sm:text-[#DEE2E6]">NT$</span>
+                          <span class="text-gray sm:text-gray-l">NT$</span>
                           <span class="text-black sm:text-inherit">{{
                             formatNumber(item.price)
                           }}</span>

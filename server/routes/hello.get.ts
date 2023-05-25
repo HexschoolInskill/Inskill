@@ -48,11 +48,9 @@ export default defineEventHandler(async () => {
       response
     }
   } catch (error: any) {
-    console.log(`[hello.get] error : `, error)
-    return {
-      success: false,
-      statusCode: 400,
+    return createError({
+      statusCode: error.statusCode ? error.statusCode : 400,
       message: error.message
-    }
+    })
   }
 })

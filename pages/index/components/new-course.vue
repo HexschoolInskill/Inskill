@@ -6,7 +6,7 @@
         <div class="swiper-wrapper">
           <div v-for="item in list" :key="item.id" class="swiper-slide">
             <div class="group block cursor-pointer">
-              <in-card perspective class="flex flex-col font-bold text-[#6C757D] sm:text-white">
+              <in-card xs-white perspective class="flex flex-col font-bold text-gray sm:text-white">
                 <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-6/10">
                   <img
                     :src="item.thumbnail"
@@ -52,7 +52,7 @@
                         <p class="font-bold leading-normal">{{ item.teacher.name }}</p>
                       </div>
                       <p class="flex items-center gap-5 text-2xl">
-                        <span class="text-[#6C757D] sm:text-[#DEE2E6]">NT$</span>
+                        <span class="text-gray sm:text-gray-l">NT$</span>
                         <span class="text-black sm:text-inherit">{{
                           formatNumber(item.price)
                         }}</span>

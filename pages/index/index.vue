@@ -1,12 +1,22 @@
 <template>
   <Title>Inskill - 做最好的自己，學習最硬的技能</Title>
-  <div class="overflow-hidden">
-    <banner />
-    <new-course />
-    <stream-course />
-    <comments />
-    <popular-course />
-    <praise-course />
+  <div>
+    <nuxt-layout name="default" :padding-top="false">
+      <template #header>
+        <in-header />
+      </template>
+      <div class="overflow-hidden">
+        <banner />
+        <new-course />
+        <stream-course />
+        <comments />
+        <popular-course />
+        <praise-course />
+      </div>
+      <template #footer>
+        <in-footer />
+      </template>
+    </nuxt-layout>
   </div>
 </template>
 <script setup lang="ts">
@@ -21,7 +31,13 @@ import Comments from './components/comments.vue'
 import PopularCourse from './components/popular-course.vue'
 import PraiseCourse from './components/praise-course.vue'
 
-onMounted(() => {
+definePageMeta({
+  layout: false
+})
+
+onMounted(async () => {
+  await nextTick()
+
   gsap.registerPlugin(ScrollTrigger)
 
   new Rellax('.rellax', {
@@ -43,7 +59,7 @@ onMounted(() => {
   }
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .slider-pagination {
   @apply flex flex-wrap items-center justify-center gap-6;
   &__bullet {

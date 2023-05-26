@@ -90,3 +90,33 @@ export async function getWebRTCAppRecordList() : Promise<any> {
         }
     }
 }
+
+export async function createWebRTCApp(roomName : string) : Promise<any> {
+    // 創建媒體伺服器的webRTCApp
+    try {
+        const APIURI = `${API_ENDPOINT}/broadcasts/create`
+        const response = await fetch(APIURI, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name : roomName,
+            })
+        })
+        const { status, statusText } = response
+        console.log(`createWebRTCApp status-statusText:`,status, statusText)
+        const data = await response.json()
+        console.log(`createWebRTCApp data:`,data)
+        return {
+            success : true,
+            data
+        }
+    } catch(err) {
+        console.log(`createWebRTCApp error: `, err)
+        return {
+            success : false,
+            message : err || `createWebRTCApp error`
+        }
+    }
+}

@@ -1,5 +1,5 @@
 import { decoder } from '../services/jwt'
-import models, { User } from '../model/schema'
+import models from '../model/schema'
 interface JwtPayload {
   uid: string
   exp: number
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
           statusCode: 401,
           message: 'Unauthorized : user not found'
         }
-      event.context.auth = { userID: uid, userInfo : user }
+      event.context.auth = { userID: uid, userInfo: user }
     } catch (err) {
       console.log(`Through authentication middleware error : `, err)
       return {

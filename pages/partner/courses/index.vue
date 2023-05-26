@@ -18,16 +18,14 @@
       <p class="font-light">發布或取消發布您的課程。查看您的課程對訪客或已註冊學生的展示效果。</p>
       <div class="my-4">
         <button type="button" class="mr-2 rounded border bg-black px-5 py-1">發布課程</button>
-        <button type="button" class="ml-2 rounded border bg-black px-5 py-1">更多</button>
+        <select class="ml-2 rounded border bg-black px-5 py-1">
+          <option selected disabled>更多</option>
+          <option value="preview_guest">預覽販售頁面</option>
+          <option value="preview_student">以學生身分預覽</option>
+          <option value="duplicate">複製課程</option>
+          <option value="delete">刪除課程</option>
+        </select>
       </div>
-
-      <!-- more options -->
-      <ul class="hidden">
-        <li>預覽販售頁面</li>
-        <li>以學生身分預覽</li>
-        <li>複製課程</li>
-        <li>刪除課程</li>
-      </ul>
     </section>
     <section class="border-bottom mb-10">
       <h1 class="section-title">品牌資訊</h1>
@@ -37,18 +35,20 @@
       </p>
 
       <nav class="mb-4 flex">
-        <div
-          class="border-bottom border-4 px-2"
-          :class="[brand === 'web' ? 'border-emerald-400' : 'border-slate-400']"
+        <button
+          class="border-bottom p-2"
+          :class="[brand === 'web' ? 'border-emerald-400 shadow-lg shadow-emerald-400/50' : 'border-slate-400']"
+          @click="choseBrandType('web')"
         >
           Web
-        </div>
-        <div
-          class="border-bottom border-4 px-2"
-          :class="[brand === 'ios' ? 'border-emerald-400' : 'border-slate-400']"
+        </button>
+        <button
+          class="border-bottom p-2"
+          :class="[brand === 'ios' ? 'border-emerald-400 shadow-lg shadow-emerald-400/50' : 'border-slate-400']"
+          @click="choseBrandType('ios')"
         >
           IOS
-        </div>
+        </button>
       </nav>
 
       <h2 class="text-xl">課程圖片</h2>
@@ -165,6 +165,10 @@ const saveCourseContent = () => {
   setCurrentCourse(currentCourse.value)
 }
 
+const choseBrandType = (type: string) => {
+  brand.value = type
+}
+
 const initHiddenUploader = () => {
   hiddenUpload.value.click()
 }
@@ -211,10 +215,6 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-.border-bottom {
-  @apply border border-l-0 border-r-0 border-t-0;
-}
-
 .section-title {
   @apply text-3xl font-bold;
 }

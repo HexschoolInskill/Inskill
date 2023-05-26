@@ -10,8 +10,24 @@
       @end="drag = false"
     >
       <template #item="{ element }">
-        <div>
-          {{ element }}
+        <div class="flex">
+          <div class="handle"></div>
+          <div class="chapter">
+            <div v-if="!element.title.length" class="flex">
+              <input v-model="element.title" type="text" />
+              <button>取消</button>
+              <button>確定</button>
+            </div>
+            
+            <div v-else>{{ element.title }}</div>
+
+            <div class="lesson">
+              <div v-if="!element.lessons.length">
+                <button>新增課程</button>
+              </div>
+            </div>
+          </div>
+
         </div>
       </template>
     </Draggable>
@@ -49,11 +65,11 @@ const store: any = storeToRefs(coursesStore())
 
 const { currentCourse } = store
 
-console.log(currentCourse)
+// console.log(currentCourse)
 
 const createNewChapter = () => {
   currentCourse.value.chapters.push({
-    title: '新章節',
+    title: '',
     description: '',
     sort: currentCourse.value.chapters.length,
     lessons: []

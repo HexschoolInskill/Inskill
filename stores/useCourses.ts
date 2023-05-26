@@ -9,7 +9,6 @@ interface course {
   description: string
   price: number
   thumbnail: string
-  theacherId: string
   chapters: object[]
   reviews?: object[]
 }
@@ -24,13 +23,12 @@ export default defineStore('courses', () => {
   // 建立/編輯的課程
   let currentCourse = reactive<course>({
     _id: '',
-    teacherId: '',
     isPublic: false,
     title: '',
     description: '',
     price: 0,
     thumbnail: '',
-    theacherId: '',
+    teacherId: '',
     chapters: []
   })
   const cart = ref<Object[]>([])

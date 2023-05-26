@@ -2,7 +2,11 @@
   <div
     ref="cardRef"
     class="in-card"
-    :class="{ 'in-card--perspective': perspective, 'in-card--xs-white': xsWhite }"
+    :class="{
+      'in-card--perspective': perspective,
+      'in-card--xs-white': xsWhite,
+      'in-card--border': border
+    }"
     :style="{
       '--x': `${axisRotate.x}deg`,
       '--y': `${axisRotate.y}deg`
@@ -26,6 +30,10 @@ const props = defineProps({
     type: Boolean
   },
   xsWhite: {
+    type: Boolean,
+    default: false
+  },
+  border: {
     type: Boolean,
     default: false
   }
@@ -56,10 +64,10 @@ function handleMouseOver(event: MouseEvent) {
 </script>
 <style lang="scss">
 .in-card {
+  border-radius: 24px;
+  overflow: hidden;
   &__wrapper {
     background-image: linear-gradient(90deg, #262b2f, #000);
-    border-radius: 24px;
-    overflow: hidden;
     will-change: transform;
     transition: transform 0.3s;
     height: 100%;
@@ -78,6 +86,9 @@ function handleMouseOver(event: MouseEvent) {
     .in-card__wrapper {
       transform: rotateX(var(--x, 0)) rotateY(var(--y, 0));
     }
+  }
+  &--border {
+    border: 1px solid white;
   }
 }
 </style>

@@ -1,3 +1,4 @@
+// @ts-nocheck
 type $Fetch = typeof $fetch
 
 type requestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'

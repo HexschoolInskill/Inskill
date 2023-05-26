@@ -1,23 +1,40 @@
 <template>
-  <button v-if="href !== null" class="in-btn" v-bind="$attrs">
+  <component
+    :is="href ? 'a' : 'button'"
+    class="in-btn"
+    :class="{
+      'in-btn--small': size === 'small'
+    }"
+    v-bind="$attrs"
+  >
     <slot></slot>
-  </button>
-  <a v-else class="in-btn" :href="href" v-bind="$attrs">
-    <slot></slot>
-  </a>
+  </component>
 </template>
 <script setup lang="ts">
 defineProps({
   href: {
     type: String,
     default: null
+  },
+  size: {
+    type: String as PropType<'small'>,
+    default: ''
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
 <style lang="scss" scoped>
 .in-btn {
-  max-width: 196px;
-  padding: 8px 12px;
-  @apply inline-flex h-10 w-full cursor-pointer select-none items-center justify-center rounded-1 bg-white text-black hover:bg-gray-l;
+  min-width: 196px;
+  @apply inline-flex h-10 cursor-pointer select-none items-center justify-center rounded-1 bg-white px-3 text-black hover:bg-gray-l;
+  &--small {
+    min-width: 138px;
+  }
+  &--disabled {
+    opacity: 0.5;
+  }
 }
 </style>

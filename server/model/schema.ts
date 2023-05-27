@@ -50,7 +50,7 @@ const userSchema = new Schema<User>(
       realName: { type: String, required: true },
       gender: { type: String, required: true },
       unit: { type: String, required: true },
-      phone: { type: Number, required: true },
+      phone: { type: String, required: true },
       postNumber: { type: Number, required: true },
       address: { type: String, required: true },
       description: { type: String, required: true },

@@ -106,7 +106,7 @@ export default defineEventHandler(async (event) => {
         })
       }
       // return webRTCApp streamId
-      const { streamId } = webRTCApp
+      // const { streamId } = webRTCApp // streamId重複定義了 server端會報錯無法 run
       return {
         statusCode: 200,
         data: {

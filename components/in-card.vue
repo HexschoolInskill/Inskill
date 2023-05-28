@@ -9,7 +9,8 @@
     }"
     :style="{
       '--x': `${axisRotate.x}deg`,
-      '--y': `${axisRotate.y}deg`
+      '--y': `${axisRotate.y}deg`,
+      borderRadius: `${borderRadius}px`
     }"
     @mouseover="handleMouseOver"
     @mouseleave="resetAxis"
@@ -36,6 +37,10 @@ const props = defineProps({
   border: {
     type: Boolean,
     default: false
+  },
+  borderRadius: {
+    type: Number,
+    default: 24
   }
 })
 
@@ -64,7 +69,6 @@ function handleMouseOver(event: MouseEvent) {
 </script>
 <style lang="scss">
 .in-card {
-  border-radius: 24px;
   overflow: hidden;
   &__wrapper {
     background-image: linear-gradient(90deg, #262b2f, #000);

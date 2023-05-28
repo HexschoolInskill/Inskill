@@ -5,21 +5,28 @@
         <li>
           <nuxt-link
             to="/partner/courses"
-            class="transition-base text-fs-6 flex h-13 items-center rounded-4 border border-solid border-white px-7 hover:bg-white hover:text-black"
+            class="transition-base text-fs-6 flex h-13 items-center rounded-1 border border-solid border-white px-7 hover:bg-white hover:text-black"
             >課程資訊
           </nuxt-link>
         </li>
         <li>
           <nuxt-link
             to="/partner/courses/chapters"
-            class="transition-base text-fs-6 flex h-13 items-center rounded-4 border border-solid border-white px-7 hover:bg-white hover:text-black"
+            class="transition-base text-fs-6 flex h-13 items-center rounded-1 border border-solid border-white px-7 hover:bg-white hover:text-black"
             >章節課程
           </nuxt-link>
         </li>
         <li>
           <nuxt-link
-            class="transition-base text-fs-6 flex h-13 items-center rounded-4 border border-solid border-white px-7 hover:bg-white hover:text-black"
+            class="transition-base text-fs-6 flex h-13 items-center rounded-1 border border-solid border-white px-7 hover:bg-white hover:text-black"
             >價格
+          </nuxt-link>
+        </li>
+        <li>
+          <nuxt-link
+            to="/"
+            class="transition-base text-fs-6 flex h-13 items-center rounded-1 border border-solid border-white px-7 hover:bg-white hover:text-black"
+            >回到我的課程
           </nuxt-link>
         </li>
       </ul>

@@ -18,5 +18,6 @@
     </template>
   </nuxt-layout>
   <in-notification />
+  <in-confirm />
 </template>
 <script setup lang="ts"></script>

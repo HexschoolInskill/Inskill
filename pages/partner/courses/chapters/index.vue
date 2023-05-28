@@ -1,23 +1,77 @@
 <template>
   <div class="relative">
-    <draggable v-model="courseTree" @end="dragEnd">
-      <template #item="{ element: chapter }" item-key="id">
-        <div>
-          <div class="text-white">{{ chapter.title }}</div>
-          <draggable v-model="chapter.lessons" item-key="id" @end="dragEnd">
-            <template #item="{ element: lesson }">
-              <div class="pl-4">{{ lesson.title }}</div>
-            </template>
-          </draggable>
+    <draggable
+      v-model="courseTree"
+      item-key="id"
+      handle=".chapter-handler"
+      @end="handleSort('chapter')"
+    >
+      <template #item="{ element: chapter }">
+        <div class="chapter">
+          <in-card border class="flex">
+            <div class="flex-shrink-0 border-r border-solid border-white/50 px-4">
+              <div class="flex h-15 items-center">
+                <i class="chapter-handler icon-reorder text-white"></i>
+              </div>
+            </div>
+            <div class="flex-1">
+              <title-input
+                :id="chapter.id"
+                type="chapter"
+                :value="chapter.title"
+                class="h-15"
+                @loading-start="isLoading = true"
+                @loading-end="isLoading = false"
+              />
+              <draggable
+                v-if="chapter.lessons && chapter.lessons.length !== 0"
+                v-model="chapter.lessons"
+                item-key="id"
+                handle=".lesson-handler"
+                @end="handleSort('lesson', chapter.id)"
+              >
+                <template #item="{ element: lesson }">
+                  <title-input
+                    :id="lesson.id"
+                    class="h-15"
+                    type="lesson"
+                    :value="lesson.title"
+                    @loading-start="isLoading = true"
+                    @loading-end="isLoading = false"
+                  >
+                    <template #handler>
+                      <div class="flex-shrink-0 pr-6">
+                        <i class="lesson-handler icon-reorder text-white"></i>
+                      </div>
+                    </template>
+                  </title-input>
+                </template>
+              </draggable>
+              <div class="py-2 text-center">
+                <in-btn size="small" ghost>新增課程</in-btn>
+              </div>
+            </div>
+          </in-card>
         </div>
       </template>
     </draggable>
-    <!-- <div class="absolute left-0 top-0 w-full h-full bg-black/40"></div> -->
+    <div class="mt-5 text-center">
+      <in-btn>新增章節</in-btn>
+    </div>
+    <transition name="loading">
+      <div
+        v-if="isLoading"
+        class="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black/80"
+      >
+        <in-spin :size="40" color="#fff" />
+      </div>
+    </transition>
   </div>
 </template>
 
 <script lang="ts" setup>
 import Draggable from 'vuedraggable'
+import TitleInput from './components/title-input.vue'
 import useNotification from '~/stores/useNotification'
 
 definePageMeta({
@@ -259,21 +313,46 @@ const courseTree = ref([
   }
 ])
 
-function dragEnd() {
+function handleSort(type: 'chapter' | 'lesson', chapterId?: string) {
   isLoading.value = true
-  console.log(
-    courseTree.value.map((chapter, chapterIndex) => {
-      return {
+
+  if (type === 'chapter') {
+    console.log(
+      courseTree.value.map((chapter, index) => ({
         id: chapter.id,
-        sort: chapterIndex + 1,
-        lessons: chapter.lessons.map((lesson, lessonIndex) => ({
-          id: lesson.id,
-          sort: lessonIndex + 1
-        }))
-      }
-    })
-  )
-  isLoading.value = false
+        sort: index
+      }))
+    )
+  }
+
+  if (type === 'lesson') {
+    if (!chapterId) return
+    const targetChapter = courseTree.value.find((chapter) => chapter.id === chapterId)
+    console.log(
+      targetChapter?.lessons.map((lesson, index) => ({
+        id: lesson.id,
+        sort: index + 1
+      }))
+    )
+  }
+
   notification.success('更新成功')
+
+  setTimeout(() => {
+    isLoading.value = false
+  }, 300)
 }
 </script>
+
+<style lang="scss" scoped>
+.chapter-handler,
+.lesson-handler {
+  cursor: grab;
+}
+
+.chapter {
+  &:not(:last-child) {
+    @apply mb-5;
+  }
+}
+</style>

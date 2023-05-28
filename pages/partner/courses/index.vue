@@ -14,7 +14,7 @@
       <p class="font-light">發布或取消發布您的課程。查看您的課程對訪客或已註冊學生的展示效果。</p>
       <div class="my-4 flex gap-3">
         <in-btn size="small">發布課程</in-btn>
-        <in-btn size="small">更多功能</in-btn>
+        <!-- <in-btn size="small">更多功能</in-btn> -->
       </div>
 
       <!-- more options -->
@@ -24,6 +24,19 @@
         <li>複製課程</li>
         <li>刪除課程</li>
       </ul>
+    </section>
+    <section class="border-bottom mb-10">
+      <h2 class="text-h2 font-bold">課程圖片</h2>
+      <div class="my-10 w-4/12 cursor-pointer rounded border border-dotted p-5 text-center">
+        <p class="text-fs-6 mb-4">上傳您的圖片</p>
+        <p>建議尺寸 : 3840 x 2160 or 1920 x 1080 pixels</p>
+        <p>(PNG or JPG)</p>
+        <button type="button" class="mt-4 border px-10 pb-2">
+          <i class="icon-upload text-[24px]"></i>
+          上傳
+        </button>
+        <input ref="hiddenUpload" class="hidden" type="file" name="courseCover" />
+      </div>
     </section>
     <section class="flex w-4/12 flex-col border-b border-solid border-white">
       <h2 class="mb-2 text-h2 font-bold">細節資訊</h2>

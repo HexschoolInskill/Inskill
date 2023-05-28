@@ -6,7 +6,7 @@
         v-if="type === 'text'"
         v-model="inputValue"
         type="text"
-        class="in-input__input h-10"
+        class="in-input__input"
         :class="{
           'in-input__input--error': error
         }"
@@ -18,7 +18,7 @@
         v-model="inputValue"
         cols="30"
         rows="10"
-        class="in-input__input py-2"
+        class="in-input__input"
         :class="{
           'in-input__input--error': error
         }"
@@ -74,7 +74,7 @@ const inputValue = computed({
 .in-input {
   &__input {
     font-family: inherit;
-    @apply block w-full rounded-4 bg-gray-l px-5 placeholder:text-gray;
+    @apply block w-full rounded-4 bg-gray-l px-5 py-2 placeholder:text-gray;
     &[disabled] {
       opacity: 0.5;
       pointer-events: none;

@@ -18,6 +18,7 @@
         </li>
         <li>
           <nuxt-link
+            to="/partner/courses/price"
             class="transition-base text-fs-6 flex h-13 items-center rounded-1 border border-solid border-white px-7 hover:bg-white hover:text-black"
             >價格
           </nuxt-link>

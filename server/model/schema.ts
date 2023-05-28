@@ -29,7 +29,6 @@ export interface User extends Document {
   createdAt: Date
   updatedAt: Date
 }
-
 const userSchema = new Schema<User>(
   {
     username: { type: String, required: true },
@@ -68,26 +67,44 @@ const userSchema = new Schema<User>(
 
 export interface Order extends Document {
   userId: Object
-  courseId: Object
+  orderCourses: CourseContent[]
   price: number
   orderDate: Date
 }
-
 const orderSchema = new Schema<Order>({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  courseId: { type: Schema.Types.ObjectId, ref: 'Course', required: true },
+  orderCourses: [courseContent],
   price: { type: Number, required: true },
   orderDate: { type: Date, default: Date.now }
+})
+
+export interface LessonContent extends Document {
+  contentType: string
+  content: string
+  duration?: number
+  sort: number
+}
+const lessonContentSchema = new Schema<LessonContent>({
+  contentType: { type: String, required: true },
+  content: { type: String, required: true },
+  duration: { type: Number },
+  sort: { type: Number, required: true }
 })
 
 export interface Lesson extends Document {
   title: string
   description: string
-  contentType: string
-  content: string
-  duration: number
+  freePreview: boolean
   sort: number
+  lessonContent: LessonContent[]
 }
+const lessonSchema = new Schema<Lesson>({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  freePreview: { type: Boolean, default: false },
+  sort: { type: Number, required: true },
+  lessonContent: [{ type: Schema.Types.ObjectId, ref: 'LessonContent' }]
+})
 
 export interface Chapter extends Document {
   title: string
@@ -95,6 +112,12 @@ export interface Chapter extends Document {
   sort: number
   lessons: Lesson[]
 }
+const chapterSchema = new Schema<Chapter>({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  sort: { type: Number, required: true },
+  lessons: [{ type: Schema.Types.ObjectId, ref: 'Lesson' }]
+})
 
 export interface Review extends Document {
   userId: Object
@@ -102,6 +125,12 @@ export interface Review extends Document {
   comment: string
   createdAt: Date
 }
+const reviewSchema = new Schema<Review>({
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  rating: { type: Number, required: true },
+  comment: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now }
+})
 
 export interface Course extends Document {
   title: string
@@ -110,33 +139,10 @@ export interface Course extends Document {
   purchasedCount: number
   thumbnail: string
   teacherId: Object
+  isPublic: boolean
   chapters: Chapter[]
   reviews: Review[]
 }
-
-const lessonSchema = new Schema<Lesson>({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  contentType: { type: String, required: true },
-  content: { type: String, default: '' },
-  duration: { type: Number, default: 0 },
-  sort: { type: Number, required: true }
-})
-
-const chapterSchema = new Schema<Chapter>({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  sort: { type: Number, required: true },
-  lessons: [lessonSchema]
-})
-
-const reviewSchema = new Schema<Review>({
-  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  rating: { type: Number, required: true },
-  comment: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now }
-})
-
 const courseSchema = new Schema<Course>({
   title: { type: String, required: true },
   description: { type: String, required: true },
@@ -144,7 +150,8 @@ const courseSchema = new Schema<Course>({
   purchasedCount: { type: Number, default: 0 },
   thumbnail: { type: String, default: '' },
   teacherId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  chapters: [chapterSchema],
+  isPublic: { type: Boolean, default: false },
+  chapters: [{ type: Schema.Types.ObjectId, ref: 'Chapter' }],
   reviews: [reviewSchema]
 })
 
@@ -160,7 +167,6 @@ export interface LiveCourse extends Document {
   endTime: Date
   reviews: Review[]
 }
-
 const liveCourseSchema = new Schema<LiveCourse>({
   title: { type: String, required: true },
   description: { type: String, required: true },
@@ -180,12 +186,6 @@ export interface ChatMessage extends Document {
   timestamp: Date
   message: string
 }
-
-export interface LiveChat extends Document {
-  courseId: Object
-  messages: ChatMessage[]
-}
-
 const chatMessageSchema = new Schema<ChatMessage>({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   username: { type: String, required: true },
@@ -193,6 +193,10 @@ const chatMessageSchema = new Schema<ChatMessage>({
   message: { type: String, required: true }
 })
 
+export interface LiveChat extends Document {
+  courseId: Object
+  messages: ChatMessage[]
+}
 const liveChatSchema = new Schema<LiveChat>({
   courseId: { type: Schema.Types.ObjectId, ref: 'LiveCourse', required: true },
   messages: [chatMessageSchema]
@@ -200,8 +204,11 @@ const liveChatSchema = new Schema<LiveChat>({
 
 const User = mongoose.model<User>('User', userSchema)
 const Order = mongoose.model<Order>('Order', orderSchema)
+const LessonContent = mongoose.model<LessonContent>('LessonContent', lessonContentSchema)
+const Lesson = mongoose.model<Lesson>('Lesson', lessonSchema)
+const Chapter = mongoose.model<Chapter>('Chapter', chapterSchema)
 const Course = mongoose.model<Course>('Course', courseSchema)
 const LiveCourse = mongoose.model<LiveCourse>('LiveCourse', liveCourseSchema)
 const LiveChat = mongoose.model<LiveChat>('LiveChat', liveChatSchema)
 
-export default { User, Order, Course, LiveCourse, LiveChat }
+export default { User, Order, LessonContent, Lesson, Chapter, Course, LiveCourse, LiveChat }

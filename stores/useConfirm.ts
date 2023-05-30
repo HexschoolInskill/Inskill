@@ -4,31 +4,31 @@ export default defineStore('confirm', () => {
   const isShow = ref(false)
   const title = ref('')
   const description = ref('')
-  const callback = ref<(() => void) | null>(null)
 
-  function callbackWrapper(callback: Function) {
-    return () => {
-      callback()
-      isShow.value = false
-    }
-  }
+  const confirmResolve = ref<Function | null>(null)
+  const confirmReject = ref<Function | null>(null)
 
-  function confirm<T extends Function>(
-    confirmTitle: string,
-    confirmDescription: string,
-    confirmCallback: T
-  ) {
+  function confirm(confirmTitle: string, confirmDescription: string) {
     isShow.value = true
     title.value = confirmTitle
     description.value = confirmDescription
-    callback.value = callbackWrapper(confirmCallback)
+
+    return new Promise<boolean>((resolve) => {
+      confirmResolve.value = () => resolve(true)
+      confirmReject.value = () => resolve(false)
+    }).finally(() => {
+      isShow.value = false
+      confirmResolve.value = null
+      confirmReject.value = null
+    })
   }
 
   return {
     isShow,
-    callback,
     title,
     description,
-    confirm
+    confirm,
+    confirmResolve,
+    confirmReject
   }
 })

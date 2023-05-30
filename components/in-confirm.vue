@@ -4,8 +4,8 @@
       <h3 class="text-h3 font-bold">{{ title }}</h3>
       <p class="text-fs-6 mt-5">{{ description }}</p>
       <div class="mt-10 flex justify-end gap-5">
-        <in-btn size="small" ghost @click="isShow = false">取消</in-btn>
-        <in-btn size="small" @click="callback?.()">確認</in-btn>
+        <in-btn size="small" ghost @click="confirmReject?.()">取消</in-btn>
+        <in-btn size="small" @click="confirmResolve?.()">確認</in-btn>
       </div>
     </div>
   </in-popup>
@@ -15,6 +15,6 @@ import { storeToRefs } from 'pinia'
 import useConfirm from '~/stores/useConfirm'
 
 const store = useConfirm()
-const { title, description, callback, isShow } = storeToRefs(store)
+const { title, description, isShow, confirmResolve, confirmReject } = storeToRefs(store)
 </script>
 <style></style>

@@ -2,12 +2,7 @@
   <div class="flex w-full items-center border-b border-solid border-white/50 px-6">
     <slot name="handler"></slot>
     <div class="flex-1 text-white">
-      <in-input
-        v-if="isEditing"
-        v-model="inputValue"
-        class="text-black"
-        @keyup.enter="handleEdit"
-      />
+      <in-input v-if="isEditing" v-model="inputValue" class="text-black" @keyup.enter="handleEdit" />
       <template v-else>
         <h5 v-if="type === 'chapter'" class="text-h5 font-bold line-clamp-1">{{ value }}</h5>
         <h6 v-if="type === 'lesson'" class="text-fs-6 line-clamp-1">{{ value }}</h6>
@@ -74,17 +69,11 @@ function handleEdit() {
   }, 300)
 }
 
-function handleDelete() {
+async function handleDelete() {
   const message =
     props.type === 'chapter' ? '將連同章節內的所有課程一起刪除' : '將連同課程的內容一起刪除'
-
-  confirm('確定刪除?', message, () => {
-    isLoading.value = true
-    setTimeout(() => {
-      notification.success('更新成功')
-      isLoading.value = false
-    }, 300)
-  })
+  const isConfirm = await confirm('確定刪除?', message)
+  if (isConfirm) console.log('deleted')
 }
 </script>
 <style lang="scss"></style>

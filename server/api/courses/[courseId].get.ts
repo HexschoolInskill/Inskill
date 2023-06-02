@@ -27,7 +27,6 @@ export default defineEventHandler(async (event) => {
       price: course.price,
       thumbnail: course.thumbnail,
       teacher: teacher?.username,
-      lessons: course.lessons,
       chapters: course.chapters, // TODO : lack model
       reviews: course.reviews // TODO : lack model
     }

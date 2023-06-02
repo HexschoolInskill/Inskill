@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
         message: 'Course not found'
       })
     }
-    const { teacherId } = course
+    const teacherId = course.teacherId.toString()
     if (teacherId !== userID) {
       return createError({
         statusCode: 400,

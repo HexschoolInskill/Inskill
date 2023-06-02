@@ -12,7 +12,9 @@ export default defineEventHandler(async (event) => {
   }).or('title', 'description', 'price', 'thumbnail')
   try {
     const pathParameters = getRouterParams(event)
-    const { error, value } = await schema.validate(pathParameters, { abortEarly: true })
+    const body = await readBody(event)
+    const mergedObject = { ...body, ...pathParameters }
+    const { error, value } = await schema.validate(mergedObject, { abortEarly: true })
     if (error) throw new Error(error.details.map((e: any) => e.message).join(', '))
     // get course from db
     const { courseId } = value
@@ -25,7 +27,7 @@ export default defineEventHandler(async (event) => {
     }
     // check user is the teacher belong to course
     const { userInfo } = event.context.auth
-    const { teacherId } = course
+    const teacherId = course.teacherId.toString()
     if (teacherId !== userInfo.id) {
       return createError({
         statusCode: 400,

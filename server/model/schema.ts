@@ -85,10 +85,10 @@ export interface LessonContent extends Document {
 }
 const lessonContentSchema = new Schema<LessonContent>(
   {
-    contentType: { type: String, required: true },
-    content: { type: String, required: true },
+    contentType: { type: String },
+    content: { type: String },
     duration: { type: Number },
-    sort: { type: Number, required: true }
+    sort: { type: Number }
   },
   { timestamps: true }
 )
@@ -106,16 +106,16 @@ export interface Question extends Document {
 
 const replySchema = new Schema<Reply>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    comment: { type: String, required: true }
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
+    comment: { type: String }
   },
   { timestamps: true }
 )
 
 const questionSchema = new Schema<Question>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    comment: { type: String, required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
+    comment: { type: String },
     replies: [replySchema]
   },
   { timestamps: true }
@@ -126,15 +126,17 @@ export interface Lesson extends Document {
   description: string
   freePreview: boolean
   sort: number
+  isPublish: boolean
   lessonContent: LessonContent[]
   question: Question[]
 }
 const lessonSchema = new Schema<Lesson>(
   {
-    title: { type: String, required: true },
-    description: { type: String, required: true },
+    title: { type: String },
+    description: { type: String },
     freePreview: { type: Boolean, default: false },
-    sort: { type: Number, required: true },
+    sort: { type: Number },
+    isPublish: { type: Boolean, default: false },
     lessonContent: [lessonContentSchema],
     question: [questionSchema]
   },
@@ -149,9 +151,9 @@ export interface Chapter extends Document {
 }
 const chapterSchema = new Schema<Chapter>(
   {
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    sort: { type: Number, required: true },
+    title: { type: String },
+    description: { type: String },
+    sort: { type: Number },
     lessons: [lessonSchema]
   },
   { timestamps: true }
@@ -164,9 +166,9 @@ export interface Review extends Document {
 }
 const reviewSchema = new Schema<Review>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    rating: { type: Number, required: true },
-    comment: { type: String, required: true }
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
+    rating: { type: Number },
+    comment: { type: String }
   },
   { timestamps: true }
 )
@@ -178,19 +180,19 @@ export interface Course extends Document {
   purchasedCount: number
   thumbnail: string
   teacherId: Object
-  isPublish: boolean
+  isPublic: boolean
   chapters: Chapter[]
   reviews: Review[]
 }
 const courseSchema = new Schema<Course>(
   {
     title: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String },
     price: { type: Number, required: true },
     purchasedCount: { type: Number, default: 0 },
     thumbnail: { type: String, default: '' },
     teacherId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    isPublish: { type: Boolean, default: false },
+    isPublic: { type: Boolean, default: false },
     chapters: [chapterSchema],
     reviews: [reviewSchema]
   },
@@ -213,7 +215,7 @@ const liveCourseSchema = new Schema<LiveCourse>(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    price: { type: Number, required: true },
+    price: { type: Number },
     purchasedCount: { type: Number, default: 0 },
     thumbnail: { type: String, default: '' },
     teacherId: { type: Schema.Types.ObjectId, ref: 'User', required: true },

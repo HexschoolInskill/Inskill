@@ -31,20 +31,12 @@
                 @end="handleSort('lesson', chapter.id)"
               >
                 <template #item="{ element: lesson }">
-                  <title-input
+                  <lesson-item
                     :id="lesson.id"
-                    class="h-15"
-                    type="lesson"
                     :value="lesson.title"
                     @loading-start="isLoading = true"
                     @loading-end="isLoading = false"
-                  >
-                    <template #handler>
-                      <div class="flex-shrink-0 pr-6">
-                        <i class="lesson-handler icon-reorder text-white"></i>
-                      </div>
-                    </template>
-                  </title-input>
+                  />
                 </template>
               </draggable>
               <div class="py-2 text-center">
@@ -72,6 +64,7 @@
 <script lang="ts" setup>
 import Draggable from 'vuedraggable'
 import TitleInput from './components/title-input.vue'
+import LessonItem from './components/lesson-item.vue'
 import useNotification from '~/stores/useNotification'
 
 definePageMeta({

@@ -2,7 +2,9 @@
   <!-- <slot name="header"></slot> -->
 
   <div class="flex">
-    <aside class="w-4/12 sm:w-1/12 absolute sm:relative text-white bg-black h-full ml-[-100vw] sm:ml-[unset]">
+    <aside
+      class="absolute ml-[-100vw] h-full w-4/12 bg-black text-white sm:relative sm:ml-[unset] sm:w-1/12"
+    >
       <h1 class="bg-gray p-4" style="overflow-wrap: break-word">{{ currentCourse.title }}</h1>
       <ul class="p-4">
         <li class="mb-4" :class="{ 'border-bottom': route.path === '/partner/courses' }">
@@ -17,7 +19,7 @@
       </ul>
     </aside>
 
-    <main class="w-full sm:w-11/12 text-white">
+    <main class="w-full text-white sm:w-11/12">
       <slot />
     </main>
   </div>

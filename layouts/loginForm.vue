@@ -10,7 +10,7 @@
       class="modalWrapper absolute z-10 h-[100%] w-[100%] bg-black bg-opacity-50"
     >
       <div
-      class="modal relative left-[50%] top-[50%] w-[50%] translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded bg-white"
+        class="modal relative left-[50%] top-[50%] w-[50%] translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded bg-white"
       >
         <div class="modalHeader border border-l-0 border-r-0 border-t-0 p-2 px-4">
           <button

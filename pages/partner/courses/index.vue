@@ -37,14 +37,22 @@
       <nav class="mb-4 flex">
         <button
           class="border-bottom p-2"
-          :class="[brand === 'web' ? 'border-emerald-400 shadow-lg shadow-emerald-400/50' : 'border-slate-400']"
+          :class="[
+            brand === 'web'
+              ? 'border-emerald-400 shadow-lg shadow-emerald-400/50'
+              : 'border-slate-400'
+          ]"
           @click="choseBrandType('web')"
         >
           Web
         </button>
         <button
           class="border-bottom p-2"
-          :class="[brand === 'ios' ? 'border-emerald-400 shadow-lg shadow-emerald-400/50' : 'border-slate-400']"
+          :class="[
+            brand === 'ios'
+              ? 'border-emerald-400 shadow-lg shadow-emerald-400/50'
+              : 'border-slate-400'
+          ]"
           @click="choseBrandType('ios')"
         >
           IOS
@@ -132,7 +140,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import coursesStore from '~/stores/courses'
+import coursesStore from '~/stores/useCourses'
 import useNotification from '~~/stores/useNotification'
 
 definePageMeta({

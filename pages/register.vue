@@ -94,7 +94,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, email, sameAs, helpers } from '@vuelidate/validators'
 import { storeToRefs } from 'pinia'
 import useUSer from '~/stores/useUser'
-import { usePolicyStore } from '@/stores/policyStore'
+import { usePolicyStore } from '@/stores/usePolicy'
 import useNotification from '~~/stores/useNotification'
 
 definePageMeta({

@@ -18,7 +18,7 @@
               <button>取消</button>
               <button>確定</button>
             </div>
-            
+
             <div v-else>{{ element.title }}</div>
 
             <div class="lesson">
@@ -27,7 +27,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </template>
     </Draggable>
@@ -53,7 +52,7 @@
 import { ref } from 'vue'
 import Draggable from 'vuedraggable'
 import { storeToRefs } from 'pinia'
-import coursesStore from '~/stores/courses'
+import coursesStore from '~/stores/useCourses'
 
 definePageMeta({
   layout: 'create-courses'

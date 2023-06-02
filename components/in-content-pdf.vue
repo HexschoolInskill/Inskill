@@ -1,6 +1,6 @@
 <template>
   <div class="m-4">
-    <object :data="props.content" type="application/pdf"></object>
+    <object :data="props.content" type="application/pdf" width="100%" height="500px"></object>
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 const props = defineProps({
   content: {
     type: String,
-    default: ""
+    default: ''
   }
 })
 

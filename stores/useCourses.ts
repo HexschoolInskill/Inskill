@@ -4,8 +4,19 @@ import { ref, reactive } from 'vue'
 interface review {
   userId: string
   rating: number
-  comments: string
+  comment: string
   createAt: Date
+}
+
+interface reply {
+  userId: string
+  comment: string
+}
+
+interface question {
+  userId: string
+  comment: string
+  reply?: reply[]
 }
 
 interface content {
@@ -23,7 +34,7 @@ interface lession {
   freePreview: boolean
   sort: number
   lessionContent: content[]
-  comments: []
+  question: question[]
 }
 
 interface chapter {
@@ -62,8 +73,8 @@ export default defineStore('courses', () => {
     description: '',
     price: 0,
     thumbnail: '',
-    theacherId: '',
-    chapters: []
+    chapters: [],
+    reviews: []
   })
   const cart = ref<Object[]>([])
 

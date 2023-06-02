@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import coursesStore from '~/stores/courses'
+import coursesStore from '~/stores/useCourses'
 
 const { currentCourse } = storeToRefs(coursesStore())
 const route = useRoute()

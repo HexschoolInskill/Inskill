@@ -1,6 +1,6 @@
 <template>
   <div class="m-4">
-    <p>{{ props.content }}</p>
+    <code>{{ props.content }}</code>
   </div>
 </template>
 

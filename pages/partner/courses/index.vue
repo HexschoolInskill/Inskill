@@ -1,146 +1,159 @@
 <template>
   <in-card border class="flex flex-col bg-gray-900 p-10 text-white">
-    <section class="mb-10 flex items-center justify-between">
-      <div class="flex items-center">
-        <h2 class="text-h2 font-bold">課程資訊</h2>
-        <div class="text-fs-6 ml-4 flex items-center rounded border border-solid px-7 py-2">
-          {{ currentCourse.isPublic ? '發布' : '未發布' }}
+    <div class="max-w-lg">
+      <section class="mb-10">
+        <div class="flex items-center">
+          <h2 class="text-h2 font-bold">課程資訊</h2>
+          <div class="text-fs-6 ml-4 flex items-center rounded border border-solid px-7 py-2">
+            未發布
+          </div>
         </div>
-      </div>
-      <in-btn size="small" @click="saveCourseContent">儲存</in-btn>
-    </section>
-    <section class="mb-10 border-b border-solid border-white/50">
-      <h2 class="mb-2 text-h2 font-bold">發佈與預覽</h2>
-      <p class="font-light">發布或取消發布您的課程。查看您的課程對訪客或已註冊學生的展示效果。</p>
-      <div class="my-4 flex gap-3">
-        <in-btn size="small">發布課程</in-btn>
-        <!-- <in-btn size="small">更多功能</in-btn> -->
-      </div>
-
-      <!-- more options -->
-      <ul class="hidden">
-        <li>預覽販售頁面</li>
-        <li>以學生身分預覽</li>
-        <li>複製課程</li>
-        <li>刪除課程</li>
-      </ul>
-    </section>
-    <section class="border-bottom mb-10">
-      <h2 class="text-h2 font-bold">課程圖片</h2>
-      <div class="my-10 w-4/12 cursor-pointer rounded border border-dotted p-5 text-center">
-        <p class="text-fs-6 mb-4">上傳您的圖片</p>
-        <p>建議尺寸 : 3840 x 2160 or 1920 x 1080 pixels</p>
-        <p>(PNG or JPG)</p>
-        <button type="button" class="mt-4 border px-10 pb-2">
-          <i class="icon-upload text-[24px]"></i>
-          上傳
-        </button>
-        <input ref="hiddenUpload" class="hidden" type="file" name="courseCover" />
-      </div>
-    </section>
-    <section class="flex w-4/12 flex-col border-b border-solid border-white">
-      <h2 class="mb-2 text-h2 font-bold">細節資訊</h2>
-      <p class="mb-4 font-light">編輯關於課程的基本資訊。</p>
-
-      <label class="mb-5">
-        <p class="text-fs-6 mb-2">課程標題 <span class="text-red-700">*</span></p>
+      </section>
+      <section class="mb-10 border-b border-solid border-white/50">
+        <h3 class="mb-2 text-h3 font-bold">發佈與儲存</h3>
+        <div class="my-4 flex gap-3">
+          <in-btn size="small" @click="publishCourse">發布課程</in-btn>
+          <in-btn size="small" @click="saveCourse">儲存</in-btn>
+        </div>
+      </section>
+      <section class="mb-10 border-b border-solid border-white/50 pb-5">
+        <h3 class="text-h3 font-bold">課程圖片</h3>
+        <label
+          class="transition-2 relative mt-5 block cursor-pointer overflow-hidden rounded-6 border border-solid border-white/50 pt-6/10 hover:border-white"
+        >
+          <input type="file" class="hidden" @change="handleThumbnailChange" />
+          <div
+            class="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center"
+          >
+            <template v-if="thumbnailPreview">
+              <img
+                :src="thumbnailPreview"
+                alt=""
+                class="absolute left-0 top-0 h-full w-full object-cover"
+              />
+            </template>
+            <template v-else>
+              <p class="text-fs-6 text-white">課程圖片建議尺寸 1200 * 2000</p>
+              <in-btn size="small" ghost class="pointer-events-none mt-5">上傳課程圖片</in-btn>
+            </template>
+          </div>
+        </label>
+        <in-btn
+          v-if="thumbnailPreview"
+          ghost
+          type="error"
+          size="small"
+          class="mt-5 gap-3"
+          @click="course.thumbnail = ''"
+        >
+          <i class="icon-trash"></i>
+          <p class="text-fs-6">刪除圖片</p>
+        </in-btn>
+      </section>
+      <section class="mb-10 border-b border-solid border-white/50 pb-5">
+        <h3 class="text-h3 font-bold">課程標題</h3>
         <in-input
-          v-model="currentCourse.title"
-          class="text-black"
-          name="title"
+          v-model="course.title"
+          class="mt-5 text-black"
+          :error="v$.title.$invalid"
           placeholder="請輸入課程標題"
         />
-      </label>
-      <label class="mb-5">
-        <p class="text-fs-6 mb-2">課程副標題(選填)</p>
+        <p v-if="v$.title.required.$invalid" class="mt-2 text-red-500">課程標題為必填</p>
+      </section>
+      <section class="mb-10 border-b border-solid border-white/50 pb-5">
+        <h3 class="text-h3 font-bold">課程說明</h3>
+      </section>
+      <section>
+        <h3 class="text-h3 font-bold">課程售價</h3>
+        <div class="mt-5 flex items-center gap-5">
+          <in-btn size="small" :ghost="course.price !== 0" @click="course.price = 0">免費</in-btn>
+          <in-btn size="small" :ghost="course.price === 0" @click="course.price = 1"
+            >一次性付費</in-btn
+          >
+        </div>
         <in-input
-          v-model="courseSubtitle"
-          class="text-black"
-          name="subtitle"
-          placeholder="請輸入課程副標題"
+          v-if="course.price !== 0"
+          v-model="course.price"
+          class="mt-5 text-black"
+          placeholder="請輸入課程價格"
+          :error="v$.price.$invalid"
         />
-      </label>
-      <!-- TODO: 這邊應為選擇類別 暫時隱藏 -->
-      <!-- <label for="type" class="mb-1">類別 <span class="text-sm">(按enter新增)</span></label>
-      <in-input v-model="currentCourse.title" name="subtitle" /> -->
-      <label class="text-fs-6 mb-2">詳細說明</label>
-      <in-text-editor v-model="currentCourse.description" :max-limit="280" />
-    </section>
+        <div class="mt-2">
+          <p v-if="v$.price.numeric.$invalid" class="text-red-500">課程售價必須為數字</p>
+          <p v-if="v$.price.required.$invalid" class="text-red-500">課程售價為必填</p>
+        </div>
+      </section>
+    </div>
   </in-card>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
-import coursesStore from '~/stores/useCourses'
-import useNotification from '~~/stores/useNotification'
+import { useVuelidate } from '@vuelidate/core'
+import { required, numeric } from '@vuelidate/validators'
+import useConfirm from '~/stores/useConfirm'
+
+interface ICourse {
+  title: string
+  price: number
+  description: string
+  thumbnail: string | File
+}
 
 definePageMeta({
   layout: 'create-courses'
 })
 
-// const router = useRouter()
-const route = useRoute()
-const { $api } = useNuxtApp()
-const { notification } = useNotification()
-const { currentCourse } = storeToRefs(coursesStore())
-const { setCurrentCourse } = coursesStore()
+const { confirm } = useConfirm()
 
-const courseSubtitle = ref('')
+const course = reactive<ICourse>({
+  title: '',
+  price: 0,
+  description: '',
+  thumbnail: ''
+})
 
-// course type input
-// const coursetype = ref('')
-// const typeTips: any = ref([])
-
-// const hiddenUpload: any = ref(null)
-
-const saveCourseContent = () => {
-  setCurrentCourse(currentCourse.value)
-}
-
-// const initHiddenUploader = () => {
-//   hiddenUpload.value.click()
-// }
-
-// const getBrandImage = ($event: any) => {
-//   console.log('file :>>>', $event)
-//   if (brand.value === 'web') {
-//     brandImage.value[0].file = $event.target.files
-//   } else {
-//     brandImage.value[1].file = $event.target.files
-//   }
-// }
-
-// const addCourseType = () => {
-//   if (coursetype.value.length) {
-//     typeTips.value.push(coursetype.value)
-//     coursetype.value = ''
-//   }
-// }
-
-// const removeType = (index: number) => {
-//   typeTips.value.splice(index, 1)
-// }
-
-onMounted(async () => {
-  // 如果有代課程id進來
-  if (route.query.id !== undefined) {
-    const courseId = String(route.query.id)
-    // 發動獲取單一課程資料的 api
-    try {
-      const courseContent: any = await $api.course.getCourseContent(courseId)
-
-      if (courseContent.success) {
-        // 把取得的資料放入對應的欄位
-        // setCurrentCourse()
-      } else {
-        notification.error(courseContent.message)
-      }
-    } catch (err: any) {
-      notification.error(err)
-    }
+const thumbnailPreview = computed(() => {
+  if (course.thumbnail instanceof File) {
+    return URL.createObjectURL(course.thumbnail)
+  } else {
+    return course.thumbnail
   }
 })
+
+const rules = {
+  title: {
+    required,
+    $lazy: true,
+    $autoDirty: true
+  },
+  price: {
+    required,
+    numeric,
+    $lazy: true,
+    $autoDirty: true
+  }
+}
+
+const v$ = useVuelidate(rules, course)
+
+function handleThumbnailChange(event: Event) {
+  const target = event.target as HTMLInputElement
+  const file = target?.files?.[0]
+  if (!file) return
+  course.thumbnail = file
+}
+
+async function saveCourse() {
+  await v$.value.$validate()
+}
+
+async function publishCourse() {
+  const isConfirm = await confirm(
+    '確定發布?',
+    `發布後將會對所有學生公開，目前課程售價為 ${course.price || '免費'}`
+  )
+  if (isConfirm) console.log('course published')
+}
 </script>
 
 <style lang="scss"></style>

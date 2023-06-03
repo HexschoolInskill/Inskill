@@ -224,11 +224,11 @@
                 <textarea
                   id="new_question"
                   class="mt-4 rounded-lg bg-[#DEE2E6] p-2 text-black"
+                  v-model="newQuestion"
                   name="new_question"
                   cols="30"
                   rows="10"
                   placeholder="喜歡這堂課嗎? 購買課程後可以和大家已起討論囉!"
-                  v-model="newQuestion"
                 >
                 </textarea>
 

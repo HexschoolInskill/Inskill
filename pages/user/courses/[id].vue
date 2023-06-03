@@ -22,24 +22,42 @@
             v-for="(chapter, index) in currentCourse.chapters"
             :key="chapter.title"
             class="my-2 rounded-md border px-4"
-            :class="{'bg-white text-black': expandChapter === index}"
+            :class="{ 'bg-white text-black': expandChapter === index }"
             @click="expandChapterController(index)"
           >
             <div class="flex items-center">
               <span class="mr-auto">{{ chapter.title }}</span>
-              <i class="icon-arrow text-[24px]" :class="{'rotate-180': expandChapter === index}"></i>
+              <i
+                class="icon-arrow text-[24px]"
+                :class="{ 'rotate-180': expandChapter === index }"
+              ></i>
             </div>
 
             <ul v-if="expandChapter === index">
-              <li 
-              v-for="lession in chapter.lessions" 
-              :key="lession.title"
-              class="my-2 border-bottom">
-                <div class="flex p-1 items-center">
+              <li
+                v-for="lession in chapter.lessions"
+                :key="lession.title"
+                class="border-bottom my-2"
+              >
+                <div class="flex items-center p-1">
                   <span class="mr-auto">{{ lession.title }}</span>
-                  <span v-if="lession.freePreview" class="rounded-md border rounded px-2 py-1">試看</span>
+                  <span v-if="lession.freePreview" class="rounded rounded-md border px-2 py-1"
+                    >試看</span
+                  >
 
-                  <svg v-else xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32"><g fill="none"><path d="M18 20a2 2 0 1 1-4 0a2 2 0 0 1 4 0zm-8-10V8a6 6 0 0 1 12 0v2h1.5a3.5 3.5 0 0 1 3.5 3.5v13a3.5 3.5 0 0 1-3.5 3.5h-15A3.5 3.5 0 0 1 5 26.5v-13A3.5 3.5 0 0 1 8.5 10H10zm2-2v2h8V8a4 4 0 0 0-8 0zm-3.5 4A1.5 1.5 0 0 0 7 13.5v13A1.5 1.5 0 0 0 8.5 28h15a1.5 1.5 0 0 0 1.5-1.5v-13a1.5 1.5 0 0 0-1.5-1.5h-15z" fill="currentColor"></path></g></svg>
+                  <svg
+                    v-else
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    viewBox="0 0 32 32"
+                  >
+                    <g fill="none">
+                      <path
+                        d="M18 20a2 2 0 1 1-4 0a2 2 0 0 1 4 0zm-8-10V8a6 6 0 0 1 12 0v2h1.5a3.5 3.5 0 0 1 3.5 3.5v13a3.5 3.5 0 0 1-3.5 3.5h-15A3.5 3.5 0 0 1 5 26.5v-13A3.5 3.5 0 0 1 8.5 10H10zm2-2v2h8V8a4 4 0 0 0-8 0zm-3.5 4A1.5 1.5 0 0 0 7 13.5v13A1.5 1.5 0 0 0 8.5 28h15a1.5 1.5 0 0 0 1.5-1.5v-13a1.5 1.5 0 0 0-1.5-1.5h-15z"
+                        fill="currentColor"
+                      ></path>
+                    </g>
+                  </svg>
                 </div>
               </li>
             </ul>
@@ -113,10 +131,9 @@
               <h2 class="text-2xl font-bold">課程評價</h2>
 
               <div class="flex">
-                <h1 class="text-4xl font-bold mt-4 mx-8">{{ sumUpReviews }}</h1>
+                <h1 class="mx-8 mt-4 text-4xl font-bold">{{ sumUpReviews }}</h1>
 
                 <div>
-
                   <div class="star mb-2 flex">
                     <div v-for="star in Math.floor(sumUpReviews)" :key="star" class="w-10">
                       <svg
@@ -159,12 +176,16 @@
                       fill="currentColor"
                     ></path>
                   </svg>
-                  <p class="text-center">{{ currentCourse.reviews[i-1].userId }}</p>
+                  <p class="text-center">{{ currentCourse.reviews[i - 1].userId }}</p>
                 </div>
 
                 <div class="w-full">
                   <div class="star mb-2 flex">
-                    <div v-for="star in currentCourse.reviews[i-1].rating" :key="star" class="w-10">
+                    <div
+                      v-for="star in currentCourse.reviews[i - 1].rating"
+                      :key="star"
+                      class="w-10"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -180,50 +201,50 @@
                     </div>
                   </div>
 
-                  <p>{{ currentCourse.reviews[i-1].comment }}</p>
+                  <p>{{ currentCourse.reviews[i - 1].comment }}</p>
                 </div>
               </div>
 
-              <div
-              v-if="currentCourse.reviews.length > showReviews"
-              class="text-center mt-8 mb-8">
+              <div v-if="currentCourse.reviews.length > showReviews" class="mb-8 mt-8 text-center">
                 <button
-                class="rounded bg-white text-black w-[150px] py-1"
-                type="button"
-                @click="getMoreReviews"
-                >查看更多</button>                
+                  class="w-[150px] rounded bg-white py-1 text-black"
+                  type="button"
+                  @click="getMoreReviews"
+                >
+                  查看更多
+                </button>
               </div>
             </div>
 
             <div class="gradient my-10 rounded-lg p-4 px-6">
               <h2 class="text-2xl font-bold">問與答</h2>
 
-              <div class="flex flex-col my-4">
+              <div class="my-4 flex flex-col">
                 <label for="new_question text-2xl">新增提問</label>
                 <textarea
-                v-model="newQuestion"
-                id="new_question"
-                class="rounded-lg text-black bg-[#DEE2E6] mt-4 p-2"
-                name="new_question"
-                cols="30"
-                rows="10"
-                placeholder="喜歡這堂課嗎? 購買課程後可以和大家已起討論囉!"
+                  id="new_question"
+                  class="mt-4 rounded-lg bg-[#DEE2E6] p-2 text-black"
+                  name="new_question"
+                  cols="30"
+                  rows="10"
+                  placeholder="喜歡這堂課嗎? 購買課程後可以和大家已起討論囉!"
+                  v-model="newQuestion"
                 >
-                </textarea
-                >
+                </textarea>
 
                 <button
-                class="rounded border bg-white text-black w-[150px] ml-auto my-2"
-                :class="{'bg-gray': !newQuestion.length}"
-                type="button"
-                :disabled="!newQuestion.length"
+                  class="my-2 ml-auto w-[150px] rounded border bg-white text-black"
+                  :class="{ 'bg-gray': !newQuestion.length }"
+                  type="button"
+                  :disabled="!newQuestion.length"
                 >
-                送出
-                </button>                
+                  送出
+                </button>
               </div>
 
-
-              <h2 class="font-bold text-2xl">全部問答 ({{ currenChapterLession.question.length }})</h2>
+              <h2 class="text-2xl font-bold">
+                全部問答 ({{ currenChapterLession.question.length }})
+              </h2>
 
               <div v-if="currenChapterLession.question.length" class="flex rounded-lg border">
                 <img src="" alt="avatar" />
@@ -378,25 +399,28 @@ const newQuestion = ref('')
 
 // 計算平均評價
 const sumUpReviews = computed(() => {
-  const total = currentCourse.reviews.reduce((accumulator, currentReview) => accumulator + currentReview.rating, 0)
+  const total = currentCourse.reviews.reduce(
+    (accumulator, currentReview) => accumulator + currentReview.rating,
+    0
+  )
 
   return total / currentCourse.reviews.length
 })
 
 // 章節選單的開關
 const expandChapterController = (index: number) => {
-  if(expandChapter.value === index){
+  if (expandChapter.value === index) {
     expandChapter.value = -1
-  }else{
+  } else {
     expandChapter.value = index
   }
 }
 
 // 載入更多評價
 const getMoreReviews = () => {
-  if(currentCourse.reviews.length < (showReviews.value + 3)){
+  if (currentCourse.reviews.length < showReviews.value + 3) {
     showReviews.value = currentCourse.reviews.length
-  }else{
+  } else {
     showReviews.value = showReviews.value + 3
   }
 }

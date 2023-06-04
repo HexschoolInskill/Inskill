@@ -10,14 +10,18 @@
             v-if="isOptionsShow"
             ref="optionsRef"
             class="fixed z-10 overflow-hidden rounded-1 bg-white text-black"
-            :style="{ left: `${optionsPosition.x}px`, top: `${optionsPosition.y}px` }"
+            :style="{
+              left: `${optionsPosition.x}px`,
+              top: `${optionsPosition.y}px`,
+              width: optionsSize
+            }"
             @click.stop
           >
             <div
               v-for="option in options"
-              :key="option.key"
+              :key="option.value"
               :label="option.label"
-              class="cursor-pointer whitespace-nowrap border-b border-solid border-gray-l px-4 py-2 last:border-0 hover:bg-gray-l"
+              class="cursor-pointer whitespace-nowrap border-b border-solid border-gray-l px-6 py-2 last:border-0 hover:bg-gray-l"
               @click="handleSelect(option)"
             >
               {{ option.label }}
@@ -29,22 +33,31 @@
   </div>
 </template>
 <script lang="ts">
+const OPTIONS_SCALE_RATIO = 0.9
+
 export interface Option {
   label: string
-  key: string
+  value: string | number
 }
 </script>
 <script setup lang="ts">
-defineProps({
+const props = defineProps({
   options: {
     type: Array as PropType<Option[]>,
     default: () => []
+  },
+  size: {
+    type: [Number, String],
+    default: 'auto'
   }
 })
 
 const emit = defineEmits<{ (e: 'select', option: Option): void }>()
 
 const isOptionsShow = ref(false)
+const optionsSize = computed(() => {
+  return typeof props.size === 'number' ? `${props.size}px` : props.size
+})
 const optionsPosition = reactive({
   x: 0,
   y: 0
@@ -52,15 +65,14 @@ const optionsPosition = reactive({
 const triggerRef = ref<HTMLDivElement | null>(null)
 const optionsRef = ref<HTMLDivElement | null>(null)
 
-async function calculateOptionsPosition(isOptionsShow: boolean) {
-  await nextTick()
-  if (!isOptionsShow || !triggerRef.value || !optionsRef.value) return
+function calculateOptionsStyle() {
+  if (!triggerRef.value || !optionsRef.value) return
 
   const triggerRect = triggerRef.value.getBoundingClientRect()
   const optionsRect = optionsRef.value.getBoundingClientRect()
-
-  const basePositionX = triggerRect.left + triggerRect.width / 2 - optionsRect.width / 2
-  if (basePositionX > window.innerWidth) {
+  const basePositionX =
+    triggerRect.left + triggerRect.width / 2 - optionsRect.width / OPTIONS_SCALE_RATIO / 2
+  if (basePositionX + optionsRect.width / OPTIONS_SCALE_RATIO > window.innerWidth) {
     optionsPosition.x = window.innerWidth - optionsRect.width - 40
   } else {
     optionsPosition.x = basePositionX
@@ -69,7 +81,11 @@ async function calculateOptionsPosition(isOptionsShow: boolean) {
   optionsPosition.y = triggerRect.top + triggerRect.height + 12
 }
 
-watch(isOptionsShow, calculateOptionsPosition)
+watch(isOptionsShow, async (current) => {
+  if (!current) return
+  await nextTick()
+  calculateOptionsStyle()
+})
 
 function handleClickOutside(event: Event) {
   if (!triggerRef.value) return
@@ -87,6 +103,7 @@ onBeforeUnmount(() => {
 
 function handleSelect(option: Option) {
   emit('select', option)
+  isOptionsShow.value = false
 }
 </script>
 <style lang="scss" scoped>

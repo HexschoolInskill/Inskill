@@ -1,5 +1,5 @@
 <template>
-  <in-card border class="flex flex-col bg-gray-900 p-10 text-white">
+  <in-card border :border-radius="4" class="flex flex-col bg-gray-900 p-10 text-white">
     <div class="max-w-lg">
       <section class="mb-10">
         <div class="flex items-center">

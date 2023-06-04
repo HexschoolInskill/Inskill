@@ -255,10 +255,22 @@ const liveChatSchema = new Schema<LiveChat>(
   { timestamps: true }
 )
 
+export interface CourseCategory extends Document {
+  courseCategory: string
+}
+
+const courseCategorySchema = new Schema<CourseCategory>(
+  {
+    courseCategory: { type: String, required: true }
+  },
+  { timestamps: true }
+)
+
 const User = mongoose.model<User>('User', userSchema)
 const Order = mongoose.model<Order>('Order', orderSchema)
 const Course = mongoose.model<Course>('Course', courseSchema)
 const LiveCourse = mongoose.model<LiveCourse>('LiveCourse', liveCourseSchema)
 const LiveChat = mongoose.model<LiveChat>('LiveChat', liveChatSchema)
+const CourseCategory = mongoose.model<CourseCategory>('CourseCategory', courseCategorySchema)
 
-export default { User, Order, Course, LiveCourse, LiveChat }
+export default { User, Order, Course, LiveCourse, LiveChat, CourseCategory }

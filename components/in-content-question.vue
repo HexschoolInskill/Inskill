@@ -122,7 +122,8 @@ import { ref } from 'vue'
 
 const props = defineProps({
   question: {
-    type: null
+    type: null,
+    default: {}
   }
 })
 

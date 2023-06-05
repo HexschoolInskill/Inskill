@@ -62,6 +62,9 @@
       </section>
       <section class="mb-10 border-b border-solid border-white/50 pb-5">
         <h3 class="text-h3 font-bold">課程說明</h3>
+        <div class="mt-5">
+          <in-editor v-model="course.description" />
+        </div>
       </section>
       <section>
         <h3 class="text-h3 font-bold">課程售價</h3>

@@ -4,13 +4,9 @@
       v-if="show"
       class="popup fixed left-0 top-0 z-40 flex h-screen w-screen items-center bg-black/50"
     >
-      <in-container>
-        <div class="popup__content mx-auto sm:w-6/12">
-          <in-card class="p-8 text-white">
-            <slot></slot>
-          </in-card>
-        </div>
-      </in-container>
+      <div class="popup__content mx-auto">
+        <slot></slot>
+      </div>
     </div>
   </transition>
 </template>
@@ -19,6 +15,10 @@ defineProps({
   show: {
     type: Boolean,
     default: false
+  },
+  size: {
+    type: String as PropType<'large'>,
+    default: ''
   }
 })
 </script>

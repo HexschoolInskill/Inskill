@@ -12,7 +12,7 @@
       />
       <template v-else>
         <nuxt-link
-          :to="`/partner/courses/lesson/${id}`"
+          :to="`/partner/courses/chapters/lesson/${id}`"
           class="text-fs-6 group relative inline-block"
         >
           <p class="line-clamp-1">{{ value }}</p>

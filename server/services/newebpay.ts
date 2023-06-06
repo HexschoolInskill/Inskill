@@ -59,7 +59,7 @@ export async function createPayment(order: Record<string, unknown>, isProd: bool
     ItemDesc: order.description,
     ReturnURL: 'https://timesdev.demoto.me',
     NotifyURL: 'https://timesdev.demoto.me/newebpay/notify',
-    ClientBackURL: 'https://timesdev.demoto.me/login',
+    ClientBackURL: 'https://timesdev.demoto.me/',
     Email: order.email,
     EmailModify: 1,
     LoginType: 0,

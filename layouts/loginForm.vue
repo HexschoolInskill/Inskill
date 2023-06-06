@@ -52,7 +52,7 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { usePolicyStore } from '@/stores/policyStore'
+import { usePolicyStore } from '@/stores/usePolicy'
 
 const policyStore = usePolicyStore()
 const { modalOpen, policyType, userPolicy, privitePolicy } = storeToRefs(policyStore)

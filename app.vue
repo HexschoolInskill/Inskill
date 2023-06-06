@@ -21,3 +21,9 @@
   <in-confirm />
 </template>
 <script setup lang="ts"></script>
+
+<style lang="scss">
+.border-bottom {
+  @apply border border-l-0 border-r-0 border-t-0;
+}
+</style>

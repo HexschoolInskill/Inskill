@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
       })
     }
     // checkout user is the teacher belong to course
-    const { teacherId } = course
+    const teacherId = course.teacherId.toString()
     if (teacherId !== userInfo.id) {
       return createError({
         statusCode: 400,

@@ -18,6 +18,16 @@ export default defineEventHandler(async (event) => {
         }
       },
       { $unwind: '$course' },
+      // 使用教師 ID 聯結 users 資料表，取出教師的使用者名稱
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'course.teacherId',
+          foreignField: '_id',
+          as: 'teacher'
+        }
+      },
+      { $unwind: '$teacher' },
       // 整理資料格式
       {
         $group: {
@@ -28,7 +38,8 @@ export default defineEventHandler(async (event) => {
               _id: '$purchasedCourses.courseId',
               title: '$course.title',
               description: '$course.description',
-              teacherId: '$course.teacherId'
+              teacherId: '$course.teacherId',
+              teacherName: '$teacher.username'
             }
           }
         }

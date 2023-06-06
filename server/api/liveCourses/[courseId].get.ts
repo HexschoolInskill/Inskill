@@ -9,9 +9,8 @@ export default defineEventHandler(async (event) => {
     const pathParameters = getRouterParams(event)
     const { error, value } = await schema.validate(pathParameters, { abortEarly: true })
     if (error) throw new Error(error.details.map((e: any) => e.message).join(', '))
-    // get course from db
     const { courseId } = value
-    const course = await models.Course.aggregate([
+    const liveCourse = await models.LiveCourse.aggregate([
       {
         $match: { $expr: { $eq: ['$_id', { $toObjectId: courseId }] } }
       },
@@ -45,36 +44,6 @@ export default defineEventHandler(async (event) => {
         }
       },
       {
-        $lookup: {
-          from: 'users',
-          localField: 'chapters.lessons.question.userId',
-          foreignField: '_id',
-          as: 'questionUser'
-        }
-      },
-      {
-        $addFields: {
-          'chapters.lessons.question.username': {
-            $ifNull: [{ $first: '$questionUser.username' }, 'anonymous']
-          }
-        }
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'chapters.lessons.question.replies.userId',
-          foreignField: '_id',
-          as: 'replyUser'
-        }
-      },
-      {
-        $addFields: {
-          'chapters.lessons.question.replies.username': {
-            $ifNull: [{ $first: '$replyUser.username' }, 'anonymous']
-          }
-        }
-      },
-      {
         $group: {
           _id: '$_id',
           title: { $first: '$title' },
@@ -84,22 +53,29 @@ export default defineEventHandler(async (event) => {
           thumbnail: { $first: '$thumbnail' },
           teacherId: { $first: '$teacherId' },
           teacherName: { $first: '$teacherName' },
-          chapters: { $first: '$chapters' },
+          videoUrl: { $first: '$videoUrl' },
+          startTime: { $first: '$startTime' },
+          endTime: { $first: '$endTime' },
           reviews: { $push: '$reviews' }
         }
       },
       {
         $project: {
           user: 0,
-          reviewsUser: 0,
-          questionUser: 0,
-          replyUser: 0
+          reviewsUser: 0
         }
       }
     ])
+
+    if (!liveCourse) {
+      return createError({
+        statusCode: 400,
+        message: 'Course not found'
+      })
+    }
     return {
       success: true,
-      course
+      liveCourse
     }
   } catch (error: any) {
     return createError({

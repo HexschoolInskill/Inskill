@@ -17,6 +17,15 @@ export default defineEventHandler(async (event) => {
       },
       { $unwind: '$course' },
       {
+        $lookup: {
+          from: 'users',
+          localField: 'course.teacherId',
+          foreignField: '_id',
+          as: 'teacher'
+        }
+      },
+      { $unwind: '$teacher' },
+      {
         $group: {
           _id: '$purchasedCourses.courseType',
           courseType: { $first: '$purchasedCourses.courseType' },
@@ -25,7 +34,8 @@ export default defineEventHandler(async (event) => {
               _id: '$purchasedCourses.courseId',
               title: '$course.title',
               description: '$course.description',
-              teacherId: '$course.teacherId'
+              teacherId: '$course.teacherId',
+              teacherName: '$teacher.username'
             }
           }
         }

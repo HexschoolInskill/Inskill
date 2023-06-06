@@ -1,4 +1,4 @@
-// 修改chapter 某個欄位
+// 刪除影音課程章節
 
 import Joi from 'joi'
 import models, { Course } from '../../model/schema'
@@ -6,17 +6,13 @@ import models, { Course } from '../../model/schema'
 export default defineEventHandler(async (event) => {
   const schema = Joi.object({
     courseId: Joi.string().required(),
-    chapterId: Joi.string().required(),
-    title: Joi.string(),
-    description: Joi.string(),
-    sort: Joi.number(),
-    field: Joi.string().valid('title', 'description', 'sort').required()
-  }).or('title', 'description', 'sort')
+    chapterId: Joi.string().required()
+  })
   try {
-    const body = await readBody(event)
-    const { error, value } = await schema.validate(body, { abortEarly: true })
+    const pathParameters = getQuery(event)
+    const { error, value } = await schema.validate(pathParameters, { abortEarly: true })
     if (error) throw new Error(error.details.map((e: any) => e.message).join(', '))
-    const { courseId, chapterId, title, description, sort } = value
+    const { courseId, chapterId } = value
     const { userInfo } = event.context.auth
     // checkout course exist
     const course = (await models.Course.findById(courseId)) as Course
@@ -34,23 +30,10 @@ export default defineEventHandler(async (event) => {
         message: 'Permission deined, Only teacher can add lesson'
       })
     }
-
-    // checkout chapter exist
-    const chapters = course.chapters
-    const chapter = chapters.find((chapter) => chapter._id.toString() === chapterId)
-    if (!chapter) {
-      return createError({
-        statusCode: 400,
-        message: 'Chapter not found'
-      })
-    }
-
-    // update chapter
-    if (title) chapter.title = title
-    if (description) chapter.description = description
-    if (sort) chapter.sort = sort
-    // sort chapters by sort
-    course.chapters.sort((a, b) => a.sort - b.sort)
+    course.chapters.filter((chapter) => chapter._id !== chapterId)
+    course.chapters.forEach((item, index) => {
+      item.sort = index + 1
+    })
     await course.save()
     return {
       success: true

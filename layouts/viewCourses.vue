@@ -39,7 +39,7 @@
                 v-for="(lession, lessionIndex) in chapter.lessions"
                 :key="lession.title"
                 class="border-bottom my-2"
-                @click="selectLession(lessionIndex)"
+                @click.stop="selectLession(lessionIndex)"
               >
                 <div class="flex items-center p-1">
                   <span class="mr-auto">{{ lession.title }}</span>
@@ -52,6 +52,7 @@
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
                     viewBox="0 0 32 32"
+                    class="w-[25px]"
                   >
                     <g fill="none">
                       <path
@@ -132,22 +133,29 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import coursesStore from '~/stores/useCourses'
+import useCourses from '~/stores/useCourses'
 
-const { currentCourse, expandChapter, content } = storeToRefs(coursesStore())
+const { currentCourse, expandChapter } = storeToRefs(useCourses())
+const { setChapter, setContent } = useCourses()
 // const { setCurrentCourse } = coursesStore()
+const router = useRouter()
 
 // 章節選單的開關
 const expandChapterController = (index: number) => {
   if (expandChapter.value === index) {
-    expandChapter.value = -1
+    setChapter(-1)
   } else {
-    expandChapter.value = index
+    setChapter(index)
   }
 }
 
 const selectLession = (index: number) => {
-  content.value.chapter = expandChapter.value
-  content.value.lession = index
+  console.log(index)
+  setContent(index)
+  router.push(
+    `/user/courses/${currentCourse.value.chapters[expandChapter.value]._id}/lession/${
+      currentCourse.value.chapters[expandChapter.value].lessions[index]._id
+    }`
+  )
 }
 </script>

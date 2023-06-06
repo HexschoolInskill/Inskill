@@ -126,10 +126,10 @@ export default defineStore('courses', () => {
             ]
           },
           {
-            _id: '00001',
+            _id: '00002',
             title: 'lession 2',
             description: 'gbkjbljnkjlj',
-            freePreview: true,
+            freePreview: false,
             sort: 0,
             lessionContent: [
               {
@@ -207,6 +207,15 @@ export default defineStore('courses', () => {
     currentCourse = course
   }
 
+  const setChapter = (index: number) => {
+    expandChapter.value = index
+  }
+
+  const setContent = (index: number) => {
+    content.value.chapter = expandChapter.value
+    content.value.lession = index
+  }
+
   return {
     courseStudent,
     setCourse,
@@ -216,6 +225,8 @@ export default defineStore('courses', () => {
     content,
     cart,
     setCart,
-    setCurrentCourse
+    setCurrentCourse,
+    setChapter,
+    setContent
   }
 })

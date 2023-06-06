@@ -19,7 +19,7 @@
       <span class="mr-auto"
         >章節數量: {{ currentCourse.chapters.length }}章 {{ getTotalLessions }}節</span
       >
-      <span class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span>
+      <span v-if="!purchased" class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span>
     </span>
 
     <span class="border-bottom mt-1 flex items-center pb-2">
@@ -37,7 +37,11 @@
 
       <span class="mr-auto">{{ currentCourse.purchasedCount }}人已加入</span>
 
-      <button class="rounded border border-white bg-white px-3 text-black" type="button">
+      <button
+        v-if="!purchased"
+        class="rounded border border-white bg-white px-3 text-black"
+        type="button"
+      >
         加入購物車
       </button>
     </span>
@@ -53,6 +57,10 @@ const props = defineProps({
   currentCourse: {
     type: null,
     default: {}
+  },
+  purchased: {
+    type: Boolean,
+    default: false
   }
 })
 

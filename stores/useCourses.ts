@@ -186,6 +186,8 @@ export default defineStore('courses', () => {
     ]
   })
 
+  const collected = ref(false)
+  const purchased = ref(false)
   const expandChapter = ref(0) // 預設在課程第一章
   const content = ref({ chapter: expandChapter, lession: 0 }) // 當前查看的課程內容
 
@@ -197,6 +199,14 @@ export default defineStore('courses', () => {
     } else {
       courseTeacher.value = coursesFromBackend
     }
+  }
+
+  const setCollected = (collect: boolean) => {
+    collected.value = collect
+  }
+
+  const setPurchased = (purchase: boolean) => {
+    purchased.value = purchase
   }
 
   const setCart = (cartFromBackend: Object[]) => {
@@ -222,10 +232,14 @@ export default defineStore('courses', () => {
     courseTeacher,
     currentCourse,
     expandChapter,
+    purchased,
+    collected,
     content,
     cart,
     setCart,
     setCurrentCourse,
+    setPurchased,
+    setCollected,
     setChapter,
     setContent
   }

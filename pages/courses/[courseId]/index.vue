@@ -1,7 +1,6 @@
 <template>
-  <div class="flex">
-    <!--課程內容展示-->
-    <div class="content w-11/12">
+    <!--課程內容介紹-->
+    <div class="w-11/12">
       <div class="wrapper gradient rounded-lg p-4 px-6">
         <in-content-desc :current-course="currentCourse" :purchased="purchased"></in-content-desc>
       </div>
@@ -16,11 +15,10 @@
         @add-reply="($value: any) => addingReply($value)"
       ></in-content-question>
     </div>
-  </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 // components
@@ -29,26 +27,17 @@ import inContentTeacher from './components/in-content-teacher.vue'
 import inContentReview from './components/in-content-review.vue'
 import inContentQuestion from './components/in-content-question.vue'
 
-import coursesStore from '~/stores/useCourses'
-//   import useUser from '~/stores/useUser'
+import useCourses from '~/stores/useCourses'
 
-const { currentCourse, content } = storeToRefs(coursesStore())
-//   const { userProfile } = storeToRefs(useUser())
-// const { setCurrentCourse } = coursesStore()
-
-// const { $api } = useNuxtApp()
+const { currentCourse, content, purchased } = storeToRefs(useCourses())
 
 definePageMeta({
   layout: 'view-courses'
 })
 
-const route = useRoute()
-
 const currenChapterLession = ref(
   currentCourse.value.chapters[content.value.chapter].lessions[content.value.lession]
 )
-
-const purchased = ref(false)
 
 // 新增提問
 const addingQuestion = ($value: any) => {
@@ -67,28 +56,6 @@ const addingReply = ($value: any) => {
   })
 }
 
-// onMounted(async () => {
-onMounted(() => {
-  console.log(route.params)
-  // if (route.params.id) {
-  // 發動取該課程的 api
-  // const courseId = String(route.params.id)
-
-  // try {
-  //   const currentCourse: any = await $api.course.getCourseContent(courseId)
-  //   console.log(currentCourse)
-
-  //  查看是否有購買該課程
-  // const courseIndex = userProfile.value.purchasedCourses.findIndex((course) => course === route.params.id)
-
-  // purchased.value = courseIndex > -1
-  // } catch (error) {
-  //   console.log(error)
-  // }
-
-  // setCurrentCourse(currentCourse)
-  // }
-})
 </script>
 
 <style scope>

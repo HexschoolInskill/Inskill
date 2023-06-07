@@ -1,5 +1,5 @@
 <template>
-  <div class="gradient my-10 rounded-lg p-4 px-6">
+  <div id="question" class="gradient my-10 rounded-lg p-4 px-6">
     <h2 class="text-2xl font-bold">問與答</h2>
 
     <div class="my-4 flex flex-col">

@@ -13,6 +13,7 @@ export interface IUserProfile {
   githubLink: string
   socialLink: string
   purchasedCourses: []
+  collectCourses: []
 }
 
 export default defineStore('user', () => {
@@ -28,7 +29,8 @@ export default defineStore('user', () => {
     youtubeLink: '',
     githubLink: '',
     socialLink: '',
-    purchasedCourses: []
+    purchasedCourses: [],
+    collectCourses: []
   })
 
   function resetUserProfile() {
@@ -44,7 +46,8 @@ export default defineStore('user', () => {
       youtubeLink: '',
       githubLink: '',
       socialLink: '',
-      purchasedCourses: []
+      purchasedCourses: [],
+      collectCourses: []
     }
   }
 

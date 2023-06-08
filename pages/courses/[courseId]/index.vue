@@ -1,20 +1,20 @@
 <template>
-    <!--課程內容介紹-->
-    <div class="w-11/12">
-      <div class="wrapper gradient rounded-lg p-4 px-6">
-        <in-content-desc :current-course="currentCourse" :purchased="purchased"></in-content-desc>
-      </div>
-
-      <in-content-teacher></in-content-teacher>
-
-      <in-content-review :review="currentCourse.reviews"></in-content-review>
-
-      <in-content-question
-        :questions="currenChapterLession.question"
-        @add-question="($value: any) => addingQuestion($value)"
-        @add-reply="($value: any) => addingReply($value)"
-      ></in-content-question>
+  <!--課程內容介紹-->
+  <div class="w-11/12">
+    <div class="wrapper gradient rounded-lg p-4 px-6">
+      <in-content-desc :current-course="currentCourse" :purchased="purchased"></in-content-desc>
     </div>
+
+    <in-content-teacher></in-content-teacher>
+
+    <in-content-review :review="currentCourse.reviews"></in-content-review>
+
+    <in-content-question
+      :questions="currenChapterLession.question"
+      @add-question="($value: any) => addingQuestion($value)"
+      @add-reply="($value: any) => addingReply($value)"
+    ></in-content-question>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -55,7 +55,6 @@ const addingReply = ($value: any) => {
     comment: $value.msg
   })
 }
-
 </script>
 
 <style scope>

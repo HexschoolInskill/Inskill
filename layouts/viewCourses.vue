@@ -2,42 +2,69 @@
   <slot name="header"></slot>
   <in-container class="relative">
     <div
-    class="border-bottom mb-4 mt-[10vh] flex items-center pb-4 pt-8 text-white sm:mt-[12vh]"
-    :class="{'hidden': deepDive}">
+      class="border-bottom mb-4 mt-[10vh] flex items-center pb-4 pt-8 text-white sm:mt-[12vh]"
+      :class="{ hidden: deepDive }"
+    >
       <h1 class="mr-auto text-3xl font-bold">課程名稱</h1>
 
       <h2 class="mr-4 text-2xl font-bold">NT$ {{ currentCourse.price }}</h2>
 
       <button v-if="!purchased" class="course-header-action" type="button">
-        
-        <svg class="w-[25px]" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><g><path d="M169.6,377.6c-22.882,0-41.6,18.718-41.6,41.601c0,22.882,18.718,41.6,41.6,41.6s41.601-18.718,41.601-41.6
+        <svg
+          class="w-[25px]"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 512 512"
+          enable-background="new 0 0 512 512"
+          xml:space="preserve"
+        >
+          <g>
+            <path
+              d="M169.6,377.6c-22.882,0-41.6,18.718-41.6,41.601c0,22.882,18.718,41.6,41.6,41.6s41.601-18.718,41.601-41.6
 		C211.2,396.317,192.481,377.6,169.6,377.6z M48,51.2v41.6h41.6l74.883,151.682l-31.308,50.954c-3.118,5.2-5.2,12.482-5.2,19.765
 		c0,27.85,19.025,41.6,44.825,41.6H416v-40H177.893c-3.118,0-5.2-2.082-5.2-5.2c0-1.036,2.207-5.2,2.207-5.2l20.782-32.8h154.954
 		c15.601,0,29.128-8.317,36.4-21.836l74.882-128.8c1.237-2.461,2.082-6.246,2.082-10.399c0-11.446-9.364-19.765-20.8-19.765H135.364
 		L115.6,51.2H48z M374.399,377.6c-22.882,0-41.6,18.718-41.6,41.601c0,22.882,18.718,41.6,41.6,41.6S416,442.082,416,419.2
-		C416,396.317,397.281,377.6,374.399,377.6z"></path></g></svg>
+		C416,396.317,397.281,377.6,374.399,377.6z"
+            ></path>
+          </g>
+        </svg>
 
         <span>加入購物車</span>
       </button>
 
       <button v-if="!collected" class="course-header-action" type="button">
-
-        <svg class="w-[20px]" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512"><path d="M400 480a16 16 0 0 1-10.63-4L256 357.41L122.63 476A16 16 0 0 1 96 464V96a64.07 64.07 0 0 1 64-64h192a64.07 64.07 0 0 1 64 64v368a16 16 0 0 1-16 16z" fill="currentColor"></path></svg>
+        <svg
+          class="w-[20px]"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M400 480a16 16 0 0 1-10.63-4L256 357.41L122.63 476A16 16 0 0 1 96 464V96a64.07 64.07 0 0 1 64-64h192a64.07 64.07 0 0 1 64 64v368a16 16 0 0 1-16 16z"
+            fill="currentColor"
+          ></path>
+        </svg>
 
         <span>加入收藏</span>
       </button>
 
-      <button v-else class="course-header-action" type="button">
-        取消收藏
-      </button>
+      <button v-else class="course-header-action" type="button">取消收藏</button>
 
-      <button v-if="userProfile.username.length && purchased" class="course-header-action" type="button">
+      <button
+        v-if="userProfile.username.length && purchased"
+        class="course-header-action"
+        type="button"
+      >
         評價課程
       </button>
     </div>
 
-    <div class="flex text-white" :class="{'mt-[15vh]': deepDive}">
-      <aside class="w-2/12" :class="{'hidden': deepDive}">
+    <div class="flex text-white" :class="{ 'mt-[15vh]': deepDive }">
+      <aside class="w-2/12" :class="{ hidden: deepDive }">
         <h2 class="my-4 text-2xl font-bold">課程介紹</h2>
 
         <ul>
@@ -90,19 +117,21 @@
         </ul>
       </aside>
 
-      <main class="w-10/12 p-4 transition-all duration-200" :class="{'w-full': deepDive}">
+      <main class="w-10/12 p-4 transition-all duration-200" :class="{ 'w-full': deepDive }">
         <slot />
       </main>
 
       <!-- 懸浮按鈕 -->
       <ul
-      class="h-full w-[65px] rounded border border-[#6C757D]"
-      :class="{'fixed right-[16.3vw] top-5 h-min': scrollY > 250}">
+        class="h-full w-[65px] rounded border border-[#6C757D]"
+        :class="{ 'fixed right-[16.3vw] top-5 h-min': scrollY > 250 }"
+      >
         <!-- 留言 -->
         <li
-        class="right-controller border-bottom" 
-        :class="{'!hidden': deepDive}"
-        @click="scrollToQuestion">
+          class="right-controller border-bottom"
+          :class="{ '!hidden': deepDive }"
+          @click="scrollToQuestion"
+        >
           <svg
             class="mx-auto w-3/6"
             xmlns="http://www.w3.org/2000/svg"
@@ -118,13 +147,17 @@
           </svg>
 
           <span class="toolTip">課程討論</span>
-
         </li>
         <!-- 沉浸模式 -->
         <li
-        class="right-controller border-bottom"
-        :class="{'!border-b-0': deepDive}"
-        @click="() => { deepDive = !deepDive }">
+          class="right-controller border-bottom"
+          :class="{ '!border-b-0': deepDive }"
+          @click="
+            () => {
+              deepDive = !deepDive
+            }
+          "
+        >
           <svg
             class="mx-auto w-3/6"
             xmlns="http://www.w3.org/2000/svg"
@@ -138,10 +171,9 @@
           </svg>
 
           <span class="toolTip">沉靜模式</span>
-
         </li>
         <!-- 上一堂課 -->
-        <li class="right-controller border-bottom" :class="{'!hidden': deepDive}">
+        <li class="right-controller border-bottom" :class="{ '!hidden': deepDive }">
           <svg
             class="mx-auto w-3/6"
             xmlns="http://www.w3.org/2000/svg"
@@ -154,7 +186,7 @@
           <span class="toolTip">上一堂課</span>
         </li>
         <!-- 下一堂課 -->
-        <li class="right-controller" :class="{'!hidden': deepDive}">
+        <li class="right-controller" :class="{ '!hidden': deepDive }">
           <svg
             class="mx-auto w-3/6"
             xmlns="http://www.w3.org/2000/svg"
@@ -179,7 +211,7 @@
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import useCourses from '~/stores/useCourses'
-import useUser from '~/stores/useUser';
+import useUser from '~/stores/useUser'
 
 const { currentCourse, expandChapter, purchased, collected } = storeToRefs(useCourses())
 const { userProfile } = storeToRefs(useUser())
@@ -220,7 +252,7 @@ const scrollToQuestion = () => {
 }
 
 const fixedBottons = () => {
-  if(window.top?.scrollY){
+  if (window.top?.scrollY) {
     scrollY.value = window.top.scrollY
   }
 }
@@ -234,8 +266,12 @@ const fixedBottons = () => {
 // }
 
 //  查看是否有購買/收藏該課程
-const coursePurchasedIndex = userProfile.value.purchasedCourses.findIndex((course: any) => course === courseId.value)
-const courseCollectedIndex = userProfile.value.collectCourses.findIndex((course: any) => course === courseId.value)
+const coursePurchasedIndex = userProfile.value.purchasedCourses.findIndex(
+  (course: any) => course === courseId.value
+)
+const courseCollectedIndex = userProfile.value.collectCourses.findIndex(
+  (course: any) => course === courseId.value
+)
 setPurchased(coursePurchasedIndex > -1)
 setCollected(courseCollectedIndex > -1)
 
@@ -246,19 +282,18 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .course-header-action {
-  @apply mx-2 rounded border border-white bg-white px-3 py-2 text-black flex items-center;
+  @apply mx-2 flex items-center rounded border border-white bg-white px-3 py-2 text-black;
 }
 
-.right-controller{
-  @apply relative inline-block py-2 cursor-pointer;
-  .toolTip{
-    @apply absolute invisible bg-white text-black text-center px-[5px] text-sm top-[10px] left-[65px] w-[100px] rounded;
-  }  
-  &:hover{
-    .toolTip{
+.right-controller {
+  @apply relative inline-block cursor-pointer py-2;
+  .toolTip {
+    @apply invisible absolute left-[65px] top-[10px] w-[100px] rounded bg-white px-[5px] text-center text-sm text-black;
+  }
+  &:hover {
+    .toolTip {
       @apply visible;
-    }  
+    }
   }
 }
-
 </style>

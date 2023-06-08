@@ -11,7 +11,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
       return `/login?redirect=${to.fullPath}`
     }
   }
-  if(to.params.courseId){
+  if (to.params.courseId) {
     useState('courseId', () => Number(to.params.courseId))
   }
 })

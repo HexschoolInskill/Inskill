@@ -43,7 +43,7 @@
               <i class="icon-search text-[20px] text-gray"></i>
             </button>
           </form>
-          <nuxt-link>合作申請</nuxt-link>
+          <nuxt-link to="/partner">合作申請</nuxt-link>
         </div>
         <div
           class="relative flex flex-shrink-0 items-center lg:ml-5 2xl:ml-8"

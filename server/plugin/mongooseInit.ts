@@ -1,12 +1,12 @@
 import { Nitro } from 'nitropack'
 import mongoose from 'mongoose'
-import models from '../model/schema'
+// import models from '../model/schema'
 // import { MongoClient, ServerApiVersion } from "mongodb"
 export default async (_nitroApp: Nitro) => {
   const config = useRuntimeConfig()
   try {
     await mongoose.connect(config.mongodbUri)
-    console.log('Mongoose connected', models)
+    console.log('Mongoose connected')
   } catch (err) {
     console.log(`Error connecting to mongodb: ${err}`)
   }

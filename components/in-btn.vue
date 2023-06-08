@@ -1,23 +1,71 @@
 <template>
-  <button v-if="href !== null" class="in-btn" v-bind="$attrs">
+  <component
+    :is="href ? 'a' : 'button'"
+    class="in-btn"
+    :class="{
+      'in-btn--small': size === 'small',
+      'in-btn--ghost': ghost,
+      'in-btn--error': type === 'error',
+      'in-btn--primary': type === 'primary'
+    }"
+    v-bind="$attrs"
+  >
     <slot></slot>
-  </button>
-  <a v-else class="in-btn" :href="href" v-bind="$attrs">
-    <slot></slot>
-  </a>
+  </component>
 </template>
 <script setup lang="ts">
 defineProps({
   href: {
     type: String,
     default: null
+  },
+  size: {
+    type: String as PropType<'small'>,
+    default: ''
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  ghost: {
+    type: Boolean,
+    default: false
+  },
+  type: {
+    type: String as PropType<'error' | 'primary'>,
+    default: 'primary'
   }
 })
 </script>
 <style lang="scss" scoped>
 .in-btn {
-  max-width: 196px;
-  padding: 8px 12px;
-  @apply inline-flex h-10 w-full cursor-pointer select-none items-center justify-center rounded-1 bg-white text-black hover:bg-gray-l;
+  min-width: 196px;
+  @apply transition-base inline-flex h-10 cursor-pointer select-none items-center justify-center rounded-1 px-3;
+
+  &--primary {
+    @apply bg-white text-black hover:bg-gray-l;
+  }
+  &--small {
+    min-width: 138px;
+  }
+
+  &--disabled {
+    opacity: 0.5;
+  }
+
+  &--ghost {
+    @apply border border-solid border-white bg-transparent text-white hover:bg-white hover:text-black;
+  }
+
+  &--error {
+    &.in-btn {
+      &--ghost {
+        @apply border-red-500 text-red-500 hover:bg-transparent;
+      }
+      &--primary {
+        @apply bg-red-500 text-white hover:text-red-800;
+      }
+    }
+  }
 }
 </style>

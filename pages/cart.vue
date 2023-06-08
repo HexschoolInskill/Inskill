@@ -86,7 +86,7 @@
 <script lang="ts" setup>
 import { reactive, onMounted, computed } from 'vue'
 // import { storeToRefs } from 'pinia'
-// import coursesStore from '~/stores/courses'
+// import coursesStore from '~/stores/useCourses'
 
 // const { $api } = useNuxtApp()
 // let { cart } = storeToRefs(coursesStore())

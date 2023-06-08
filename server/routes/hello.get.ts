@@ -9,8 +9,10 @@
  */
 
 // import Joi from 'joi'
-import { createPayment } from '../services/newebpay'
-export default defineEventHandler(async () => {
+// import {getWebRTCAppList, updateWebRTCAppEndPointList} from '../services/mediaServer'
+import { createLive } from '../services/youtubeApi'
+// import { createLive, startLive, endLive } from '../services/youtubeApi'
+export default defineEventHandler(async (_) => {
   // const parametersSchema = Joi.object({
   //   symbol: Joi.string(),
   //   limit: Joi.number().max(1000).default(500)
@@ -30,22 +32,21 @@ export default defineEventHandler(async () => {
     //   method: 'GET',
     //   baseURL: `https://fapi.binance.com/fapi/v1`
     // })
-    const response = await createPayment(
-      {
-        id: '1234',
-        total: 199,
-        description: 'test',
-        email: 'senxsen@gmail.com'
-      },
-      true
-    )
-
+    // return {
+    //   success: true,
+    //   statusCode: 200,
+    //   message: '測試 [GET] /hello with Joi',
+    //   value,
+    //   response
+    // }
+    // const response = await updateWebRTCAppEndPointList("9K6nIH339mtV168412138054", "rtmp://a.rtmp.youtube.com/live2/zbkg-3m3y-wvx6-p3kw-f6fv-test")
+    const response = await createLive()
+    // const response = await startLive("7y0MA5WSVyg")
+    // const response = await endLive("7y0MA5WSVyg")
     return {
       success: true,
       statusCode: 200,
-      message: '測試 [GET] /hello with Joi',
-      // value,
-      response
+      data: response
     }
   } catch (error: any) {
     return createError({

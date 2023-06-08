@@ -6,14 +6,13 @@ import models, { Course } from '../../model/schema'
 export default defineEventHandler(async (event) => {
   const schema = Joi.object({
     courseId: Joi.string().required(),
-    title: Joi.string().required(),
-    description: Joi.string().required()
+    title: Joi.string().required()
   })
   try {
     const body = await readBody(event)
     const { error, value } = await schema.validate(body, { abortEarly: true })
     if (error) throw new Error(error.details.map((e: any) => e.message).join(', '))
-    const { courseId, title, description } = value
+    const { courseId, title } = value
     const { userInfo } = event.context.auth
     // checkout course exist
     const course = (await models.Course.findById(courseId)) as Course
@@ -43,7 +42,6 @@ export default defineEventHandler(async (event) => {
     // add chapter
     const chapter = {
       title,
-      description,
       sort: newChapterSort,
       lessons: []
     }

@@ -29,8 +29,8 @@
 
     <h2 class="mb-4 text-2xl font-bold">全部問答 ({{ questions.length }})</h2>
 
-    <div v-for="i in showQuestion" :key="i" class="rounded-lg border p-8">
-      <div class="border-bottom flex">
+    <div v-for="i in showQuestion" :key="i" class="my-4 rounded-lg border p-8">
+      <div class="flex p-4" :class="{ 'border-bottom': questions[i - 1].replies.length }">
         <div class="avatar mr-4 w-1/6">
           <!-- <img src="" alt="avatar" /> -->
           <svg
@@ -50,11 +50,15 @@
         </div>
 
         <div class="w-full">
-          <h2>使用者名稱</h2>
+          <h2>{{ questions[i - 1].username }}</h2>
           <p>{{ questions[i - 1].comment }}</p>
 
           <div class="my-4 flex">
-            <button class="mr-4 flex w-[100px] items-center" type="button" @click="openReplyBox">
+            <button
+              class="mr-4 flex w-[100px] items-center"
+              type="button"
+              @click="openReplyBox(i - 1)"
+            >
               <svg
                 class="w-1/6"
                 xmlns="http://www.w3.org/2000/svg"
@@ -86,13 +90,13 @@
                 </g>
               </svg>
 
-              <span class="w-4/6">共{{ questions[i - 1].reply.length }}則</span>
+              <span class="w-4/6">共{{ questions[i - 1].replies?.length }}則</span>
             </button>
           </div>
         </div>
       </div>
 
-      <div v-if="addReply" class="m-6">
+      <div v-if="addReply && replyIndex === i - 1" class="m-6">
         <textarea
           id="new_question"
           v-model="newReply"
@@ -104,7 +108,7 @@
         >
         </textarea>
 
-        <div class="flex">
+        <div class="my-2 flex">
           <button
             class="my-2 ml-auto w-[150px] rounded border p-2"
             type="button"
@@ -113,18 +117,18 @@
             取消
           </button>
           <button
-            class="my-2 ml-2 w-[150px] rounded border bg-white p-2 text-black"
+            class="my-2 ml-6 w-[150px] rounded border bg-white p-2 text-black"
             :class="{ 'bg-gray': !newReply.length }"
             type="button"
             :disabled="!newReply.length"
-            @click="emit('addReply', { msg: newReply, index: i - 1 })"
+            @click="submitReply(i)"
           >
             送出
           </button>
         </div>
       </div>
 
-      <div v-for="reply in questions[i - 1].reply" :key="reply.comment" class="flex px-6 pt-4">
+      <div v-for="reply in questions[i - 1].replies" :key="reply.comment" class="flex px-6 pt-4">
         <div class="avatar mr-4 w-1/6">
           <!-- <img src="" alt="avatar" /> -->
           <svg
@@ -146,7 +150,7 @@
         </div>
 
         <div class="w-full">
-          <h2>使用者名稱</h2>
+          <h2>{{ reply.username || '使用者名稱' }}</h2>
           <p>{{ reply.comment }}</p>
         </div>
       </div>
@@ -169,7 +173,7 @@ import { ref } from 'vue'
 const props = defineProps({
   questions: {
     type: null,
-    default: {}
+    default: []
   },
   purchased: {
     type: Boolean,
@@ -181,17 +185,24 @@ const emit = defineEmits(['addQuestion', 'addReply'])
 
 const showQuestion = ref(props.questions.length < 3 ? props.questions.length : 3)
 const addReply = ref(false)
+const replyIndex = ref(-1)
 const newReply = ref('')
 const newQuestion = ref('')
 
 // 開啟回復的輸入框
-const openReplyBox = () => {
+const openReplyBox = (index: number) => {
+  replyIndex.value = index
   addReply.value = true
 }
 
 // 關閉回復的輸入框
 const closeReply = () => {
   addReply.value = false
+}
+
+const submitReply = (i: number) => {
+  emit('addReply', { msg: newReply, index: i - 1 })
+  closeReply()
 }
 
 const getMoreQuestion = () => {

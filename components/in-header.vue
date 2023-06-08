@@ -88,7 +88,7 @@
         <transition name="menu">
           <ul
             v-if="currentPopup === 'user'"
-            class="absolute right-0 top-18 grid w-[calc(100vw-24px)] gap-2 rounded-6 bg-white p-4 sm:w-52 lg:top-28"
+            class="absolute right-0 top-18 grid w-[calc(100vw-24px)] gap-2 rounded-6 bg-white p-4 shadow sm:w-52 lg:top-28"
             :class="{ 'lg:hidden': !store.userProfile.username }"
           >
             <template v-if="!store.userProfile.username">
@@ -130,7 +130,7 @@
         <transition name="menu">
           <ul
             v-if="currentPopup === 'explore'"
-            class="absolute left-0 top-18 grid w-[calc(100vw-24px)] gap-2 rounded-6 bg-white p-4 sm:w-[375px] lg:left-20 lg:top-28"
+            class="absolute left-0 top-18 grid w-[calc(100vw-24px)] gap-2 rounded-6 bg-white p-4 shadow sm:w-[375px] lg:left-20 lg:top-28"
           >
             <li class="in-header__popup-link">
               <nuxt-link class="block whitespace-nowrap px-3 py-2" to="/search"

@@ -62,8 +62,8 @@
 
   <in-content-question
     :questions="currenChapterLession.question"
-    @add-question="($value: any) => addingQuestion($value)"
-    @add-reply="($value: any) => addingReply($value)"
+    @add-question="($value: any) => addingQuestion({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, comment: $value })"
+    @add-reply="($value: any) => addingReply({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, index: $value.index, comment: $value.msg })"
   >
   </in-content-question>
 </template>
@@ -81,7 +81,8 @@ import inContentTeacher from '../components/in-content-teacher.vue'
 import inContentReview from '../components/in-content-review.vue'
 import inContentQuestion from '../components/in-content-question.vue'
 
-import coursesStore from '~/stores/useCourses'
+import useCourse from '~/stores/useCourses'
+import useUser from '~/stores/useUser'
 
 definePageMeta({
   layout: 'view-courses'
@@ -89,29 +90,14 @@ definePageMeta({
 
 const purchased = ref(false)
 
-const { currentCourse, content } = storeToRefs(coursesStore())
+const { currentCourse, content } = storeToRefs(useCourse())
+const { userProfile } = storeToRefs(useUser())
+const { addingQuestion, addingReply } = useCourse()
 const route = useRoute()
 
 const currenChapterLession = ref(
-  currentCourse.value.chapters[content.value.chapter].lessions[content.value.lession]
+  currentCourse.value.chapters[content.value.chapter].lessons[content.value.lesson]
 )
-
-// 新增提問
-const addingQuestion = ($value: any) => {
-  currenChapterLession.value.question.push({
-    userId: '',
-    comment: $value,
-    reply: []
-  })
-}
-
-// 新增回復
-const addingReply = ($value: any) => {
-  currenChapterLession.value.question[$value.index].reply.push({
-    userId: '',
-    comment: $value.msg
-  })
-}
 
 onMounted(() => {
   console.log(route.params)

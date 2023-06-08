@@ -17,7 +17,7 @@
       </svg>
 
       <span class="mr-auto"
-        >章節數量: {{ currentCourse.chapters.length }}章 {{ getTotalLessions }}節</span
+        >章節數量: {{ currentCourse.chapters?.length }}章 {{ getTotalLessons }}節</span
       >
       <span v-if="!purchased" class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span>
     </span>
@@ -65,9 +65,9 @@ const props = defineProps({
 })
 
 // 計算全部章節的課程總數
-const getTotalLessions = computed(() => {
-  const total = props.currentCourse.chapters.reduce(
-    (accumulator: number, chapter: any) => accumulator + chapter.lessions.length,
+const getTotalLessons = computed(() => {
+  const total = props.currentCourse.chapters?.reduce(
+    (accumulator: number, chapter: any) => accumulator + chapter.lessons.length,
     0
   )
 

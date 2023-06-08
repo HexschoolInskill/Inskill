@@ -12,6 +12,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
   }
   if (to.params.courseId) {
-    useState('courseId', () => Number(to.params.courseId))
+    useState('courseId', () => to.params.courseId)
   }
 })

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 
 interface review {
   userId: string
@@ -16,7 +16,7 @@ interface reply {
 interface question {
   userId: string
   comment: string
-  reply: reply[]
+  replies: reply[]
 }
 
 interface content {
@@ -27,7 +27,7 @@ interface content {
   sort: number
 }
 
-interface lession {
+interface lesson {
   _id: string
   title: string
   description: string
@@ -42,7 +42,7 @@ interface chapter {
   title: string
   description: string
   sort: number
-  lessions: lession[]
+  lessons: lesson[]
 }
 
 interface course {
@@ -66,7 +66,7 @@ export default defineStore('courses', () => {
   // 老師開設的課程
   const courseTeacher = ref<courseArray>([])
   // 建立/編輯/觀看的課程
-  let currentCourse = reactive<course>({
+  const currentCourse = ref<course>({
     _id: '001',
     teacherId: '002',
     isPublic: false,
@@ -82,7 +82,7 @@ export default defineStore('courses', () => {
         title: 'chapter 1',
         description: 'dfdfsdfsdf',
         sort: 0,
-        lessions: [
+        lessons: [
           {
             _id: '00001',
             title: 'lession 1',
@@ -115,7 +115,7 @@ export default defineStore('courses', () => {
                 userId: 'u001',
                 comment:
                   '村喜夏蝶毛胡星同？裏次己、世我休但停候包息唱色也着法采意方，掃收重千房背着要歌位游老化杯生，掃錯哭兆習他，杯香車過欠由吧加給送快、字回不入雞彩雄瓜母完少枝外弓汁幸反！且少斥土自物都真現浪玉再追瓜春尼。',
-                reply: [
+                replies: [
                   {
                     userId: 'u002',
                     comment:
@@ -148,14 +148,14 @@ export default defineStore('courses', () => {
         title: 'chapter 2',
         description: 'dfdfsdfsdf',
         sort: 1,
-        lessions: []
+        lessons: []
       },
       {
         _id: '0003',
         title: 'chapter 3',
         description: 'dfdfsdfsdf',
         sort: 2,
-        lessions: []
+        lessons: []
       }
     ],
     reviews: [
@@ -189,7 +189,7 @@ export default defineStore('courses', () => {
   const collected = ref(false)
   const purchased = ref(false)
   const expandChapter = ref(0) // 預設在課程第一章
-  const content = ref({ chapter: expandChapter, lession: 0 }) // 當前查看的課程內容
+  const content = ref({ chapter: expandChapter, lesson: 0 }) // 當前查看的課程內容
 
   const cart = ref<Object[]>([])
 
@@ -214,7 +214,7 @@ export default defineStore('courses', () => {
   }
 
   const setCurrentCourse = (course: course) => {
-    currentCourse = course
+    currentCourse.value = course
   }
 
   const setChapter = (index: number) => {
@@ -223,7 +223,36 @@ export default defineStore('courses', () => {
 
   const setContent = (index: number) => {
     content.value.chapter = expandChapter.value
-    content.value.lession = index
+    content.value.lesson = index
+  }
+
+  // 新增評價
+  const addingReview = (content: any) => {
+    const { star, userId, comment } = content
+    currentCourse.value.reviews.push({
+      userId,
+      rating: star,
+      comment
+    })
+  }
+
+  // 新增提問
+  const addingQuestion = (content: any) => {
+    const { chapter, lesson, userId, comment } = content
+    currentCourse.value.chapters[chapter].lessons[lesson].question.push({
+      userId,
+      comment,
+      replies: []
+    })
+  }
+
+  // 新增回復
+  const addingReply = (content: any) => {
+    const { chapter, lesson, index, userId, comment } = content
+    currentCourse.value.chapters[chapter].lessons[lesson].question[index].replies.push({
+      userId,
+      comment
+    })
   }
 
   return {
@@ -241,6 +270,9 @@ export default defineStore('courses', () => {
     setPurchased,
     setCollected,
     setChapter,
-    setContent
+    setContent,
+    addingReview,
+    addingQuestion,
+    addingReply
   }
 })

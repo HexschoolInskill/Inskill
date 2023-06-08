@@ -11,8 +11,8 @@
 
     <in-content-question
       :questions="currenChapterLession.question"
-      @add-question="($value: any) => addingQuestion($value)"
-      @add-reply="($value: any) => addingReply($value)"
+      @add-question="($value: any) => addingQuestion({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, comment: $value })"
+      @add-reply="($value: any) => addingReply({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, index: $value.index, comment: $value.msg })"
     ></in-content-question>
   </div>
 </template>
@@ -28,33 +28,20 @@ import inContentReview from './components/in-content-review.vue'
 import inContentQuestion from './components/in-content-question.vue'
 
 import useCourses from '~/stores/useCourses'
+import useUser from '~/stores/useUser'
 
 const { currentCourse, content, purchased } = storeToRefs(useCourses())
+const { userProfile } = storeToRefs(useUser())
+
+const { addingQuestion, addingReply } = useCourses()
+
+const { chapter, lesson } = content.value
 
 definePageMeta({
   layout: 'view-courses'
 })
 
-const currenChapterLession = ref(
-  currentCourse.value.chapters[content.value.chapter].lessions[content.value.lession]
-)
-
-// 新增提問
-const addingQuestion = ($value: any) => {
-  currenChapterLession.value.question.push({
-    userId: '',
-    comment: $value,
-    reply: []
-  })
-}
-
-// 新增回復
-const addingReply = ($value: any) => {
-  currenChapterLession.value.question[$value.index].reply.push({
-    userId: '',
-    comment: $value.msg
-  })
-}
+const currenChapterLession = ref(currentCourse.value?.chapters[chapter].lessons[lesson])
 </script>
 
 <style scope>

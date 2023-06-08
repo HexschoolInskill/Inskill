@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 
 export interface IUserProfile {
+  _id: string
   username: string
   email: string
   expertise: string
@@ -18,6 +19,7 @@ export interface IUserProfile {
 
 export default defineStore('user', () => {
   const userProfile = ref<IUserProfile>({
+    _id: '',
     username: '',
     email: '',
     expertise: '',
@@ -35,6 +37,7 @@ export default defineStore('user', () => {
 
   function resetUserProfile() {
     userProfile.value = {
+      _id: '',
       username: '',
       email: '',
       expertise: '',

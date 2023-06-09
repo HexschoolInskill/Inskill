@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     if (error) throw new Error(error.details.map((e: any) => e.message).join(', '))
     // get course from db
     const { courseId } = value
-    const course = await models.Course.findById(courseId) as Course // 添加類型斷言為 Course
+    const course = (await models.Course.findById(courseId)) as Course // 添加類型斷言為 Course
     if (!course) {
       return createError({
         statusCode: 400,
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
       })
     }
     // get teacher from db
-    const teacher = await models.User.findById(course.teacherId) as User // 添加類型斷言為 User
+    const teacher = (await models.User.findById(course.teacherId)) as User // 添加類型斷言為 User
     // return limited course details
     const targetCourse = {
       title: course.title,
@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
       teacher: teacher?.username,
       lessons: course.lessons,
       chapters: course.chapters, // TODO : lack model
-      reviews: course.reviews, // TODO : lack model
+      reviews: course.reviews // TODO : lack model
     }
     return {
       success: true,

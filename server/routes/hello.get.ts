@@ -8,10 +8,11 @@
     getRequestHeader(event, key) -> event.req.headers[key]
  */
 
-import Joi from 'joi'
+// import Joi from 'joi'
 // import {getWebRTCAppList, updateWebRTCAppEndPointList} from '../services/mediaServer'
-import {createLive, startLive, endLive} from '../services/youtubeApi'
-export default defineEventHandler(async (event) => {
+import { createLive } from '../services/youtubeApi'
+// import { createLive, startLive, endLive } from '../services/youtubeApi'
+export default defineEventHandler(async (_) => {
   // const parametersSchema = Joi.object({
   //   symbol: Joi.string(),
   //   limit: Joi.number().max(1000).default(500)
@@ -45,7 +46,7 @@ export default defineEventHandler(async (event) => {
     return {
       success: true,
       statusCode: 200,
-      data : response
+      data: response
     }
   } catch (error: any) {
     return {

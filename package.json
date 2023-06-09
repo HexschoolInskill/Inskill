@@ -43,10 +43,12 @@
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/crypto-js": "^4.1.1",
     "@types/jsonwebtoken": "^9.0.2",
     "@vuelidate/core": "^2.0.2",
     "@vuelidate/validators": "^2.0.2",
     "bcrypt": "^5.1.0",
+    "crypto-js": "^4.1.1",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.3.0",

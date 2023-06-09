@@ -10,8 +10,8 @@
       </div>
       <div class="gsap-slide-up mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
         <in-card
-          v-for="item in list"
-          :key="item.id"
+          v-for="item in courses"
+          :key="item._id"
           perspective
           xs-white
           class="group flex cursor-pointer flex-col font-bold text-gray"
@@ -30,17 +30,17 @@
             <div class="mt-2 flex gap-3 xl:block">
               <div class="flex gap-3 text-gray-l/50">
                 <i
-                  v-for="score in item.score.value"
+                  v-for="score in Math.round(item.averageRating)"
                   :key="score"
                   class="icon-star text-[22px] text-yellow"
                 ></i>
                 <i
-                  v-for="score in 5 - item.score.value"
+                  v-for="score in 5 - Math.round(item.averageRating)"
                   :key="score"
                   class="icon-star text-[22px]"
                 ></i>
               </div>
-              <p class="mt-2">{{ item.score.count }} 則評價</p>
+              <p class="mt-2">{{ item.scoreCount }} 則評價</p>
             </div>
             <div class="mt-6 flex items-center">
               <div class="flex-shrink-0">
@@ -59,7 +59,7 @@
                 <i class="icon-people text-black sm:text-white"></i>
               </div>
               <div class="flex-1 pl-4">
-                <span>{{ formatNumber(item.students) }}</span>
+                <span>{{ formatNumber(item.purchasedCount) }}</span>
                 <span class="ml-3">人已經加入</span>
               </div>
             </div>
@@ -70,7 +70,7 @@
                   src="/images/avatar-fallback.svg"
                   alt=""
                 />
-                <p class="font-bold leading-normal">{{ item.teacher.name }}</p>
+                <p class="font-bold leading-normal">{{ item.teacherName }}</p>
               </div>
               <p class="flex items-center gap-5 text-2xl">
                 <span>NT$</span>
@@ -90,71 +90,12 @@
   </section>
 </template>
 <script lang="ts" setup>
-const list = ref([
-  {
-    id: 1,
-    title: '好評課程名稱',
-    thumbnail: '/images/index-praise-course-1.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    score: {
-      value: 4,
-      count: 99
-    },
-    chapter: 9,
-    course: 99,
-    students: 9999
-  },
-  {
-    id: 2,
-    title: '好評課程名稱',
-    thumbnail: '/images/index-praise-course-2.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    score: {
-      value: 4,
-      count: 99
-    },
-    chapter: 9,
-    course: 99,
-    students: 9999
-  },
-  {
-    id: 3,
-    title: '好評課程名稱',
-    thumbnail: '/images/index-praise-course-3.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    score: {
-      value: 4,
-      count: 99
-    },
-    chapter: 9,
-    course: 99,
-    students: 9999
-  },
-  {
-    id: 4,
-    title: '好評課程名稱',
-    thumbnail: '/images/index-praise-course-4.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    score: {
-      value: 4,
-      count: 99
-    },
-    chapter: 9,
-    course: 99,
-    students: 9999
+import { INormalCourse } from '@/http/modules/courses'
+defineProps({
+  courses: {
+    type: Array as PropType<INormalCourse[]>,
+    default: () => []
   }
-])
+})
 </script>
 <style lang="scss"></style>

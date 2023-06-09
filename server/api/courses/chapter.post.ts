@@ -45,16 +45,14 @@ export default defineEventHandler(async (event) => {
       sort: newChapterSort,
       lessons: []
     }
-    await models.Course.updateOne(
+    const result: any = await models.Course.findOneAndUpdate(
       { _id: courseId }, // 指定要更新的文件條件
-      { $push: { chapters: chapter } } // 使用 $push 運算子新增新的 chapter 到陣列
+      { $push: { chapters: chapter } }, // 使用 $push 運算子新增新的 chapter 到陣列
+      { new: true } // 選項，返回更新後的文檔
     )
-    // course.chapters.push(chapter) // 此寫法 ts 會報錯，暫時先用 updateOne 處理
-    // // sort chapters by sort
-    // course.chapters.sort((a, b) => a.sort - b.sort)
-    // await course.save()
     return {
-      success: true
+      success: true,
+      updatedChapter: result.chapters
     }
   } catch (error: any) {
     return createError({

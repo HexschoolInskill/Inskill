@@ -41,16 +41,21 @@ export default defineEventHandler(async (event) => {
     const maxSort = maxSortResult[0]?.maxSort || 0 // 獲取最大 sort 值，預設為 0
     const newLessonSort = maxSort + 1
 
-    // const chapters = course.chapters
-    // const lesson = {
-    //   title,
-    //   sort: newLessonSort
-    // }
-    // chapters.push(lesson)
-    // await course.save()
+    const lesson = {
+      title,
+      sort: newLessonSort,
+      lessonContent: [],
+      question: []
+    }
+
+    const result: any = await models.Course.findOneAndUpdate(
+      { _id: courseId, 'chapters._id': chapterId },
+      { $push: { 'chapters.$.lessons': lesson } },
+      { new: true }
+    )
     return {
-      newLessonSort,
-      success: true
+      success: true,
+      updatedChapter: result.chapters
     }
   } catch (error: any) {
     return createError({
@@ -59,3 +64,17 @@ export default defineEventHandler(async (event) => {
     })
   }
 })
+
+// const find: any = await models.Course.find({ 'chapters._id': chapterId }).exec()
+// const find: any = await models.Course.find({ 'chapters._id': chapterId, 'chapters.lessons._id': '64829ace5dac7ea13bd4153c' })
+// const find: any = await models.Course.find({
+//   'chapters.lessons.lessonContent._id': '647a1336fc747cba02b8a2a8'
+// }).select('chapters.lessons.lessonContent')
+
+// const findResult = await models.Course.aggregate([
+//   { $match: { $expr: { $eq: ['$_id', { $toObjectId: courseId }] } } },
+//   { $unwind: '$chapters' },
+//   { $unwind: '$chapters.lessons' },
+//   { $unwind: '$chapters.lessons.lessonContent' },
+//   { $project: { _id: 0, lessonContent: '$chapters.lessons.lessonContent' } }
+// ])

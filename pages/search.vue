@@ -305,8 +305,16 @@ function isInCollection(courseId: string) {
   return profile.value.collectCourses.find((course) => course.courseId === courseId) !== undefined
 }
 async function handleCollectCourse(courseId: string) {
-  if (!profile.value._id) navigateTo(`/login?redirect=${route.fullPath}`)
-
+  if (!profile.value._id)
+    return router.push({
+      name: 'login',
+      query: {
+        redirect: '/search',
+        q: q.value,
+        category: category.value,
+        sortBy: sortBy.value
+      }
+    })
   try {
     const isCollect = !isInCollection(courseId)
     const courseType = category.value === 'normal' ? 'Course' : 'LiveCourse'

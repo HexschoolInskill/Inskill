@@ -4,7 +4,7 @@
       <div class="gsap-slide-up flex items-center justify-center sm:justify-between">
         <h2 class="text-center text-[32px] font-black text-white">熱門課程</h2>
         <nuxt-link
-          to="/search?sortBy=popular"
+          to="/search?q=&sortBy=popular?category=normal"
           class="hidden cursor-pointer items-center text-white sm:flex"
         >
           <p>更多熱門課程</p>
@@ -79,10 +79,10 @@
   </section>
 </template>
 <script lang="ts" setup>
-import { INormalCourse } from '@/http/modules/courses'
+import { NormalCourse } from '@/http/modules/courses'
 defineProps({
   courses: {
-    type: Array as PropType<INormalCourse[]>,
+    type: Array as PropType<NormalCourse[]>,
     default: () => []
   }
 })

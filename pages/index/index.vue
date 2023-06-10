@@ -30,14 +30,14 @@ import StreamCourse from './components/stream-course.vue'
 import Comments from './components/comments.vue'
 import PopularCourse from './components/popular-course.vue'
 import PraiseCourse from './components/praise-course.vue'
-import type { INormalCourse, IStreamCourse } from '@/http/modules/courses'
+import type { NormalCourse, StreamCourse as IStreamCourse } from '@/http/modules/courses'
 
 const app = useNuxtApp()
 
-const newCourses = ref<INormalCourse[]>([])
-const praiseCourses = ref<INormalCourse[]>([])
+const newCourses = ref<NormalCourse[]>([])
+const praiseCourses = ref<NormalCourse[]>([])
 const streamCourses = ref<IStreamCourse[]>([])
-const popularCourses = ref<INormalCourse[]>([])
+const popularCourses = ref<NormalCourse[]>([])
 
 definePageMeta({
   layout: false

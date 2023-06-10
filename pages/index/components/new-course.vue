@@ -72,12 +72,12 @@
 <script lang="ts" setup>
 import Swiper, { Pagination } from 'swiper'
 import formatNumber from '@/utils/formatNumber'
-import type { INormalCourse } from '@/http/modules/courses'
+import type { NormalCourse } from '@/http/modules/courses'
 Swiper.use([Pagination])
 
 defineProps({
   courses: {
-    type: Array as PropType<INormalCourse[]>,
+    type: Array as PropType<NormalCourse[]>,
     default: () => []
   }
 })

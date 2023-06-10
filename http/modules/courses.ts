@@ -1,5 +1,7 @@
 import HttpFactory from '../factory'
 
+export type CourseSortBy = 'popular' | 'praise' | 'time'
+export type CourseCategory = 'normal' | 'stream'
 interface ICourse {
   _id: string
   title: string
@@ -11,13 +13,13 @@ interface ICourse {
   teacherName: string
   averageRating: number
 }
-export interface INormalCourse extends ICourse {
+export interface NormalCourse extends ICourse {
   chapter: number
   course: number
   createdAt: string
   scoreCount: number
 }
-export interface IStreamCourse extends ICourse {
+export interface StreamCourse extends ICourse {
   endTime: string
   startTime: string
 }
@@ -26,16 +28,16 @@ interface ISearchCourses<T> extends IResponse {
   searchCourses: T[]
 }
 interface IIndexCourses extends IResponse {
-  newCourses: INormalCourse[]
-  streamCourse: IStreamCourse[]
-  popularCourses: INormalCourse[]
-  praiseCourses: INormalCourse[]
+  newCourses: NormalCourse[]
+  streamCourse: StreamCourse[]
+  popularCourses: NormalCourse[]
+  praiseCourses: NormalCourse[]
 }
 
 interface ISearchParams {
   q?: string
-  category: 'stream' | 'normal'
-  sortBy: 'popular' | 'praise' | 'time'
+  category: CourseCategory
+  sortBy: CourseSortBy
 }
 
 class CoursesModule extends HttpFactory {
@@ -60,26 +62,17 @@ class CoursesModule extends HttpFactory {
   }
 
   searchCourse(): Promise<IIndexCourses>
-  searchCourse(params: ISearchParams): Promise<ISearchCourses<INormalCourse>>
-  searchCourse(params: ISearchParams): Promise<ISearchCourses<IStreamCourse>>
+  searchCourse(params: ISearchParams): Promise<ISearchCourses<NormalCourse | StreamCourse>>
   async searchCourse(params?: ISearchParams) {
     if (params) {
       const searchParams = Object.entries(params)
-        .filter((param) => param[1])
+        .filter((param) => param[1] !== undefined)
         .map((param) => `${param[0]}=${encodeURIComponent(param[1])}`)
         .join('&')
-      if (params.category === 'normal') {
-        return await this.call<ISearchCourses<INormalCourse>>(
-          `${this.RESOURCE}/search?${searchParams}`,
-          'GET'
-        )
-      }
-      if (params.category === 'stream') {
-        return await this.call<ISearchCourses<IStreamCourse>>(
-          `${this.RESOURCE}/search?${searchParams}`,
-          'GET'
-        )
-      }
+      return await this.call<ISearchCourses<NormalCourse | StreamCourse>>(
+        `${this.RESOURCE}/search?${searchParams}`,
+        'GET'
+      )
     } else {
       return await this.call<IIndexCourses>(`${this.RESOURCE}/search`, 'GET')
     }

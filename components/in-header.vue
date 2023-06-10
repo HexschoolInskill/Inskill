@@ -161,9 +161,7 @@ const searchInput = ref('')
 
 function handleSearch() {
   const value = encodeURIComponent(searchInput.value.trim())
-  if (value) {
-    navigateTo(`/search?q=${value}`)
-  }
+  navigateTo(`/search?q=${value}&sortBy=time&category=normal`)
 }
 
 const currentPopup = ref<null | string>(null)
@@ -195,16 +193,19 @@ onBeforeUnmount(() => {
 .in-header {
   &__popup-link {
     cursor: pointer;
+
     &:not(:last-child) {
       border-bottom: 1px solid #6c757d;
       border-radius: 4px;
     }
   }
 }
+
 .menu-enter-from,
 .menu-leave-to {
   opacity: 0;
 }
+
 .menu-enter-active,
 .menu-leave-active {
   transition: 0.3s ease-in-out;

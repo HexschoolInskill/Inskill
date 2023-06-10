@@ -77,11 +77,11 @@
 </template>
 <script lang="ts" setup>
 import Swiper, { Pagination } from 'swiper'
-import { IStreamCourse } from '@/http/modules/courses'
+import { StreamCourse } from '@/http/modules/courses'
 
 defineProps({
   courses: {
-    type: Array as PropType<IStreamCourse[]>,
+    type: Array as PropType<StreamCourse[]>,
     default: () => []
   }
 })

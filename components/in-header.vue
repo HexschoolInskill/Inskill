@@ -121,6 +121,14 @@
                   會員資料
                 </nuxt-link>
               </li>
+              <li class="in-header__popup-link">
+                <nuxt-link
+                  class="block whitespace-nowrap px-3 py-2 text-center"
+                  @click="currentPopup = null"
+                >
+                  我的課程
+                </nuxt-link>
+              </li>
               <li class="in-header__popup-link" @click="app.$api.user.logout">
                 <div class="block whitespace-nowrap px-3 py-2 text-center">登出</div>
               </li>

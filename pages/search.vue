@@ -91,8 +91,13 @@
             />
             <div
               class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-[#FFC107] group-hover:translate-y-0 group-hover:opacity-100"
+              @click="handleCollectCourse(item._id)"
             >
-              <i class="icon-bookmark-outline -mt-px text-[32px]"></i>
+              <i
+                v-if="isInCollection(item._id)"
+                class="icon-bookmark -mt-px text-[32px] text-yellow"
+              ></i>
+              <i v-else class="icon-bookmark-outline -mt-px text-[32px]"></i>
             </div>
           </div>
           <div class="flex-1 p-8 xl:px-6 xl:py-4">
@@ -171,8 +176,13 @@
             />
             <div
               class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-[#FFC107] group-hover:translate-y-0 group-hover:opacity-100"
+              @click="handleCollectCourse(item._id)"
             >
-              <i class="icon-bookmark-outline -mt-px text-[32px]"></i>
+              <i
+                v-if="isInCollection(item._id)"
+                class="icon-bookmark -mt-px text-[32px] text-yellow"
+              ></i>
+              <i v-else class="icon-bookmark-outline -mt-px text-[32px]"></i>
             </div>
           </div>
           <div class="flex-1 p-8 xl:px-6 xl:py-4">
@@ -217,52 +227,19 @@
         <h2 class="text-center text-h2 font-bold text-white">沒有相關課程</h2>
       </div>
     </section>
-    <!-- <section class="pb-32 select-none transition-base" :class="{ 'opacity-50 pointer-events-none': isLoading }">
-      <div class="flex items-center justify-center">
-        <in-pagination :page="page" :page-count="pageCount" :page-slot="3">
-          <template #prev="{ disabled }">
-            <div
-              class="transition-base flex h-12 w-12 flex-shrink-0 rotate-90 cursor-pointer items-center justify-center rounded-full bg-white hover:bg-[#6C757D]"
-              :class="{
-                'pointer-events-none border border-solid border-[#6C757D] !bg-transparent !text-[#6C757D]':
-                  disabled
-              }">
-              <i class="icon-arrow -mt-px text-[24px]"></i>
-            </div>
-          </template>
-          <template #default="{ num, active }">
-            <div
-              class="transition-base flex h-10 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full border border-solid border-white font-bold text-white hover:bg-white hover:text-black"
-              :class="{ '!bg-white !text-black': active }">
-              {{ num }}
-            </div>
-          </template>
-          <template #next="{ disabled }">
-            <div
-              class="transition-base flex h-12 w-12 flex-shrink-0 -rotate-90 cursor-pointer items-center justify-center rounded-full bg-white hover:bg-[#6C757D]"
-              :class="{
-                'pointer-events-none border border-solid border-[#6C757D] !bg-transparent !text-[#6C757D]':
-                  disabled
-              }">
-              <i class="icon-arrow -mt-px text-[24px]"></i>
-            </div>
-          </template>
-        </in-pagination>
-      </div>
-    </section> -->
   </in-container>
 </template>
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { NormalCourse, StreamCourse, CourseSortBy, CourseCategory } from '@/http/modules/courses'
 import useNotification from '~/stores/useNotification'
-// import useUser from '~/stores/useUser'
-// import { storeToRefs } from 'pinia'
+import useUser from '~/stores/useUser'
 
-// const userStore = useUser()
-// const { userProfile } = storeToRefs(userStore)
 const route = useRoute()
 const router = useRouter()
 const app = useNuxtApp()
+const userStore = useUser()
+const { userProfile: profile } = storeToRefs(userStore)
 const { notification } = useNotification()
 
 const isLoading = ref(false)
@@ -271,8 +248,6 @@ const streamCourses = ref<StreamCourse[]>([])
 const q = ref<string>('')
 const category = ref<CourseCategory>('normal')
 const sortBy = ref<CourseSortBy>('popular')
-// const page = ref(1)
-// const pageCount = ref(1)
 
 await searchCourseByRouteQuery()
 
@@ -282,8 +257,6 @@ watch([category, sortBy], ([category, sortBy]) => {
 watch(
   () => route.query,
   async (query) => {
-    // page.value = 1
-    // pageCount.value = 1
     if (typeof query.q === 'string') q.value = query.q
     await searchCourse()
   }
@@ -327,6 +300,22 @@ async function searchCourseByRouteQuery() {
     normalCourses.value = (data.value?.searchCourses as NormalCourse[]) ?? []
 }
 
-// async function collectCourse() {}
+function isInCollection(courseId: string) {
+  if (!profile.value._id) return false
+  return profile.value.collectCourses.find((course) => course.courseId === courseId) !== undefined
+}
+async function handleCollectCourse(courseId: string) {
+  if (!profile.value._id) navigateTo(`/login?redirect=${route.fullPath}`)
+
+  try {
+    const isCollect = !isInCollection(courseId)
+    const courseType = category.value === 'normal' ? 'Course' : 'LiveCourse'
+    const { collect } = await app.$api.course.collectCourse({ courseId, courseType, isCollect })
+    profile.value.collectCourses = collect
+    notification.success(isCollect ? '收藏成功' : '已取消收藏')
+  } catch (error) {
+    notification.error((error as Error).message)
+  }
+}
 </script>
 <style lang="scss"></style>

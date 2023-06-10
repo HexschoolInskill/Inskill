@@ -2,6 +2,7 @@ import HttpFactory from '../factory'
 
 export type CourseSortBy = 'popular' | 'praise' | 'time'
 export type CourseCategory = 'normal' | 'stream'
+export type CollectCourseType = 'Course' | 'LiveCourse'
 interface ICourse {
   _id: string
   title: string
@@ -24,20 +25,32 @@ export interface StreamCourse extends ICourse {
   startTime: string
 }
 
-interface ISearchCourses<T> extends IResponse {
+interface SearchCourses<T> extends Response {
   searchCourses: T[]
 }
-interface IIndexCourses extends IResponse {
+interface IndexCourses extends Response {
   newCourses: NormalCourse[]
   streamCourse: StreamCourse[]
   popularCourses: NormalCourse[]
   praiseCourses: NormalCourse[]
 }
 
-interface ISearchParams {
+interface SearchPayload {
   q?: string
   category: CourseCategory
   sortBy: CourseSortBy
+}
+
+interface CollectCoursePayload {
+  courseId: string
+  courseType: CollectCourseType
+  isCollect: boolean
+}
+
+export interface CollectCourse {
+  _id: string
+  courseId: string
+  courseType: CollectCourseType
 }
 
 class CoursesModule extends HttpFactory {
@@ -61,21 +74,29 @@ class CoursesModule extends HttpFactory {
     return await this.call(`${this.RESOURCE}/cart`, 'GET')
   }
 
-  searchCourse(): Promise<IIndexCourses>
-  searchCourse(params: ISearchParams): Promise<ISearchCourses<NormalCourse | StreamCourse>>
-  async searchCourse(params?: ISearchParams) {
-    if (params) {
-      const searchParams = Object.entries(params)
-        .filter((param) => param[1] !== undefined)
-        .map((param) => `${param[0]}=${encodeURIComponent(param[1])}`)
+  searchCourse(): Promise<IndexCourses>
+  searchCourse(payload: SearchPayload): Promise<SearchCourses<NormalCourse | StreamCourse>>
+  async searchCourse(payload?: SearchPayload) {
+    if (payload) {
+      const searchQueries = Object.entries(payload)
+        .filter((query) => query[1] !== undefined)
+        .map((query) => `${query[0]}=${encodeURIComponent(query[1])}`)
         .join('&')
-      return await this.call<ISearchCourses<NormalCourse | StreamCourse>>(
-        `${this.RESOURCE}/search?${searchParams}`,
+      return await this.call<SearchCourses<NormalCourse | StreamCourse>>(
+        `${this.RESOURCE}/search?${searchQueries}`,
         'GET'
       )
     } else {
-      return await this.call<IIndexCourses>(`${this.RESOURCE}/search`, 'GET')
+      return await this.call<IndexCourses>(`${this.RESOURCE}/search`, 'GET')
     }
+  }
+
+  async collectCourse(payload: CollectCoursePayload) {
+    return await this.call<{ success: boolean; statusCode: number; collect: CollectCourse[] }>(
+      `${this.RESOURCE}/collect`,
+      'POST',
+      payload
+    )
   }
 }
 

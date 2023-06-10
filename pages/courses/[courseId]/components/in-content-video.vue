@@ -1,6 +1,6 @@
 <template>
   <div class="m-4">
-    <video class="w-full" controls>
+    <video class="w-full" controls controlsList="nodownload">
       <source :src="props.content" />
     </video>
   </div>

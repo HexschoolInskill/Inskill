@@ -9,25 +9,25 @@
         </span>
       </div>
 
-      <div v-for="(lession, index) in currenChapterLession.lessionContent" :key="index">
+      <div v-for="(lesson, index) in currenChapterLession.lessonContent" :key="index">
         <in-content-video
-          v-if="lession.contentType === 'video'"
-          :content="lession.content"
+          v-if="lesson.contentType === 'video'"
+          :content="lesson.content"
         ></in-content-video>
 
         <in-content-text
-          v-if="lession.contentType === 'text'"
-          :content="lession.content"
+          v-if="lesson.contentType === 'text'"
+          :content="lesson.content"
         ></in-content-text>
 
         <in-content-pdf
-          v-if="lession.contentType === 'pdf'"
-          :content="lession.content"
+          v-if="lesson.contentType === 'pdf'"
+          :content="lesson.content"
         ></in-content-pdf>
 
         <in-content-code
-          v-if="lession.contentType === 'code'"
-          :content="lession.content"
+          v-if="lesson.contentType === 'code'"
+          :content="lesson.content"
         ></in-content-code>
       </div>
     </div>
@@ -54,18 +54,20 @@
         </div>
       </div>
     </div>
+
+    <in-content-teacher></in-content-teacher>
+
+    <in-content-review :review="currentCourse.reviews"></in-content-review>
+
+    <in-content-question
+      :questions="currenChapterLession.question"
+      @add-question="($value: any) => addingQuestion({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, comment: $value })"
+      @add-reply="($value: any) => addingReply({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, index: $value.index, comment: $value.msg })"
+    >
+    </in-content-question>    
   </div>
 
-  <in-content-teacher></in-content-teacher>
 
-  <in-content-review :review="currentCourse.reviews"></in-content-review>
-
-  <in-content-question
-    :questions="currenChapterLession.question"
-    @add-question="($value: any) => addingQuestion({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, comment: $value })"
-    @add-reply="($value: any) => addingReply({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, index: $value.index, comment: $value.msg })"
-  >
-  </in-content-question>
 </template>
 
 <script lang="ts" setup>

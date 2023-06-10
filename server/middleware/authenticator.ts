@@ -31,11 +31,10 @@ export default defineEventHandler(async (event) => {
         })
       const user = await models.User.findById(uid)
       if (!user)
-        return {
-          success: false,
+        return createError({
           statusCode: 401,
-          message: 'Unauthorized : user not found'
-        }
+          message: 'Unauthorized : token invalid'
+        })
       event.context.auth = { userID: uid, userInfo: user }
     } catch (err) {
       console.log(`Through authentication middleware error : `, err)

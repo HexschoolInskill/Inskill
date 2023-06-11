@@ -26,7 +26,7 @@ export default defineNuxtPlugin(() => {
         const path = route.path
         const query = route.query
         if (route.name !== 'login')
-          navigateTo({ path: 'login', query: { redirect: path, ...query } })
+          navigateTo({ path: '/login', query: { redirect: path, ...query } })
       } else {
         throw new Error(response._data.message)
       }

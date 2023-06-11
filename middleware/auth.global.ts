@@ -9,13 +9,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
     const store = useUser()
     if (!store.userProfile._id) {
       const path = to.path
-      return navigateTo({
-        path: '/login',
-        query: {
-          redirect: path,
-          ...to.query
-        }
-      })
+      const query = Object.entries(to.query)
+        .map(([key, value]) => `${key}=${value as string}`)
+        .join('&')
+      return `/login?redirect=${path}&${query}`
     }
   }
   if (to.params.courseId) {

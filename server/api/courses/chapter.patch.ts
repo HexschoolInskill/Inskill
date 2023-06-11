@@ -48,12 +48,25 @@ export default defineEventHandler(async (event) => {
     // update chapter
     if (title) chapter.title = title
     if (description) chapter.description = description
-    if (sort) chapter.sort = sort
-    // sort chapters by sort
-    course.chapters.sort((a, b) => a.sort - b.sort)
+    if (sort) {
+      const currentIndex = chapter.sort - 1
+      const newSort = parseInt(sort)
+      course.chapters.forEach((chapter: any, index: number) => {
+        if (index === currentIndex) {
+          chapter.sort = newSort
+        } else if (index > currentIndex && chapter.sort <= newSort) {
+          chapter.sort -= 1
+        } else if (index < currentIndex && chapter.sort >= newSort) {
+          chapter.sort += 1
+        }
+      })
+      // sort chapters by sort
+      course.chapters.sort((a, b) => a.sort - b.sort)
+    }
     await course.save()
     return {
-      success: true
+      success: true,
+      updatedChapter: course.chapters
     }
   } catch (error: any) {
     return createError({

@@ -48,7 +48,7 @@
         />
       </transition>
     </div>
-    <in-popup :show="!!modalType" size="large">
+    <in-popup :show="!!modalType" :size="720">
       <in-card class="px-4 py-8">
         <in-container>
           <h3 class="text-h3 font-bold text-white">文字編輯器</h3>
@@ -81,10 +81,6 @@ interface IContent {
   value: string
   sort: number
 }
-
-definePageMeta({
-  layout: 'create-courses'
-})
 
 const { notification } = useNotification()
 const { confirm } = useConfirm()

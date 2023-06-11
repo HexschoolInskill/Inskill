@@ -1,13 +1,13 @@
 import HttpFactory from '../factory'
-import useUser, { IUserProfile } from '~/stores/useUser'
+import useUser, { UserProfile } from '~/stores/useUser'
 
-interface IProfileResponse extends IResponse {
-  user?: IUserProfile
+interface IProfileResponse extends Response {
+  user?: UserProfile
 }
 
-type IProfilePayload = Partial<IUserProfile>
+type ProfilePayload = Partial<UserProfile>
 
-interface IloginPayload {
+interface LoginPayload {
   email: string
   password: string
 }
@@ -31,7 +31,7 @@ interface IpasswordPayload {
 class UserModule extends HttpFactory {
   private RESOURCE = '/user'
 
-  async login(payload: IloginPayload) {
+  async login(payload: LoginPayload) {
     return await this.call(`${this.RESOURCE}/sign_in`, 'POST', payload)
   }
 
@@ -56,7 +56,7 @@ class UserModule extends HttpFactory {
     }
   }
 
-  async update(payload: IProfilePayload) {
+  async update(payload: ProfilePayload) {
     const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'POST', payload)
 
     const store = useUser()

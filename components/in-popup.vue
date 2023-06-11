@@ -4,7 +4,12 @@
       v-if="show"
       class="popup fixed left-0 top-0 z-40 flex h-screen w-screen items-center bg-black/50"
     >
-      <div class="popup__content mx-auto">
+      <div
+        class="popup__content mx-auto w-full"
+        :style="{
+          maxWidth: typeof size === 'string' ? size : `${size}px`
+        }"
+      >
         <slot></slot>
       </div>
     </div>
@@ -17,8 +22,8 @@ defineProps({
     default: false
   },
   size: {
-    type: String as PropType<'large'>,
-    default: ''
+    type: [String, Number],
+    default: 480
   }
 })
 </script>

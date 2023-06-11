@@ -38,7 +38,7 @@ function handleSearch() {
   const query = searchInput.value.trim()
 
   if (query) {
-    navigateTo(`/search?q=${query}`)
+    navigateTo(`/search?q=${query}&sortBy=time&category=normal`)
   }
 }
 </script>

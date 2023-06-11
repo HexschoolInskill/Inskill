@@ -46,10 +46,7 @@
 import { reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers } from '@vuelidate/validators'
-import { storeToRefs } from 'pinia'
-import useUSer from '~/stores/useUser'
 import useNotification from '~~/stores/useNotification'
-import useToken from '~/composables/useToken'
 
 definePageMeta({
   layout: 'login-form'
@@ -74,35 +71,28 @@ const rules = {
 
 const v$ = useVuelidate(rules, formFields)
 
-const { userProfile } = storeToRefs(useUSer())
-
 const { $api } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
-const token = useToken()
 
 const login = async () => {
   try {
-    const result: any = await $api.user.login({
+    await $api.user.login({
       email: formFields.userEmail,
       password: formFields.password
     })
-
-    if (result.success) {
-      token.setToken(result.accessToken)
-      userProfile.value.username = result.username
-      userProfile.value.avatar = result.avatar
-
-      if (route.query.redirect) {
-        router.push(route.query.redirect as string)
-      } else {
-        router.push('/')
-      }
+    await $api.user.fetchProfile()
+    if (route.query.redirect) {
+      const { redirect, ...query } = route.query
+      router.push({
+        path: redirect as string,
+        query
+      })
     } else {
-      notification.error(result.message)
-      formFields.password = ''
+      router.push('/')
     }
   } catch (err: any) {
+    formFields.password = ''
     notification.error(err.message)
   }
 }

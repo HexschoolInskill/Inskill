@@ -30,13 +30,20 @@ export default defineEventHandler(async (event) => {
         message: 'Permission deined, Only teacher can add lesson'
       })
     }
-    course.chapters.filter((chapter) => chapter._id !== chapterId)
-    course.chapters.forEach((item, index) => {
-      item.sort = index + 1
+    const result = await models.Course.findOneAndUpdate(
+      { _id: courseId },
+      { $pull: { chapters: { _id: chapterId } } },
+      { new: true }
+    ).then((updatedCourse: any) => {
+      // 更新剩餘章節的 sort 欄位
+      updatedCourse.chapters.forEach((chapter: any, index: number) => {
+        chapter.sort = index + 1
+      })
+      return updatedCourse.save()
     })
-    await course.save()
     return {
-      success: true
+      success: true,
+      updatedChapter: result.chapters
     }
   } catch (error: any) {
     return createError({

@@ -39,9 +39,9 @@ export default defineEventHandler(async (event) => {
       collect: userInfo.collectCourses
     }
   } catch (error: any) {
-    return {
-      success: false,
-      message: error
-    }
+    return createError({
+      statusCode: error.statusCode ? error.statusCode : 400,
+      message: error.message
+    })
   }
 })

@@ -121,6 +121,14 @@
                   會員資料
                 </nuxt-link>
               </li>
+              <li class="in-header__popup-link">
+                <nuxt-link
+                  class="block whitespace-nowrap px-3 py-2 text-center"
+                  @click="currentPopup = null"
+                >
+                  我的課程
+                </nuxt-link>
+              </li>
               <li class="in-header__popup-link" @click="app.$api.user.logout">
                 <div class="block whitespace-nowrap px-3 py-2 text-center">登出</div>
               </li>
@@ -161,9 +169,7 @@ const searchInput = ref('')
 
 function handleSearch() {
   const value = encodeURIComponent(searchInput.value.trim())
-  if (value) {
-    navigateTo(`/search?q=${value}`)
-  }
+  navigateTo(`/search?q=${value}&sortBy=time&category=normal`)
 }
 
 const currentPopup = ref<null | string>(null)
@@ -195,16 +201,19 @@ onBeforeUnmount(() => {
 .in-header {
   &__popup-link {
     cursor: pointer;
+
     &:not(:last-child) {
       border-bottom: 1px solid #6c757d;
       border-radius: 4px;
     }
   }
 }
+
 .menu-enter-from,
 .menu-leave-to {
   opacity: 0;
 }
+
 .menu-enter-active,
 .menu-leave-active {
   transition: 0.3s ease-in-out;

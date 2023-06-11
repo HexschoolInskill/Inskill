@@ -96,10 +96,10 @@ export async function spgatewayNotify(order: Record<string, unknown>, isProd: bo
   const thisShaEncrypt = await createMpgShaEncrypt(order.TradeInfo as string)
   // 使用 HASH 再次 SHA 加密字串，確保比對一致（確保不正確的請求觸發交易成功）
   if (!thisShaEncrypt === order.TradeSha) {
-    return {
-      success: false,
+    return createError({
+      statusCode: 402,
       message: '付款失敗：TradeSha 不一致'
-    }
+    })
   }
 
   // 解密交易內容

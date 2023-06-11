@@ -3,25 +3,33 @@
     <in-container>
       <div class="gsap-slide-up flex items-center justify-center sm:justify-between">
         <h2 class="text-center text-[32px] font-black text-white">熱門課程</h2>
-        <div class="hidden cursor-pointer items-center text-white sm:flex">
+        <nuxt-link
+          to="/search?q=&sortBy=popular?category=normal"
+          class="hidden cursor-pointer items-center text-white sm:flex"
+        >
           <p>更多熱門課程</p>
           <i class="icon-arrow ml-3 text-[24px] before:-rotate-90"></i>
-        </div>
+        </nuxt-link>
       </div>
       <div class="gsap-slide-up mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
         <in-card
-          v-for="item in list"
-          :key="item.id"
+          v-for="item in courses"
+          :key="item._id"
           xs-white
           perspective
           class="group flex cursor-pointer flex-col font-bold text-gray"
         >
           <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
-            <img
-              :src="item.thumbnail"
-              :alt="item.title"
-              class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
-            />
+            <nuxt-link
+              :to="`/courses/${item._id}`"
+              class="hidden cursor-pointer items-center text-white sm:flex"
+            >
+              <img
+                :src="item.thumbnail"
+                :alt="item.title"
+                class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
+              />
+            </nuxt-link>
           </div>
           <div class="flex-1 p-8 xl:px-6 xl:py-4">
             <h3 class="text-[28px] text-blue line-clamp-1 sm:text-gray">
@@ -44,7 +52,7 @@
                 <i class="icon-people text-black sm:text-white"></i>
               </div>
               <div class="flex-1 pl-4">
-                <span>{{ formatNumber(item.students) }}</span>
+                <span>{{ formatNumber(item.purchasedCount) }}</span>
                 <span class="ml-3">人已經加入</span>
               </div>
             </div>
@@ -55,7 +63,7 @@
                   src="/images/avatar-fallback.svg"
                   alt=""
                 />
-                <p class="font-bold leading-normal">{{ item.teacher.name }}</p>
+                <p class="font-bold leading-normal">{{ item.teacherName }}</p>
               </div>
               <p class="flex items-center gap-5 text-2xl">
                 <span>NT$</span>
@@ -65,65 +73,23 @@
           </div>
         </in-card>
       </div>
-      <div
+      <nuxt-link
+        :to="`/search?sortBy=popular`"
         class="mt-10 flex h-11 w-full cursor-pointer select-none items-center justify-center rounded-1 bg-white text-black sm:hidden"
       >
         <p>更多熱門課程</p>
         <i class="icon-arrow ml-3 text-[24px] before:-rotate-90"></i>
-      </div>
+      </nuxt-link>
     </in-container>
   </section>
 </template>
 <script lang="ts" setup>
-const list = ref([
-  {
-    id: 1,
-    title: '課程名稱',
-    thumbnail: '/images/index-popular-course-1.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    chapter: 9,
-    course: 99,
-    students: 9999
-  },
-  {
-    id: 2,
-    title: '課程名稱',
-    thumbnail: '/images/index-popular-course-2.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    chapter: 9,
-    course: 99,
-    students: 9999
-  },
-  {
-    id: 3,
-    title: '課程名稱',
-    thumbnail: '/images/index-popular-course-3.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    chapter: 9,
-    course: 99,
-    students: 9999
-  },
-  {
-    id: 4,
-    title: '課程名稱',
-    thumbnail: '/images/index-popular-course-4.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    chapter: 9,
-    course: 99,
-    students: 9999
+import { NormalCourse } from '@/http/modules/courses'
+defineProps({
+  courses: {
+    type: Array as PropType<NormalCourse[]>,
+    default: () => []
   }
-])
+})
 </script>
 <style lang="scss"></style>

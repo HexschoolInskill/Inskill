@@ -20,11 +20,16 @@
           class="group flex cursor-pointer flex-col font-bold text-gray"
         >
           <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
-            <img
-              :src="item.thumbnail"
-              :alt="item.title"
-              class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
-            />
+            <nuxt-link
+              :to="`/courses/${item._id}`"
+              class="hidden cursor-pointer items-center text-white sm:flex"
+            >
+              <img
+                :src="item.thumbnail"
+                :alt="item.title"
+                class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
+              />
+            </nuxt-link>
           </div>
           <div class="flex-1 p-8 xl:px-6 xl:py-4">
             <h3 class="text-[28px] text-blue line-clamp-1 sm:text-gray">

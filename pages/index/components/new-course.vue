@@ -8,11 +8,16 @@
             <div class="group block cursor-pointer">
               <in-card xs-white perspective class="flex flex-col font-bold text-gray sm:text-white">
                 <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-6/10">
-                  <img
-                    :src="item.thumbnail"
-                    :alt="item.title"
-                    class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
-                  />
+                  <nuxt-link
+                    :to="`/courses/${item._id}`"
+                    class="hidden cursor-pointer items-center text-white sm:flex"
+                  >
+                    <img
+                      :src="item.thumbnail"
+                      :alt="item.title"
+                      class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
+                    />
+                  </nuxt-link>
                 </div>
                 <div class="flex-1 p-6 sm:p-8">
                   <h3 class="text-[28px] text-blue line-clamp-1 sm:text-white">

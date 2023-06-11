@@ -84,11 +84,16 @@
           class="group flex cursor-pointer flex-col font-bold text-[#6C757D]"
         >
           <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
-            <img
-              :src="item.thumbnail"
-              :alt="item.title"
-              class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
-            />
+            <nuxt-link
+              :to="`/courses/${item._id}`"
+              class="hidden cursor-pointer items-center text-white sm:flex"
+            >
+              <img
+                :src="item.thumbnail"
+                :alt="item.title"
+                class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
+              />
+            </nuxt-link>
             <div
               class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-[#FFC107] group-hover:translate-y-0 group-hover:opacity-100"
               @click="handleCollectCourse(item._id)"
@@ -169,11 +174,16 @@
           class="group flex cursor-pointer flex-col font-bold text-[#6C757D]"
         >
           <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
-            <img
-              :src="item.thumbnail"
-              :alt="item.title"
-              class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
-            />
+            <nuxt-link
+              :to="`/courses/${item._id}`"
+              class="hidden cursor-pointer items-center text-white sm:flex"
+            >
+              <img
+                :src="item.thumbnail"
+                :alt="item.title"
+                class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
+              />
+            </nuxt-link>
             <div
               class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-[#FFC107] group-hover:translate-y-0 group-hover:opacity-100"
               @click="handleCollectCourse(item._id)"

@@ -143,7 +143,7 @@ class CoursesModule extends HttpFactory {
     return await this.call<{
       success: boolean
       sort: number
-      chapter: CourseChapter
+      updatedChapter: CourseChapter[]
     }>(`${this.RESOURCE}/chapter`, 'POST', {
       courseId,
       title

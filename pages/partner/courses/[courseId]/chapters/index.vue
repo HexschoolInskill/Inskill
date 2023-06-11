@@ -155,11 +155,11 @@ async function createItem(type: ItemType | '', title: string, chapterId?: string
   if (!type || !title) return
   try {
     if (type === 'chapter') {
-      const { chapter } = await app.$api.course.createChapter(
+      const { updatedChapter } = await app.$api.course.createChapter(
         route.params.courseId as string,
         title
       )
-      course.value.chapters.push(chapter)
+      course.value.chapters = updatedChapter
     }
     if (chapterId && type === 'lesson') {
       console.log(chapterId)

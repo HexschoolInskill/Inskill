@@ -4,7 +4,7 @@
       <ul class="sticky top-15 grid gap-2">
         <li>
           <nuxt-link
-            to="/partner/courses"
+            :to="`/partner/courses/${$route.params.courseId}`"
             class="transition-base text-fs-6 flex h-13 items-center rounded-1 border border-solid border-white px-7 hover:bg-white hover:text-black"
             active-class="bg-white text-black"
             >課程資訊
@@ -12,7 +12,7 @@
         </li>
         <li>
           <nuxt-link
-            to="/partner/courses/chapters"
+            :to="`/partner/courses/${$route.params.courseId}/chapters`"
             class="transition-base text-fs-6 flex h-13 items-center rounded-1 border border-solid border-white px-7 hover:bg-white hover:text-black"
             active-class="bg-white text-black"
             >章節課程
@@ -28,7 +28,7 @@
       </ul>
     </aside>
     <main class="flex-1 py-4 text-white">
-      <slot />
+      <slot></slot>
     </main>
   </div>
   <slot name="footer"></slot>

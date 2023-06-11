@@ -93,33 +93,18 @@
 <script lang="ts" setup>
 import { useVuelidate } from '@vuelidate/core'
 import { required, numeric } from '@vuelidate/validators'
+import { storeToRefs } from 'pinia'
 import useConfirm from '~/stores/useConfirm'
+import useEditCourse from '~/stores/useEditCourse'
 
-interface ICourse {
-  title: string
-  price: number
-  description: string
-  thumbnail: string | File
-}
-
-definePageMeta({
-  layout: 'create-courses'
-})
-
+const { currentCourse: course } = storeToRefs(useEditCourse())
 const { confirm } = useConfirm()
 
-const course = reactive<ICourse>({
-  title: '',
-  price: 0,
-  description: '',
-  thumbnail: ''
-})
-
 const thumbnailPreview = computed(() => {
-  if (course.thumbnail instanceof File) {
-    return URL.createObjectURL(course.thumbnail)
+  if (course.value.thumbnail instanceof File) {
+    return URL.createObjectURL(course.value.thumbnail)
   } else {
-    return course.thumbnail
+    return course.value.thumbnail
   }
 })
 
@@ -143,7 +128,7 @@ function handleThumbnailChange(event: Event) {
   const target = event.target as HTMLInputElement
   const file = target?.files?.[0]
   if (!file) return
-  course.thumbnail = file
+  course.value.thumbnail = file
 }
 
 async function saveCourse() {
@@ -153,7 +138,7 @@ async function saveCourse() {
 async function publishCourse() {
   const isConfirm = await confirm(
     '確定發布?',
-    `發布後將會對所有學生公開，目前課程售價為 ${course.price || '免費'}`
+    `發布後將會對所有學生公開，目前課程售價為 ${course.value.price || '免費'}`
   )
   if (isConfirm) console.log('course published')
 }

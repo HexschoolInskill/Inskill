@@ -3,7 +3,54 @@ import HttpFactory from '../factory'
 export type CourseSortBy = 'popular' | 'praise' | 'time'
 export type CourseCategory = 'normal' | 'stream'
 export type CollectCourseType = 'Course' | 'LiveCourse'
-interface ICourse {
+export interface LessonContent {
+  contentType: string
+  content: string
+  sort: number
+  _id: string
+  createdAt: string
+  updatedAt: string
+  duration?: number
+}
+export interface LessonQuestion {
+  userId: string
+  comment: string
+  _id: string
+  createdAt: string
+  updatedAt: string
+  replies: any[]
+  username: string
+}
+export interface CourseReview {
+  userId: string
+  rating: number
+  comment: string
+  createdAt: string
+  _id: string
+  username: string
+}
+export interface CourseLesson {
+  title: string
+  description: string
+  freePreview: boolean
+  sort: number
+  lessonContent: LessonContent[]
+  question: LessonQuestion[]
+  _id: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CourseChapter {
+  title: string
+  description: string
+  sort: number
+  lessons: CourseLesson[]
+  _id: string
+  createdAt: string
+  updatedAt: string
+}
+export interface Course {
   _id: string
   title: string
   description: string
@@ -14,13 +61,16 @@ interface ICourse {
   teacherName: string
   averageRating: number
 }
-export interface NormalCourse extends ICourse {
-  chapter: number
-  course: number
+export interface NormalCourse extends Course {
+  isPublic: boolean
   createdAt: string
   scoreCount: number
+  course: number
+  chapter: number
+  chapters: CourseChapter[]
+  reviews: CourseReview[]
 }
-export interface StreamCourse extends ICourse {
+export interface StreamCourse extends Course {
   endTime: string
   startTime: string
 }
@@ -66,12 +116,41 @@ class CoursesModule extends HttpFactory {
     return await this.call(`${this.RESOURCE}/courses/${id}`, 'GET')
   }
 
-  async createCourseTitle() {
-    return await this.call(`${this.RESOURCE}/courses/create`, 'POST')
-  }
-
   async getCart() {
     return await this.call(`${this.RESOURCE}/cart`, 'GET')
+  }
+
+  async fetchCourse(courseId: string) {
+    return await this.call<{ success: boolean; course: NormalCourse[] }>(
+      `${this.RESOURCE}/${courseId}`,
+      'GET'
+    )
+  }
+
+  async createChapter(courseId: string, title: string) {
+    return await this.call<{
+      success: boolean
+      sort: number
+      chapter: CourseChapter
+    }>(`${this.RESOURCE}/chapter`, 'POST', {
+      courseId,
+      title
+    })
+  }
+
+  async deleteChapter(courseId: string, chapterId: string) {
+    return await this.call<{
+      success: boolean
+    }>(`${this.RESOURCE}/chapter?courseId=${courseId}&chapterId=${chapterId}`, 'DELETE')
+  }
+
+  async sortChapter(sortPayload: {
+    courseId: string
+    chapterId: string
+    sort: number
+    field: string
+  }) {
+    return await this.call<{ success: boolean }>(`${this.RESOURCE}/chapter`, 'PATCH', sortPayload)
   }
 
   searchCourse(): Promise<IndexCourses>

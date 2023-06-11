@@ -172,9 +172,9 @@ export default defineEventHandler(async (event) => {
         sortOption = category === 'normal' ? 'createdAt' : 'startTime'
       }
 
-      let serachCourses = []
+      let searchCourses = []
       if (category === 'normal') {
-        serachCourses = await models.Course.aggregate([
+        searchCourses = await models.Course.aggregate([
           { $unwind: '$reviews' },
           {
             $lookup: {
@@ -241,7 +241,7 @@ export default defineEventHandler(async (event) => {
           }
         ])
       } else if (category === 'stream') {
-        serachCourses = await models.LiveCourse.aggregate([
+        searchCourses = await models.LiveCourse.aggregate([
           { $unwind: '$reviews' },
           {
             $lookup: {
@@ -340,7 +340,7 @@ export default defineEventHandler(async (event) => {
       return {
         success: true,
         statusCode: 200,
-        serachCourses
+        searchCourses
       }
     }
   } catch (error: any) {

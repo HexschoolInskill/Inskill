@@ -98,12 +98,13 @@ export default defineEventHandler(async (event) => {
     const collect = collectCourses.concat(collectLiveCourses)
     return {
       success: true,
+      statusCode: 200,
       collect
     }
   } catch (error: any) {
-    return {
-      success: false,
-      message: error
-    }
+    return createError({
+      statusCode: error.statusCode ? error.statusCode : 400,
+      message: error.message
+    })
   }
 })

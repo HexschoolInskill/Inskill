@@ -23,7 +23,10 @@ export default defineNuxtPlugin(() => {
         const route = useRoute()
         const userStore = useUser()
         userStore.resetUserProfile()
-        if (route.name !== 'login') navigateTo(`/login?redirect=${route.fullPath}`)
+        const path = route.path
+        const query = route.query
+        if (route.name !== 'login')
+          navigateTo({ path: 'login', query: { redirect: path, ...query } })
       } else {
         throw new Error(response._data.message)
       }

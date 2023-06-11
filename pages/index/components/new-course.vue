@@ -4,7 +4,7 @@
       <h2 class="gsap-slide-up text-center text-[32px] font-black text-white">新上好課</h2>
       <div id="new-course-slider" class="gsap-slide-up new-course__slider mt-10">
         <div class="swiper-wrapper">
-          <div v-for="item in list" :key="item.id" class="swiper-slide">
+          <div v-for="item in courses" :key="item._id" class="swiper-slide">
             <div class="group block cursor-pointer">
               <in-card xs-white perspective class="flex flex-col font-bold text-gray sm:text-white">
                 <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-6/10">
@@ -36,7 +36,7 @@
                         <i class="icon-people text-black sm:text-inherit"></i>
                       </div>
                       <div class="flex-1 pl-4">
-                        <span>{{ formatNumber(item.students) }}</span>
+                        <span>{{ formatNumber(item.purchasedCount) }}</span>
                         <span class="ml-3">人已經加入</span>
                       </div>
                     </div>
@@ -49,7 +49,7 @@
                           src="/images/avatar-fallback.svg"
                           alt=""
                         />
-                        <p class="font-bold leading-normal">{{ item.teacher.name }}</p>
+                        <p class="font-bold leading-normal">{{ item.teacherName }}</p>
                       </div>
                       <p class="flex items-center gap-5 text-2xl">
                         <span class="text-gray sm:text-gray-l">NT$</span>
@@ -72,71 +72,15 @@
 <script lang="ts" setup>
 import Swiper, { Pagination } from 'swiper'
 import formatNumber from '@/utils/formatNumber'
-
+import type { NormalCourse } from '@/http/modules/courses'
 Swiper.use([Pagination])
 
-const list = ref([
-  {
-    id: 1,
-    title: '課程名稱',
-    thumbnail: '/images/new-course-1.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    chapter: 9,
-    course: 99,
-    students: 9999
-  },
-  {
-    id: 2,
-    title: '課程名稱',
-    thumbnail: '/images/new-course-2.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    chapter: 9,
-    course: 99,
-    students: 9999
-  },
-  {
-    id: 3,
-    title: '課程名稱',
-    thumbnail: '/images/new-course-3.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    chapter: 9,
-    course: 99,
-    students: 9999
-  },
-  {
-    id: 4,
-    title: '課程名稱',
-    thumbnail: '/images/new-course-4.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    chapter: 9,
-    course: 99,
-    students: 9999
-  },
-  {
-    id: 5,
-    title: '課程名稱',
-    thumbnail: '/images/new-course-5.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    chapter: 9,
-    course: 99,
-    students: 9999
+defineProps({
+  courses: {
+    type: Array as PropType<NormalCourse[]>,
+    default: () => []
   }
-])
+})
 
 onMounted(() => {
   new Swiper('#new-course-slider', {

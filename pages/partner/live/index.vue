@@ -446,7 +446,7 @@
       </div>
     </main>
     <!-- mobileToolpopup -->
-    <div class="mobileToolpopup hidden" v-if="showToolPopup">
+    <div v-if="showToolPopup" class="mobileToolpopup hidden">
       <div class="top" @click="showToolPopup = false"></div>
       <div class="bottom">
         <!-- item -->

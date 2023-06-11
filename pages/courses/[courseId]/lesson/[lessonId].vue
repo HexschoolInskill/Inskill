@@ -1,15 +1,15 @@
 <template>
   <!--課程內容展示-->
   <div class="w-11/12">
-    <div v-if="purchased || currenChapterLession.freePreview" class="gradient rounded-lg p-4">
+    <div v-if="purchased || currenChapterLesson.freePreview" class="gradient rounded-lg p-4">
       <div class="flex">
-        <h1 class="mr-auto text-3xl font-bold">{{ currenChapterLession.title }}</h1>
-        <span v-if="currenChapterLession.freePreview" class="mb-10 rounded border px-6 py-1">
+        <h1 class="mr-auto text-3xl font-bold">{{ currenChapterLesson.title }}</h1>
+        <span v-if="currenChapterLesson.freePreview" class="mb-10 rounded border px-6 py-1">
           試看
         </span>
       </div>
 
-      <div v-for="(lesson, index) in currenChapterLession.lessonContent" :key="index">
+      <div v-for="(lesson, index) in currenChapterLesson.lessonContent" :key="index">
         <in-content-video
           v-if="lesson.contentType === 'video'"
           :content="lesson.content"
@@ -33,7 +33,7 @@
     </div>
 
     <!-- 未開放試看 -->
-    <div v-if="!currenChapterLession.freePreview" class="gradient h-[410px] rounded-lg p-4">
+    <div v-if="!currenChapterLesson.freePreview" class="gradient h-[410px] rounded-lg p-4">
       <div class="relative">
         <div class="absolute w-full bg-black p-4 py-[110px] text-center">
           <svg
@@ -60,7 +60,7 @@
     <in-content-review :review="currentCourse.reviews"></in-content-review>
 
     <in-content-question
-      :questions="currenChapterLession.question"
+      :questions="currenChapterLesson.question"
       @add-question="($value: any) => addingQuestion({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, comment: $value })"
       @add-reply="($value: any) => addingReply({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, index: $value.index, comment: $value.msg })"
     >
@@ -95,14 +95,14 @@ const { userProfile } = storeToRefs(useUser())
 const { addingQuestion, addingReply } = useCourse()
 const route = useRoute()
 
-const currenChapterLession = ref(
+const currenChapterLesson = ref(
   currentCourse.value.chapters[content.value.chapter].lessons[content.value.lesson]
 )
 
 onMounted(() => {
   console.log(route.params)
 
-  console.log(currenChapterLession)
+  console.log(currenChapterLesson)
 })
 </script>
 

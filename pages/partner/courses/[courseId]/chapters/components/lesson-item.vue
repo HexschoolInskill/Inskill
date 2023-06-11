@@ -10,7 +10,17 @@
         class="text-black"
         @keyup.enter="handleEdit"
       />
-      <h5 v-else class="text-h5 font-bold line-clamp-1">{{ value }}</h5>
+      <template v-else>
+        <nuxt-link
+          :to="`/partner/courses/${$route.params.courseId}/chapters/lesson/${id}`"
+          class="text-fs-6 group relative inline-block"
+        >
+          <p class="line-clamp-1">{{ value }}</p>
+          <div
+            class="transition-base absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-white group-hover:scale-x-100"
+          ></div>
+        </nuxt-link>
+      </template>
     </div>
     <div class="flex flex-shrink-0 items-center gap-5 pl-6">
       <template v-if="isEditing">
@@ -18,6 +28,7 @@
         <button @click="isEditing = false"><i class="icon-close"></i></button>
       </template>
       <template v-else>
+        <in-select v-model="isPublish" :options="publishOptions" />
         <in-dropdown v-slot="{ show }" :options="options" @select="handleOptionSelect">
           <div
             class="transition-base flex h-10 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full text-white group-hover:bg-gray"
@@ -53,24 +64,45 @@ const { notification } = useNotification()
 const props = defineProps({
   value: {
     type: String,
-    default: ''
+    required: true
   },
   id: {
     type: String,
+    required: true
+  },
+  publish: {
+    type: Boolean,
     required: true
   }
 })
 
 const inputValue = ref('')
 const isEditing = ref(false)
-
+const isPublish = computed({
+  get() {
+    return props.publish ? 'publish' : 'unpublish'
+  },
+  set(value) {
+    console.log(value)
+  }
+})
+const publishOptions: Option[] = [
+  {
+    label: '發布',
+    value: 'publish'
+  },
+  {
+    label: '未發布',
+    value: 'unpublish'
+  }
+]
 const options: Option[] = [
   {
     label: '重新命名',
     value: 'rename'
   },
   {
-    label: '刪除章節',
+    label: '刪除課堂',
     value: 'delete'
   }
 ]
@@ -85,14 +117,16 @@ function handleEdit() {
   emit('loadingStart')
   setTimeout(() => {
     notification.success('更新成功')
-    emit('loadingEnd')
     isEditing.value = false
+    emit('loadingEnd')
+    emit('deleted')
   }, 300)
 }
 
 async function handleDelete() {
-  const isConfirm = await confirm('確定刪除?', '將連同章節內的所有課程一起刪除')
+  const isConfirm = await confirm('確定刪除?', '將連同課程內容一起刪除')
   if (isConfirm) notification.success('刪除成功')
+  emit('deleted')
 }
 
 function handleOptionSelect(option: Option) {

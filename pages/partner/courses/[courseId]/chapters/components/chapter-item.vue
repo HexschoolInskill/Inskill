@@ -10,17 +10,7 @@
         class="text-black"
         @keyup.enter="handleEdit"
       />
-      <template v-else>
-        <nuxt-link
-          :to="`/partner/courses/chapters/lesson/${id}`"
-          class="text-fs-6 group relative inline-block"
-        >
-          <p class="line-clamp-1">{{ value }}</p>
-          <div
-            class="transition-base absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-white group-hover:scale-x-100"
-          ></div>
-        </nuxt-link>
-      </template>
+      <h5 v-else class="text-h5 font-bold line-clamp-1">{{ value }}</h5>
     </div>
     <div class="flex flex-shrink-0 items-center gap-5 pl-6">
       <template v-if="isEditing">
@@ -28,7 +18,6 @@
         <button @click="isEditing = false"><i class="icon-close"></i></button>
       </template>
       <template v-else>
-        <in-select v-model="isPublish" :options="publishOptions" />
         <in-dropdown v-slot="{ show }" :options="options" @select="handleOptionSelect">
           <div
             class="transition-base flex h-10 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full text-white group-hover:bg-gray"
@@ -54,55 +43,39 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import type { Option } from '@/components/in-dropdown.vue'
 import useNotification from '~/stores/useNotification'
 import useConfirm from '~/stores/useConfirm'
+import useEditCourse from '~/stores/useEditCourse'
 
+const { currentCourse: course } = storeToRefs(useEditCourse())
+const route = useRoute()
+const app = useNuxtApp()
 const { confirm } = useConfirm()
 const { notification } = useNotification()
 
 const props = defineProps({
   value: {
     type: String,
-    required: true
+    default: ''
   },
   id: {
     type: String,
-    required: true
-  },
-  publish: {
-    type: Boolean,
     required: true
   }
 })
 
 const inputValue = ref('')
 const isEditing = ref(false)
-const isPublish = computed({
-  get() {
-    return props.publish ? 'publish' : 'unpublish'
-  },
-  set(value) {
-    console.log(value)
-  }
-})
-const publishOptions: Option[] = [
-  {
-    label: '公開',
-    value: 'publish'
-  },
-  {
-    label: '不公開',
-    value: 'unpublish'
-  }
-]
+
 const options: Option[] = [
   {
     label: '重新命名',
     value: 'rename'
   },
   {
-    label: '刪除課堂',
+    label: '刪除章節',
     value: 'delete'
   }
 ]
@@ -117,16 +90,23 @@ function handleEdit() {
   emit('loadingStart')
   setTimeout(() => {
     notification.success('更新成功')
-    isEditing.value = false
     emit('loadingEnd')
-    emit('deleted')
+    isEditing.value = false
   }, 300)
 }
 
-async function handleDelete() {
-  const isConfirm = await confirm('確定刪除?', '將連同課程內容一起刪除')
-  if (isConfirm) notification.success('刪除成功')
-  emit('deleted')
+async function deleteChapter(courseId: string, chapterId: string) {
+  if (!chapterId) return
+  const isConfirm = await confirm('刪除章節', '將連同所有課堂一起刪除')
+  if (!isConfirm) return
+  try {
+    await app.$api.course.deleteChapter(courseId, chapterId)
+    course.value.chapters = course.value.chapters.filter((chapter) => chapter._id !== chapterId)
+    course.value.chapters.forEach((chapter, index) => (chapter.sort = index + 1))
+    notification.success('刪除成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  }
 }
 
 function handleOptionSelect(option: Option) {
@@ -136,7 +116,7 @@ function handleOptionSelect(option: Option) {
       isEditing.value = true
       break
     case 'delete':
-      handleDelete()
+      deleteChapter(route.params.courseId as string, props.id)
       break
     default:
   }

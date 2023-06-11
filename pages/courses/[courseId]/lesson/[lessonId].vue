@@ -64,10 +64,8 @@
       @add-question="($value: any) => addingQuestion({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, comment: $value })"
       @add-reply="($value: any) => addingReply({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, index: $value.index, comment: $value.msg })"
     >
-    </in-content-question>    
+    </in-content-question>
   </div>
-
-
 </template>
 
 <script lang="ts" setup>

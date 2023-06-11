@@ -157,10 +157,10 @@
 
             <ul v-if="expandChapter === index">
               <li
-                v-for="(lesson, lessionIndex) in chapter.lessons"
+                v-for="(lesson, lessonIndex) in chapter.lessons"
                 :key="lesson.title"
                 class="border-bottom my-2"
-                @click.stop="selectLession(lessionIndex)"
+                @click.stop="selectLesson(lessonIndex)"
               >
                 <div class="flex items-center p-1">
                   <span class="mr-auto">{{ lesson.title }}</span>
@@ -242,13 +242,13 @@
             ></path>
           </svg>
 
-          <span class="toolTip">沉靜模式</span>
+          <span class="toolTip">沉浸模式</span>
         </li>
         <!-- 上一堂課 -->
         <li
           class="right-controller border-bottom"
           :class="{ '!hidden': deepDive }"
-          @click="goTolession(content.lesson - 1)"
+          @click="goTolesson(content.lesson - 1)"
         >
           <svg
             class="mx-auto w-3/6"
@@ -265,7 +265,7 @@
         <li
           class="right-controller"
           :class="{ '!hidden': deepDive }"
-          @click="goTolession(content.lesson + 1)"
+          @click="goTolesson(content.lesson + 1)"
         >
           <svg
             class="mx-auto w-3/6"
@@ -323,11 +323,11 @@ const expandChapterController = (index: number) => {
   }
 }
 
-const selectLession = (index: number) => {
+const selectLesson = (index: number) => {
   console.log(index)
   setContent(index)
   router.push(
-    `/courses/${currentCourse.value.chapters[expandChapter.value]._id}/lession/${
+    `/courses/${currentCourse.value.chapters[expandChapter.value]._id}/lesson/${
       currentCourse.value.chapters[expandChapter.value].lessons[index]._id
     }`
   )
@@ -356,11 +356,11 @@ const fixedBottons = () => {
 }
 
 // 上、下一堂課
-const goTolession = (index: number) => {
+const goTolesson = (index: number) => {
   if (currentCourse.value.chapters[expandChapter.value].lessons[index]) {
     setContent(index)
     router.push(
-      `/courses/${currentCourse.value.chapters[expandChapter.value]._id}/lession/${
+      `/courses/${currentCourse.value.chapters[expandChapter.value]._id}/lesson/${
         currentCourse.value.chapters[expandChapter.value].lessons[index]._id
       }`
     )
@@ -371,7 +371,7 @@ const goTolession = (index: number) => {
       setChapter(destination)
       setContent(0)
       router.push(
-        `/courses/${currentCourse.value.chapters[destination]._id}/lession/${currentCourse.value.chapters[destination].lessons[0]._id}`
+        `/courses/${currentCourse.value.chapters[destination]._id}/lesson/${currentCourse.value.chapters[destination].lessons[0]._id}`
       )
     } else {
       notification.error(`沒有${index < 0 ? '上個' : '下個'}課程`)

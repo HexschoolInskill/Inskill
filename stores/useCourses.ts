@@ -33,7 +33,7 @@ interface lesson {
   description: string
   freePreview: boolean
   sort: number
-  lessionContent: content[]
+  lessonContent: content[]
   question: question[]
 }
 
@@ -85,11 +85,11 @@ export default defineStore('courses', () => {
         lessons: [
           {
             _id: '00001',
-            title: 'lession 1',
+            title: 'lesson 1',
             description: 'dscdsfdsvgs',
             freePreview: true,
             sort: 0,
-            lessionContent: [
+            lessonContent: [
               {
                 _id: '000001',
                 contentType: 'video',
@@ -127,11 +127,11 @@ export default defineStore('courses', () => {
           },
           {
             _id: '00002',
-            title: 'lession 2',
+            title: 'lesson 2',
             description: 'gbkjbljnkjlj',
             freePreview: false,
             sort: 0,
-            lessionContent: [
+            lessonContent: [
               {
                 _id: '000003',
                 contentType: 'pdf',

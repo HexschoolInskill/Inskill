@@ -10,7 +10,17 @@
     content: '';
     display: block;
     animation: skeleton 3s ease-out both infinite;
-    @apply absolute left-0 top-0 h-full w-full bg-gradient-to-r from-transparent via-white/10 via-50% to-transparent to-80%;
+    background-image: linear-gradient(
+      to right,
+      transparent 10%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 80%
+    );
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
 
     @keyframes skeleton {
       0% {

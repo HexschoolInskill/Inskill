@@ -1,21 +1,142 @@
 <template>
   <slot name="header"></slot>
-  <in-container>
-    <div class="border-bottom mb-4 mt-[10vh] flex items-center pb-4 pt-8 text-white sm:mt-[12vh]">
+  <in-container class="relative">
+    <div
+      class="border-bottom mb-4 mt-[10vh] flex items-center pb-4 pt-8 text-white sm:mt-[12vh]"
+      :class="{ hidden: deepDive }"
+    >
       <h1 class="mr-auto text-3xl font-bold">課程名稱</h1>
 
       <h2 class="mr-4 text-2xl font-bold">NT$ {{ currentCourse.price }}</h2>
 
-      <button class="mx-2 rounded border border-white bg-white px-3 py-2 text-black" type="button">
-        加入購物車
+      <button v-if="!purchased" class="course-header-action" type="button">
+        <svg
+          class="w-[25px]"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 512 512"
+          enable-background="new 0 0 512 512"
+          xml:space="preserve"
+        >
+          <g>
+            <path
+              d="M169.6,377.6c-22.882,0-41.6,18.718-41.6,41.601c0,22.882,18.718,41.6,41.6,41.6s41.601-18.718,41.601-41.6
+		C211.2,396.317,192.481,377.6,169.6,377.6z M48,51.2v41.6h41.6l74.883,151.682l-31.308,50.954c-3.118,5.2-5.2,12.482-5.2,19.765
+		c0,27.85,19.025,41.6,44.825,41.6H416v-40H177.893c-3.118,0-5.2-2.082-5.2-5.2c0-1.036,2.207-5.2,2.207-5.2l20.782-32.8h154.954
+		c15.601,0,29.128-8.317,36.4-21.836l74.882-128.8c1.237-2.461,2.082-6.246,2.082-10.399c0-11.446-9.364-19.765-20.8-19.765H135.364
+		L115.6,51.2H48z M374.399,377.6c-22.882,0-41.6,18.718-41.6,41.601c0,22.882,18.718,41.6,41.6,41.6S416,442.082,416,419.2
+		C416,396.317,397.281,377.6,374.399,377.6z"
+            ></path>
+          </g>
+        </svg>
+
+        <span>加入購物車</span>
       </button>
-      <button class="mx-2 rounded border border-white bg-white px-3 py-2 text-black" type="button">
-        加入收藏
+
+      <button v-if="!collected" class="course-header-action" type="button">
+        <svg
+          class="w-[20px]"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M400 480a16 16 0 0 1-10.63-4L256 357.41L122.63 476A16 16 0 0 1 96 464V96a64.07 64.07 0 0 1 64-64h192a64.07 64.07 0 0 1 64 64v368a16 16 0 0 1-16 16z"
+            fill="currentColor"
+          ></path>
+        </svg>
+
+        <span>加入收藏</span>
+      </button>
+
+      <button v-else class="course-header-action" type="button">取消收藏</button>
+
+      <button
+        v-if="userProfile.username.length && purchased"
+        class="course-header-action flex items-center"
+        type="button"
+        @click="
+          () => {
+            open = !open
+          }
+        "
+      >
+        <svg
+          class="w-[20px]"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 16 16"
+        >
+          <g fill="none">
+            <path
+              d="M7.194 2.101a.9.9 0 0 1 1.614 0l1.521 3.082l3.401.495a.9.9 0 0 1 .5 1.535l-2.462 2.399l.581 3.387a.9.9 0 0 1-1.306.949l-3.042-1.6l-3.042 1.6a.9.9 0 0 1-1.306-.949l.58-3.387l-2.46-2.4a.9.9 0 0 1 .499-1.534l3.4-.495l1.522-3.082z"
+              fill="currentColor"
+            ></path>
+          </g>
+        </svg>
+        <span>評價課程</span>
       </button>
     </div>
 
-    <div class="flex text-white">
-      <aside class="w-2/12">
+    <!-- 評價modal -->
+    <div class="absolute top-6 h-full w-full bg-black pt-10" :class="{ hidden: !open }">
+      <div class="mx-auto w-8/12 bg-white px-10 pb-4 pt-8 text-center text-black">
+        <button
+          type="button"
+          class="float-right"
+          @click="
+            () => {
+              open = !open
+            }
+          "
+        >
+          X
+        </button>
+        <h1 class="text-3xl font-bold">評價課程</h1>
+
+        <div class="my-4 flex justify-center">
+          <svg
+            v-for="i in 5"
+            :key="i"
+            class="w-8 cursor-pointer transition-all"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 16 16"
+            @click="setStar(i)"
+          >
+            <g fill="none">
+              <path
+                d="M7.194 2.101a.9.9 0 0 1 1.614 0l1.521 3.082l3.401.495a.9.9 0 0 1 .5 1.535l-2.462 2.399l.581 3.387a.9.9 0 0 1-1.306.949l-3.042-1.6l-3.042 1.6a.9.9 0 0 1-1.306-.949l.58-3.387l-2.46-2.4a.9.9 0 0 1 .499-1.534l3.4-.495l1.522-3.082z"
+                :fill="i - 1 < newReview.star ? '#FFC107' : '#DEE2E6'"
+              ></path>
+            </g>
+          </svg>
+        </div>
+
+        <textarea
+          v-model="newReview.comment"
+          class="w-full rounded-lg bg-[#DEE2E6] p-2"
+          cols="30"
+          rows="5"
+          placeholder="留下你對課程的評語吧"
+        >
+        </textarea>
+
+        <button
+          class="my-4 w-[100px] rounded bg-black p-1 text-white"
+          type="button"
+          @click="submitReview"
+        >
+          送出
+        </button>
+      </div>
+    </div>
+
+    <div class="flex text-white" :class="{ 'mt-[15vh]': deepDive, hidden: open }">
+      <aside class="w-2/12" :class="{ hidden: deepDive }">
         <h2 class="my-4 text-2xl font-bold">課程介紹</h2>
 
         <ul>
@@ -36,14 +157,14 @@
 
             <ul v-if="expandChapter === index">
               <li
-                v-for="(lession, lessionIndex) in chapter.lessions"
-                :key="lession.title"
+                v-for="(lesson, lessionIndex) in chapter.lessons"
+                :key="lesson.title"
                 class="border-bottom my-2"
                 @click.stop="selectLession(lessionIndex)"
               >
                 <div class="flex items-center p-1">
-                  <span class="mr-auto">{{ lession.title }}</span>
-                  <span v-if="lession.freePreview" class="rounded rounded-md border px-2 py-1"
+                  <span class="mr-auto">{{ lesson.title }}</span>
+                  <span v-if="lesson.freePreview" class="rounded rounded-md border px-2 py-1"
                     >試看</span
                   >
 
@@ -68,13 +189,21 @@
         </ul>
       </aside>
 
-      <main class="w-10/12 p-4">
+      <main class="w-10/12 p-4 transition-all duration-200" :class="{ 'w-full': deepDive }">
         <slot />
       </main>
 
       <!-- 懸浮按鈕 -->
-      <ul class="h-full w-[65px] rounded border border-[#6C757D]">
-        <li class="border-bottom py-2">
+      <ul
+        class="fixed right-[16.3vw] top-5 top-[230px] h-full h-min w-[65px] rounded border border-[#6C757D]"
+        :class="{ 'top-[150px]': deepDive }"
+      >
+        <!-- 留言 -->
+        <li
+          class="right-controller border-bottom"
+          :class="{ '!hidden': deepDive }"
+          @click="scrollToQuestion"
+        >
           <svg
             class="mx-auto w-3/6"
             xmlns="http://www.w3.org/2000/svg"
@@ -88,8 +217,19 @@
               ></path>
             </g>
           </svg>
+
+          <span class="toolTip">課程討論</span>
         </li>
-        <li class="border-bottom py-2">
+        <!-- 沉浸模式 -->
+        <li
+          class="right-controller border-bottom"
+          :class="{ '!border-b-0': deepDive }"
+          @click="
+            () => {
+              deepDive = !deepDive
+            }
+          "
+        >
           <svg
             class="mx-auto w-3/6"
             xmlns="http://www.w3.org/2000/svg"
@@ -101,8 +241,15 @@
               fill="currentColor"
             ></path>
           </svg>
+
+          <span class="toolTip">沉靜模式</span>
         </li>
-        <li class="border-bottom py-2">
+        <!-- 上一堂課 -->
+        <li
+          class="right-controller border-bottom"
+          :class="{ '!hidden': deepDive }"
+          @click="goTolession(content.lesson - 1)"
+        >
           <svg
             class="mx-auto w-3/6"
             xmlns="http://www.w3.org/2000/svg"
@@ -111,8 +258,15 @@
           >
             <path d="M15.41 7.41L14 6l-6 6l6 6l1.41-1.41L10.83 12z" fill="currentColor"></path>
           </svg>
+
+          <span class="toolTip">上一堂課</span>
         </li>
-        <li class="py-2">
+        <!-- 下一堂課 -->
+        <li
+          class="right-controller"
+          :class="{ '!hidden': deepDive }"
+          @click="goTolession(content.lesson + 1)"
+        >
           <svg
             class="mx-auto w-3/6"
             xmlns="http://www.w3.org/2000/svg"
@@ -124,6 +278,8 @@
               fill="currentColor"
             ></path>
           </svg>
+
+          <span class="toolTip">下一堂課</span>
         </li>
       </ul>
     </div>
@@ -132,13 +288,31 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import useCourses from '~/stores/useCourses'
+import useUser from '~/stores/useUser'
+import useNotification from '~~/stores/useNotification'
 
-const { currentCourse, expandChapter } = storeToRefs(useCourses())
-const { setChapter, setContent } = useCourses()
-// const { setCurrentCourse } = coursesStore()
+const { notification } = useNotification()
+const { currentCourse, content, expandChapter, purchased, collected } = storeToRefs(useCourses())
+const { userProfile } = storeToRefs(useUser())
+const { setChapter, setContent, setPurchased, setCollected } = useCourses()
+const { addingReview, setCurrentCourse } = useCourses()
+
+const { $api } = useNuxtApp()
+
+const courseId: any = useState('courseId')
+const scrollY = ref(0)
 const router = useRouter()
+const open = ref(false) // 評價modal 開關
+const newReview = ref({
+  star: 0,
+  comment: ''
+})
+const deepDive = ref(false)
+
+// console.log(courseId)
 
 // 章節選單的開關
 const expandChapterController = (index: number) => {
@@ -153,9 +327,105 @@ const selectLession = (index: number) => {
   console.log(index)
   setContent(index)
   router.push(
-    `/user/courses/${currentCourse.value.chapters[expandChapter.value]._id}/lession/${
-      currentCourse.value.chapters[expandChapter.value].lessions[index]._id
+    `/courses/${currentCourse.value.chapters[expandChapter.value]._id}/lession/${
+      currentCourse.value.chapters[expandChapter.value].lessons[index]._id
     }`
   )
 }
+
+const setStar = (i: number) => {
+  newReview.value.star = i
+}
+
+const submitReview = () => {
+  addingReview({ userId: userProfile.value._id, ...newReview.value })
+  open.value = false
+}
+
+// 移動到下方問答區塊
+const scrollToQuestion = () => {
+  const el = document.getElementById('question')
+  el?.scrollIntoView({ behavior: 'smooth' })
+}
+
+// 固定右方按鈕位置
+const fixedBottons = () => {
+  if (window.top?.scrollY) {
+    scrollY.value = window.top.scrollY
+  }
+}
+
+// 上、下一堂課
+const goTolession = (index: number) => {
+  if (currentCourse.value.chapters[expandChapter.value].lessons[index]) {
+    setContent(index)
+    router.push(
+      `/courses/${currentCourse.value.chapters[expandChapter.value]._id}/lession/${
+        currentCourse.value.chapters[expandChapter.value].lessons[index]._id
+      }`
+    )
+  } else {
+    const destination = index < 0 ? expandChapter.value - 1 : expandChapter.value + 1
+
+    if (currentCourse.value.chapters[destination]) {
+      setChapter(destination)
+      setContent(0)
+      router.push(
+        `/courses/${currentCourse.value.chapters[destination]._id}/lession/${currentCourse.value.chapters[destination].lessons[0]._id}`
+      )
+    } else {
+      notification.error(`沒有${index < 0 ? '上個' : '下個'}課程`)
+    }
+  }
+}
+
+// 取得該課程資料
+try {
+  const data: any = await $api.course.getCourseContent(courseId.value)
+  console.log(data)
+
+  if (data.success && data.course.length) {
+    // console.log(data.course[0])
+    setCurrentCourse(data.course[0])
+
+    // 查看是否有購買/收藏該課程
+    // const coursePurchasedIndex = userProfile.value.purchasedCourses.findIndex(
+    //   (course: any) => course === courseId.value
+    // )
+    const courseCollectedIndex = userProfile.value.collectCourses.findIndex(
+      (course: any) => course === courseId.value
+    )
+
+    // setPurchased(coursePurchasedIndex > -1)
+    setPurchased(true)
+    setCollected(courseCollectedIndex > -1)
+  } else {
+    // 無課程內容的情況先返回首頁
+    navigateTo('/')
+  }
+} catch (error: any) {
+  console.log(error)
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', fixedBottons)
+})
 </script>
+
+<style lang="scss" scoped>
+.course-header-action {
+  @apply mx-2 flex items-center rounded border border-white bg-white px-3 py-2 text-black;
+}
+
+.right-controller {
+  @apply relative inline-block cursor-pointer py-2;
+  .toolTip {
+    @apply invisible absolute left-[65px] top-[10px] ml-1 w-[100px] rounded bg-white px-[5px] text-center text-sm text-black;
+  }
+  &:hover {
+    .toolTip {
+      @apply visible;
+    }
+  }
+}
+</style>

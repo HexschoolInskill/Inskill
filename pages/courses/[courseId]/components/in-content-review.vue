@@ -3,7 +3,7 @@
     <h2 class="text-2xl font-bold">課程評價</h2>
 
     <div class="flex">
-      <h1 class="mx-8 mt-4 text-4xl font-bold">{{ sumUpReviews }}</h1>
+      <h1 class="mx-8 mt-4 text-4xl font-bold">{{ sumUpReviews.toFixed(1) }}</h1>
 
       <div>
         <in-content-star :stars="Math.floor(sumUpReviews)"></in-content-star>
@@ -28,10 +28,10 @@
             fill="currentColor"
           ></path>
         </svg>
-        <p class="text-center">{{ review[i - 1].userId }}</p>
+        <p class="text-center">{{ review[i - 1].username || '使用者名稱' }}</p>
       </div>
 
-      <div class="w-full">
+      <div class="mt-2 w-full">
         <in-content-star :stars="review[i - 1].rating"></in-content-star>
 
         <p>{{ review[i - 1].comment }}</p>
@@ -66,6 +66,7 @@ const showReviews = ref(props.review.length < 3 ? props.review.length : 3)
 
 // 計算平均評價
 const sumUpReviews = computed(() => {
+  console.log('安安')
   const total = props.review.reduce(
     (accumulator: number, currentReview: any) => accumulator + currentReview.rating,
     0
@@ -76,6 +77,7 @@ const sumUpReviews = computed(() => {
 
 // 載入更多評價
 const getMoreReviews = () => {
+  console.log('hi')
   if (props.review.length < showReviews.value + 3) {
     showReviews.value = props.review.length
   } else {

@@ -1,14 +1,27 @@
 <template>
-  <div ref="cardRef" class="in-card" :class="{
-    'in-card--perspective': perspective,
-    'in-card--xs-white': xsWhite,
-    'in-card--border': border
-  }" @mouseover="handleMouseOver" @mouseleave="resetAxis">
-    <div class="in-card__wrapper" v-bind="$attrs" :style="{
-      '--x': `${axisRotate.x}deg`,
-      '--y': `${axisRotate.y}deg`,
+  <div
+    ref="cardRef"
+    class="in-card"
+    :class="{
+      'in-card--perspective': perspective,
+      'in-card--xs-white': xsWhite,
+      'in-card--border': border
+    }"
+    :style="{
       borderRadius: `${borderRadius}px`
-    }">
+    }"
+    @mouseover="handleMouseOver"
+    @mouseleave="resetAxis"
+  >
+    <div
+      class="in-card__wrapper"
+      v-bind="$attrs"
+      :style="{
+        '--x': `${axisRotate.x}deg`,
+        '--y': `${axisRotate.y}deg`,
+        borderRadius: `${borderRadius}px`
+      }"
+    >
       <slot></slot>
     </div>
   </div>
@@ -62,7 +75,6 @@ function handleMouseOver(event: MouseEvent) {
 </script>
 <style lang="scss">
 .in-card {
-
   &__wrapper {
     background-image: linear-gradient(90deg, #262b2f, #000);
     will-change: transform;

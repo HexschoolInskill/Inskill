@@ -6,7 +6,8 @@
       'in-btn--small': size === 'small',
       'in-btn--ghost': ghost,
       'in-btn--error': type === 'error',
-      'in-btn--primary': type === 'primary'
+      'in-btn--primary': type === 'primary',
+      'in-btn--disabled': disabled
     }"
     v-bind="$attrs"
   >
@@ -51,6 +52,7 @@ defineProps({
 
   &--disabled {
     opacity: 0.5;
+    pointer-events: none;
   }
 
   &--ghost {

@@ -150,6 +150,17 @@ class CoursesModule extends HttpFactory {
     })
   }
 
+  async createLesson(courseId: string, chapterId: string, title: string) {
+    return await this.call<{
+      success: boolean
+      updatedChapter: CourseChapter[]
+    }>(`${this.RESOURCE}/lesson`, 'POST', {
+      courseId,
+      chapterId,
+      title
+    })
+  }
+
   async deleteChapter(courseId: string, chapterId: string) {
     return await this.call<{
       success: boolean

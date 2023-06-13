@@ -39,7 +39,9 @@
                 </template>
               </draggable>
               <div class="py-2 text-center">
-                <in-btn size="small" ghost>新增課程</in-btn>
+                <in-btn size="small" ghost @click="showCreatePopup('lesson', chapter._id)"
+                  >新增課堂</in-btn
+                >
               </div>
             </div>
           </in-card>
@@ -65,12 +67,14 @@
           </h2>
           <in-input
             v-model="currentItemTitle"
+            :disabled="isLoading"
             class="mt-5 text-black"
             :placeholder="currentPopupType === 'chapter' ? '請輸入章節標題' : '請輸入課堂標題'"
           />
           <div class="mt-6 flex items-center justify-end gap-5">
-            <in-btn ghost size="small" @click="closeCreatePopup">取消</in-btn>
+            <in-btn :disabled="isLoading" ghost size="small" @click="closeCreatePopup">取消</in-btn>
             <in-btn
+              :disabled="isLoading"
               size="small"
               @click="createItem(currentPopupType, currentItemTitle, currentChapterId)"
               >確定</in-btn
@@ -116,7 +120,7 @@ async function handleSort(event: any, type: ItemType, chapterId?: string) {
         .find((chapter) => chapter.chapterId === targetId)
       if (!targetChapter) return
       await app.$api.course.sortChapter(targetChapter)
-      // course.value.chapters.forEach((chapter, index) => (chapter.sort = index + 1)) 前端拖拉後的陣列位置是對的就先不用再跑這段，後端會判斷由前往後 or 由後往前拖拉去更新實際的 sort 值
+      course.value.chapters.forEach((chapter, index) => (chapter.sort = index + 1))
     }
 
     if (type === 'lesson') {
@@ -153,21 +157,24 @@ function closeCreatePopup() {
 
 async function createItem(type: ItemType | '', title: string, chapterId?: string) {
   if (!type || !title) return
+  const courseId = (route.params.courseId as string) ?? ''
+  if (!courseId) return
+  isLoading.value = true
   try {
     if (type === 'chapter') {
-      const { updatedChapter } = await app.$api.course.createChapter(
-        route.params.courseId as string,
-        title
-      )
+      const { updatedChapter } = await app.$api.course.createChapter(courseId, title)
       course.value.chapters = updatedChapter
     }
     if (chapterId && type === 'lesson') {
-      console.log(chapterId)
+      const { updatedChapter } = await app.$api.course.createLesson(courseId, chapterId, title)
+      course.value.chapters = updatedChapter
     }
     notification.success('新增成功')
     closeCreatePopup()
   } catch (error) {
     notification.error((error as Error).message)
+  } finally {
+    isLoading.value = false
   }
 }
 </script>

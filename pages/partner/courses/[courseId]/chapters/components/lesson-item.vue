@@ -1,6 +1,6 @@
 <template>
   <div class="flex h-15 w-full items-center border-b border-solid border-white/50 px-6">
-    <div class="flex-shrink-0 pr-6">
+    <div class="flex-shrink-0 cursor-grab pr-6">
       <i class="lesson-handler icon-reorder text-white"></i>
     </div>
     <div class="flex-1 text-white">

@@ -7,11 +7,11 @@
       @end="handleSort($event, 'chapter')"
     >
       <template #item="{ element: chapter }">
-        <div :data-id="chapter._id" class="chapter">
+        <div :data-id="chapter._id" class="chapter mb-5 last:mb-0">
           <in-card border class="flex" :border-radius="4">
             <div class="flex-shrink-0 border-r border-solid border-white/50 px-4">
-              <div class="flex h-15 items-center">
-                <i class="chapter-handler icon-reorder text-white"></i>
+              <div class="chapter-handler flex h-15 cursor-grab items-center">
+                <i class="icon-reorder text-white"></i>
               </div>
             </div>
             <div class="flex-1">
@@ -171,16 +171,3 @@ async function createItem(type: ItemType | '', title: string, chapterId?: string
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.chapter-handler,
-.lesson-handler {
-  cursor: grab;
-}
-
-.chapter {
-  &:not(:last-child) {
-    @apply mb-5;
-  }
-}
-</style>

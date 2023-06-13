@@ -10,7 +10,7 @@
     <in-content-review :review="currentCourse.reviews"></in-content-review>
 
     <in-content-question
-      :questions="currenChapterLesson.question"
+      :questions="currenChapterLesson?.question || []"
       @add-question="($value: any) => addingQuestion({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, comment: $value })"
       @add-reply="($value: any) => addingReply({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, index: $value.index, comment: $value.msg })"
     ></in-content-question>

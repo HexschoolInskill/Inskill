@@ -2,10 +2,10 @@
   <slot name="header"></slot>
   <in-container class="relative">
     <div
-      class="border-bottom mb-4 mt-[10vh] flex items-center pb-4 pt-8 text-white sm:mt-[12vh]"
+      class="border-bottom mb-4 mt-[12vh] flex items-center pb-4 pt-8 text-white"
       :class="{ hidden: deepDive }"
     >
-      <h1 class="mr-auto text-3xl font-bold">課程名稱</h1>
+      <h1 class="mr-auto text-3xl font-bold">{{ currentCourse.title }}</h1>
 
       <h2 class="mr-4 text-2xl font-bold">NT$ {{ currentCourse.price }}</h2>
 
@@ -143,11 +143,11 @@
           <li
             v-for="(chapter, index) in currentCourse.chapters"
             :key="chapter.title"
-            class="my-2 cursor-pointer rounded-md border px-4"
-            :class="{ 'bg-white text-black': expandChapter === index }"
+            class="my-2 cursor-pointer rounded-md"
+            :class="[expandChapter === index ? 'bg-white text-black' : 'border']"
             @click="expandChapterController(index)"
           >
-            <div class="flex items-center">
+            <div class="flex items-center px-4 py-2">
               <span class="mr-auto">{{ chapter.title }}</span>
               <i
                 class="icon-arrow text-[24px]"
@@ -159,12 +159,20 @@
               <li
                 v-for="(lesson, lessonIndex) in chapter.lessons"
                 :key="lesson.title"
-                class="border-bottom my-2"
+                class="px-4 py-2"
+                :class="{
+                  'bg-yellow':
+                    lesson._id ===
+                    currentCourse.chapters[content.chapter].lessons[content.lesson]._id,
+                  'border-bottom': lessonIndex + 1 !== chapter.lessons.length
+                }"
                 @click.stop="selectLesson(lessonIndex)"
               >
                 <div class="flex items-center p-1">
-                  <span class="mr-auto">{{ lesson.title }}</span>
-                  <span v-if="lesson.freePreview" class="rounded rounded-md border px-2 py-1"
+                  <span class="mr-4">{{ lesson.title }}</span>
+                  <span
+                    v-if="lesson.freePreview"
+                    class="w-[100px] rounded-md border py-1 text-center"
                     >試看</span
                   >
 
@@ -173,7 +181,7 @@
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
                     viewBox="0 0 32 32"
-                    class="w-[25px]"
+                    class="w-[70px]"
                   >
                     <g fill="none">
                       <path
@@ -195,7 +203,7 @@
 
       <!-- 懸浮按鈕 -->
       <ul
-        class="fixed right-[16.3vw] top-5 top-[230px] h-full h-min w-[65px] rounded border border-[#6C757D]"
+        class="fixed right-[16.4%] h-full h-min w-[65px] rounded border border-[#6C757D] lg:right-[8%]"
         :class="{ 'top-[150px]': deepDive }"
       >
         <!-- 留言 -->
@@ -288,7 +296,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import useCourses from '~/stores/useCourses'
 import useUser from '~/stores/useUser'
@@ -297,13 +305,10 @@ import useNotification from '~~/stores/useNotification'
 const { notification } = useNotification()
 const { currentCourse, content, expandChapter, purchased, collected } = storeToRefs(useCourses())
 const { userProfile } = storeToRefs(useUser())
-const { setChapter, setContent, setPurchased, setCollected } = useCourses()
-const { addingReview, setCurrentCourse } = useCourses()
+const { setChapter, setContent, addingReview } = useCourses()
 
-const { $api } = useNuxtApp()
+// const { $api } = useNuxtApp()
 
-const courseId: any = useState('courseId')
-const scrollY = ref(0)
 const router = useRouter()
 const open = ref(false) // 評價modal 開關
 const newReview = ref({
@@ -311,8 +316,6 @@ const newReview = ref({
   comment: ''
 })
 const deepDive = ref(false)
-
-// console.log(courseId)
 
 // 章節選單的開關
 const expandChapterController = (index: number) => {
@@ -348,13 +351,6 @@ const scrollToQuestion = () => {
   el?.scrollIntoView({ behavior: 'smooth' })
 }
 
-// 固定右方按鈕位置
-const fixedBottons = () => {
-  if (window.top?.scrollY) {
-    scrollY.value = window.top.scrollY
-  }
-}
-
 // 上、下一堂課
 const goTolesson = (index: number) => {
   if (currentCourse.value.chapters[expandChapter.value].lessons[index]) {
@@ -378,38 +374,6 @@ const goTolesson = (index: number) => {
     }
   }
 }
-
-// 取得該課程資料
-try {
-  const data: any = await $api.course.getCourseContent(courseId.value)
-  console.log(data)
-
-  if (data.success && data.course.length) {
-    // console.log(data.course[0])
-    setCurrentCourse(data.course[0])
-
-    // 查看是否有購買/收藏該課程
-    // const coursePurchasedIndex = userProfile.value.purchasedCourses.findIndex(
-    //   (course: any) => course === courseId.value
-    // )
-    const courseCollectedIndex = userProfile.value.collectCourses.findIndex(
-      (course: any) => course === courseId.value
-    )
-
-    // setPurchased(coursePurchasedIndex > -1)
-    setPurchased(true)
-    setCollected(courseCollectedIndex > -1)
-  } else {
-    // 無課程內容的情況先返回首頁
-    navigateTo('/')
-  }
-} catch (error: any) {
-  console.log(error)
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', fixedBottons)
-})
 </script>
 
 <style lang="scss" scoped>

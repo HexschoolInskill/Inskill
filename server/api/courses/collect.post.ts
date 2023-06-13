@@ -26,8 +26,12 @@ export default defineEventHandler(async (event) => {
     const collectIndex = userInfo.collectCourses.findIndex(
       (item: { courseId: string }) => item.courseId.toString() === courseId
     )
+
+    console.log('isCollect :>>>', isCollect)
+    console.log('collectIndex :>>>', collectIndex)
     if (isCollect && collectIndex === -1) {
       userInfo.collectCourses.push({ courseId, courseType })
+      console.log('userInfo :>>>', userInfo)
     }
     // checkout courseId whether exist in userInfo's collectCourses
     if (!isCollect && collectIndex !== -1) {

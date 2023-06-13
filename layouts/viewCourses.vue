@@ -2,7 +2,7 @@
   <slot name="header"></slot>
   <in-container class="relative">
     <div
-      class="border-bottom mb-4 mt-[12vh] flex items-center pb-4 pt-8 text-white"
+      class="border-bottom mb-4 mt-[12vh] flex items-center pb-4 pt-8 text-white max-[1536px]:mt-[15vh]"
       :class="{ hidden: deepDive }"
     >
       <h1 class="mr-auto text-3xl font-bold">{{ currentCourse.title }}</h1>
@@ -36,23 +36,21 @@
         <span>加入購物車</span>
       </button>
 
-      <button v-if="!collected" class="course-header-action" type="button">
+      <button class="course-header-action" type="button" @click="collector">
         <svg
-          class="w-[20px]"
+          class="mr-1 w-[20px]"
           xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
           viewBox="0 0 512 512"
         >
           <path
             d="M400 480a16 16 0 0 1-10.63-4L256 357.41L122.63 476A16 16 0 0 1 96 464V96a64.07 64.07 0 0 1 64-64h192a64.07 64.07 0 0 1 64 64v368a16 16 0 0 1-16 16z"
-            fill="currentColor"
+            :fill="collected ? '#FFC107' : 'currentColor'"
           ></path>
         </svg>
 
-        <span>加入收藏</span>
+        <span>{{ collected ? '取消收藏' : '加入收藏' }}</span>
       </button>
-
-      <button v-else class="course-header-action" type="button">取消收藏</button>
 
       <button
         v-if="userProfile.username.length && purchased"
@@ -65,7 +63,7 @@
         "
       >
         <svg
-          class="w-[20px]"
+          class="mr-1 w-[20px]"
           xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
           viewBox="0 0 16 16"
@@ -83,17 +81,26 @@
 
     <!-- 評價modal -->
     <div class="absolute top-6 h-full w-full bg-black pt-10" :class="{ hidden: !open }">
-      <div class="mx-auto w-8/12 bg-white px-10 pb-4 pt-8 text-center text-black">
+      <div class="mx-auto w-8/12 rounded-lg bg-white p-10 pb-4 pt-8 text-center text-black">
         <button
           type="button"
-          class="float-right"
+          class="fixed right-[26.5vw] top-[19.5vh] w-8"
           @click="
             () => {
               open = !open
             }
           "
         >
-          X
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 32 32"
+          >
+            <path
+              d="M24 9.4L22.6 8L16 14.6L9.4 8L8 9.4l6.6 6.6L8 22.6L9.4 24l6.6-6.6l6.6 6.6l1.4-1.4l-6.6-6.6L24 9.4z"
+              fill="currentColor"
+            ></path>
+          </svg>
         </button>
         <h1 class="text-3xl font-bold">評價課程</h1>
 
@@ -101,10 +108,12 @@
           <svg
             v-for="i in 5"
             :key="i"
-            class="w-8 cursor-pointer transition-all"
+            class="tempStar w-8 cursor-pointer transition-all"
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
             viewBox="0 0 16 16"
+            @mouseover="newReview.star = i"
+            @mouseleave="newReview.star = 0"
             @click="setStar(i)"
           >
             <g fill="none">
@@ -203,7 +212,7 @@
 
       <!-- 懸浮按鈕 -->
       <ul
-        class="fixed right-[16.4%] h-full h-min w-[65px] rounded border border-[#6C757D] lg:right-[8%]"
+        class="fixed right-[16.4%] h-full h-min w-[65px] rounded border border-[#6C757D] max-[1536px]:right-[8%]"
         :class="{ 'top-[150px]': deepDive }"
       >
         <!-- 留言 -->
@@ -305,17 +314,38 @@ import useNotification from '~~/stores/useNotification'
 const { notification } = useNotification()
 const { currentCourse, content, expandChapter, purchased, collected } = storeToRefs(useCourses())
 const { userProfile } = storeToRefs(useUser())
-const { setChapter, setContent, addingReview } = useCourses()
+const { setChapter, setContent, setCollected, addingReview } = useCourses()
 
-// const { $api } = useNuxtApp()
+const { $api } = useNuxtApp()
 
-const router = useRouter()
+const route = useRoute()
+const router = useRouter('')
+const courseType = ref(route.query.courseType === 'normal' ? 'Course' : 'LiveCourse')
 const open = ref(false) // 評價modal 開關
 const newReview = ref({
   star: 0,
   comment: ''
 })
 const deepDive = ref(false)
+
+// 加入/取消收藏
+const collector = async () => {
+  try {
+    const alterCollection = await $api.course.collectCourse({
+      courseId: currentCourse.value._id,
+      courseType: courseType.value,
+      isCollect: !collected.value
+    })
+    console.log('alterCollection:>>>', alterCollection)
+
+    if (alterCollection.success) {
+      setCollected(!collected.value)
+    }
+  } catch (error) {
+    console.log('error :>>>', error)
+    notification.error(error)
+  }
+}
 
 // 章節選單的開關
 const expandChapterController = (index: number) => {
@@ -341,8 +371,12 @@ const setStar = (i: number) => {
 }
 
 const submitReview = () => {
-  addingReview({ userId: userProfile.value._id, ...newReview.value })
-  open.value = false
+  if (newReview.value.comment.length) {
+    addingReview({ userId: userProfile.value._id, ...newReview.value })
+    open.value = false
+  } else {
+    notification.error('請留下評語')
+  }
 }
 
 // 移動到下方問答區塊
@@ -379,6 +413,16 @@ const goTolesson = (index: number) => {
 <style lang="scss" scoped>
 .course-header-action {
   @apply mx-2 flex items-center rounded border border-white bg-white px-3 py-2 text-black;
+}
+
+.course-header-action .tempStar {
+  &:hover {
+    svg {
+      path {
+        fill: #ffc107;
+      }
+    }
+  }
 }
 
 .right-controller {

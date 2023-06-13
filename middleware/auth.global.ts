@@ -31,17 +31,20 @@ export default defineNuxtRouteMiddleware(async (to) => {
         // console.log(data.course[0])
         courseStore.setCurrentCourse(data.course[0])
 
-        // 查看是否有購買/收藏該課程
-        // const coursePurchasedIndex = userStore.userProfile.purchasedCourses.findIndex(
-        //   (course: any) => course === courseId
-        // )
-        const courseCollectedIndex = userStore.userProfile.collectCourses.findIndex(
-          (course: any) => course === courseId
-        )
+        if (userStore.userProfile._id) {
+          // console.log(userStore.userProfile)
+          // 查看是否有購買/收藏該課程
+          const coursePurchasedIndex = userStore.userProfile.purchasedCourses.findIndex(
+            (purchased: any) => purchased.courseId === courseId
+          )
+          const courseCollectedIndex = userStore.userProfile.collectCourses.findIndex(
+            (collected: any) => collected.courseId === courseId
+          )
 
-        // setPurchased(coursePurchasedIndex > -1)
-        courseStore.setPurchased(true)
-        courseStore.setCollected(courseCollectedIndex > -1)
+          courseStore.setPurchased(coursePurchasedIndex > -1)
+          // courseStore.setPurchased(true)
+          courseStore.setCollected(courseCollectedIndex > -1)
+        }
       } else {
         // 無課程內容的情況先返回首頁
         navigateTo('/')

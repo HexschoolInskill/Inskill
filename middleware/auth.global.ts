@@ -35,10 +35,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
           // console.log(userStore.userProfile)
           // 查看是否有購買/收藏該課程
           const coursePurchasedIndex = userStore.userProfile.purchasedCourses.findIndex(
-            (purchased: any) => purchased.courseId === courseId
+            (purchased: any) => purchased?.courseId === courseId
           )
           const courseCollectedIndex = userStore.userProfile.collectCourses.findIndex(
-            (collected: any) => collected.courseId === courseId
+            (collected: any) => collected?.courseId === courseId
           )
 
           courseStore.setPurchased(coursePurchasedIndex > -1)

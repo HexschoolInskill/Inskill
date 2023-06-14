@@ -3,6 +3,13 @@ import HttpFactory from '../factory'
 export type CourseSortBy = 'popular' | 'praise' | 'time'
 export type CourseCategory = 'normal' | 'stream'
 export type CollectCourseType = 'Course' | 'LiveCourse'
+
+interface cart {
+  courseId: string
+  courseType: CollectCourseType
+  isCart: boolean
+}
+
 export interface LessonContent {
   contentType: string
   content: string
@@ -118,6 +125,10 @@ class CoursesModule extends HttpFactory {
 
   async createCourseTitle() {
     return await this.call(`${this.RESOURCE}/create`, 'POST')
+  }
+
+  async pushToCart(payload: cart) {
+    return await this.call(`${this.RESOURCE}/cart`, 'POST', payload)
   }
 
   async getCart() {

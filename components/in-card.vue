@@ -8,14 +8,20 @@
       'in-card--border': border
     }"
     :style="{
-      '--x': `${axisRotate.x}deg`,
-      '--y': `${axisRotate.y}deg`,
       borderRadius: `${borderRadius}px`
     }"
     @mouseover="handleMouseOver"
     @mouseleave="resetAxis"
   >
-    <div class="in-card__wrapper" v-bind="$attrs">
+    <div
+      class="in-card__wrapper"
+      v-bind="$attrs"
+      :style="{
+        '--x': `${axisRotate.x}deg`,
+        '--y': `${axisRotate.y}deg`,
+        borderRadius: `${borderRadius}px`
+      }"
+    >
       <slot></slot>
     </div>
   </div>
@@ -69,28 +75,33 @@ function handleMouseOver(event: MouseEvent) {
 </script>
 <style lang="scss">
 .in-card {
-  overflow: hidden;
   &__wrapper {
     background-image: linear-gradient(90deg, #262b2f, #000);
     will-change: transform;
     transition: transform 0.3s;
+    overflow: hidden;
     height: 100%;
   }
+
   &--xs-white {
     .in-card__wrapper {
       background-color: #fff;
       background-image: none;
+
       @media (min-width: 640px) {
         background-image: linear-gradient(90deg, #262b2f, #000);
       }
     }
   }
+
   &--perspective {
     perspective: 1000px;
+
     .in-card__wrapper {
       transform: rotateX(var(--x, 0)) rotateY(var(--y, 0));
     }
   }
+
   &--border {
     border: 1px solid white;
   }

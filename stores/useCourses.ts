@@ -257,7 +257,6 @@ export default defineStore('courses', () => {
 
   return {
     courseStudent,
-    setCourse,
     courseTeacher,
     currentCourse,
     expandChapter,
@@ -265,6 +264,7 @@ export default defineStore('courses', () => {
     collected,
     content,
     cart,
+    setCourse,
     setCart,
     setCurrentCourse,
     setPurchased,

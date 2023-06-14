@@ -211,7 +211,7 @@
                 @click.stop="selectLesson(lessonIndex)"
               >
                 <div class="flex items-center p-1">
-                  <span class="mr-4">{{ lesson.title }}</span>
+                  <span class="mr-auto">{{ lesson.title }}</span>
                   <span
                     v-if="lesson.freePreview"
                     class="w-[100px] rounded-md border py-1 text-center"
@@ -223,7 +223,7 @@
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
                     viewBox="0 0 32 32"
-                    class="w-[70px]"
+                    class="w-[25px]"
                   >
                     <g fill="none">
                       <path
@@ -338,7 +338,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import useCourses from '~/stores/useCourses'
 import useUser from '~/stores/useUser'
@@ -353,7 +353,7 @@ const { $api } = useNuxtApp()
 
 const route = useRoute()
 const router = useRouter('')
-const courseType = ref(route.query.courseType === 'normal' ? 'Course' : 'LiveCourse')
+const courseType = ref('')
 const isInCart = ref(() =>
   userProfile.value.cartCourses.findIndex(
     (course: any) => course?.courseId === currentCourse.value._id
@@ -378,10 +378,11 @@ const collector = async () => {
 
     if (alterCollection.success) {
       setCollected(!collected.value)
+      notification.success(`已${collected.value ? '收藏' : '取消收藏'}`)
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log('error :>>>', error)
-    notification.error(error)
+    notification.error(error.message)
   }
 }
 
@@ -399,9 +400,9 @@ const selectLesson = (index: number) => {
   console.log(index)
   setContent(index)
   router.push(
-    `/courses/${currentCourse.value.chapters[expandChapter.value]._id}/lesson/${
+    `/courses/${currentCourse.value._id}/lesson/${
       currentCourse.value.chapters[expandChapter.value].lessons[index]._id
-    }`
+    }?courseType=${courseType.value}`
   )
 }
 
@@ -414,9 +415,11 @@ const addToCart = async () => {
       isCart: !purchased.value
     })
     console.log('alterCart:>>>', alterCart)
-  } catch (error) {
+
+    if (alterCart.success) notification.success('已加入購物車')
+  } catch (error: any) {
     console.log('error :>>>', error)
-    notification.error(error)
+    notification.error(error.message)
   }
 }
 
@@ -464,6 +467,11 @@ const goTolesson = (index: number) => {
     }
   }
 }
+
+onMounted(() => {
+  console.log(route.query)
+  courseType.value = route.query.courseType === 'normal' ? 'Course' : 'LiveCourse'
+})
 </script>
 
 <style lang="scss" scoped>

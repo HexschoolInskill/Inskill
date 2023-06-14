@@ -17,40 +17,48 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
   }
   if (to.params.courseId) {
+    console.log(to)
     const courseStore = useCourses()
     const userStore = useUser()
     const courseId = String(to.params.courseId)
     const { $api } = useNuxtApp()
 
-    // 取得該課程資料
-    try {
-      const data: any = await $api.course.getCourseContent(courseId)
-      console.log(data)
+    if (to.query.courseType === 'normal') {
+      // 取得一般課程資料
+      try {
+        const data: any = await $api.course.getCourseContent(courseId)
+        console.log(data)
 
-      if (data.success && data.course.length) {
-        // console.log(data.course[0])
-        courseStore.setCurrentCourse(data.course[0])
+        if (data.success && data.course.length) {
+          // console.log(data.course[0])
+          courseStore.setCurrentCourse(data.course[0])
 
-        if (userStore.userProfile._id) {
-          // console.log(userStore.userProfile)
-          // 查看是否有購買/收藏該課程
-          const coursePurchasedIndex = userStore.userProfile.purchasedCourses.findIndex(
-            (purchased: any) => purchased?.courseId === courseId
-          )
-          const courseCollectedIndex = userStore.userProfile.collectCourses.findIndex(
-            (collected: any) => collected?.courseId === courseId
-          )
+          if (userStore.userProfile._id) {
+            // console.log(userStore.userProfile)
+            // 查看是否有購買/收藏該課程
+            const coursePurchasedIndex = userStore.userProfile.purchasedCourses.findIndex(
+              (purchased: any) => purchased?.courseId === courseId
+            )
+            const courseCollectedIndex = userStore.userProfile.collectCourses.findIndex(
+              (collected: any) => collected?.courseId === courseId
+            )
 
-          courseStore.setPurchased(coursePurchasedIndex > -1)
-          // courseStore.setPurchased(true)
-          courseStore.setCollected(courseCollectedIndex > -1)
+            courseStore.setPurchased(coursePurchasedIndex > -1)
+            // courseStore.setPurchased(true)
+            courseStore.setCollected(courseCollectedIndex > -1)
+          }
+        } else {
+          // 無課程內容的情況先返回首頁
+          navigateTo('/')
         }
-      } else {
-        // 無課程內容的情況先返回首頁
-        navigateTo('/')
+      } catch (error: any) {
+        console.log(error)
       }
-    } catch (error: any) {
-      console.log(error)
+    } else {
+      // 取得直播課程資料
+      try {
+        console.log('liveStream')
+      } catch (error) {}
     }
   }
 })

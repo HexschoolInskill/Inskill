@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    <in-content-teacher></in-content-teacher>
+    <in-content-teacher :teacher="currentCourse.teacherName"></in-content-teacher>
 
     <in-content-review :review="currentCourse.reviews"></in-content-review>
 

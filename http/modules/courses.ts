@@ -67,6 +67,7 @@ export interface Course {
   purchasedCount: number
   teacherName: string
   averageRating: number
+  reviews: CourseReview[]
 }
 export interface NormalCourse extends Course {
   isPublic: boolean
@@ -75,9 +76,9 @@ export interface NormalCourse extends Course {
   course: number
   chapter: number
   chapters: CourseChapter[]
-  reviews: CourseReview[]
 }
 export interface StreamCourse extends Course {
+  videoUrl: string
   endTime: string
   startTime: string
 }
@@ -176,7 +177,7 @@ class CoursesModule extends HttpFactory {
     return await this.call<{ success: boolean }>(`${this.RESOURCE}/chapter`, 'PATCH', sortPayload)
   }
 
-  searchCourse(): Promise<IndexCourses>
+  // searchCourse(): Promise<IndexCourses>
   searchCourse(payload: SearchPayload): Promise<SearchCourses<NormalCourse | StreamCourse>>
   async searchCourse(payload?: SearchPayload) {
     if (payload) {

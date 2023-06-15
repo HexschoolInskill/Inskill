@@ -10,6 +10,7 @@
     <in-content-review :review="currentCourse.reviews"></in-content-review>
 
     <in-content-question
+      v-if="route.query.courseType === 'normal'"
       :questions="currenChapterLesson?.question || []"
       @add-question="($value: any) => addingQuestion({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, comment: $value })"
       @add-reply="($value: any) => addingReply({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, index: $value.index, comment: $value.msg })"
@@ -18,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
 // components
@@ -32,6 +33,7 @@ import useUser from '~/stores/useUser'
 
 const { currentCourse, content, purchased } = storeToRefs(useCourses())
 const { userProfile } = storeToRefs(useUser())
+const route = useRoute()
 
 const { addingQuestion, addingReply } = useCourses()
 
@@ -41,7 +43,10 @@ definePageMeta({
   layout: 'view-courses'
 })
 
-const currenChapterLesson = ref(currentCourse.value?.chapters[chapter].lessons[lesson])
+const currenChapterLesson = computed(() => {
+  return route.query.courseType === 'normal' ? currentCourse.value?.chapters[chapter].lessons[lesson] : {}
+})
+
 </script>
 
 <style scope>

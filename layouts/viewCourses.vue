@@ -178,7 +178,8 @@
     </div>
 
     <div class="flex text-white" :class="{ 'mt-[15vh]': deepDive, hidden: open }">
-      <aside class="w-2/12" :class="{ hidden: deepDive }">
+      <!-- 左邊課程切換列表 -->
+      <aside v-if="courseType === 'Course'" class="w-2/12" :class="{ hidden: deepDive }">
         <h2 class="my-4 text-2xl font-bold">課程介紹</h2>
 
         <ul>
@@ -239,12 +240,14 @@
         </ul>
       </aside>
 
+      <!-- 中間課程內容 -->
       <main class="w-10/12 p-4 transition-all duration-200" :class="{ 'w-full': deepDive }">
         <slot />
       </main>
 
-      <!-- 懸浮按鈕 -->
+      <!-- 右邊懸浮按鈕 -->
       <ul
+        v-if="courseType === 'Course'"
         class="fixed right-[16.4%] h-full h-min w-[65px] rounded border border-[#6C757D] max-[1536px]:right-[8%]"
         :class="{ 'top-[150px]': deepDive }"
       >
@@ -332,13 +335,16 @@
           <span class="toolTip">下一堂課</span>
         </li>
       </ul>
+
+      <!-- 直播課程聊天室 -->
+      <div v-else>chatroom</div>
     </div>
   </in-container>
   <slot name="footer"></slot>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import useCourses from '~/stores/useCourses'
 import useUser from '~/stores/useUser'
@@ -351,9 +357,10 @@ const { setChapter, setContent, setCollected, addingReview } = useCourses()
 
 const { $api } = useNuxtApp()
 
-const route = useRoute()
 const router = useRouter('')
-const courseType = ref('')
+const courseType = computed(() => {
+  return currentCourse.value.chapters ? 'Course' : 'LiveCourse'
+})
 const isInCart = ref(() =>
   userProfile.value.cartCourses.findIndex(
     (course: any) => course?.courseId === currentCourse.value._id
@@ -364,7 +371,11 @@ const newReview = ref({
   star: 0,
   comment: ''
 })
-const deepDive = ref(false)
+
+// 直播課程時進入沉浸模式
+const deepDive = computed(() => {
+  return currentCourse.value.chapters === undefined
+})
 
 // 加入/取消收藏
 const collector = async () => {
@@ -467,11 +478,6 @@ const goTolesson = (index: number) => {
     }
   }
 }
-
-onMounted(() => {
-  console.log(route.query)
-  courseType.value = route.query.courseType === 'normal' ? 'Course' : 'LiveCourse'
-})
 </script>
 
 <style lang="scss" scoped>

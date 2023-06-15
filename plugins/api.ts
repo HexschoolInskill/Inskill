@@ -2,11 +2,13 @@ import { FetchOptions } from 'ofetch'
 import useUser from '~/stores/useUser'
 import UserModule from '~~/http/modules/user'
 import CoursesModule from '~~/http/modules/courses'
+import LiveCoursesModule from '~~/http/modules/liveCourse'
 import PartnerModule from '~/http/modules/partner'
 
 interface IApiInstance {
   user: UserModule
   course: CoursesModule
+  liveCourse: LiveCoursesModule
   partner: PartnerModule
 }
 
@@ -42,6 +44,7 @@ export default defineNuxtPlugin(() => {
   const modules: IApiInstance = {
     user: new UserModule(fetcher),
     course: new CoursesModule(fetcher),
+    liveCourse: new LiveCoursesModule(fetcher),
     partner: new PartnerModule(fetcher)
   }
 

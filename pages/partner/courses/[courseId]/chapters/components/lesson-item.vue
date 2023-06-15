@@ -4,12 +4,7 @@
       <i class="lesson-handler icon-reorder text-white"></i>
     </div>
     <div class="flex-1 text-white">
-      <in-input
-        v-if="isEditing"
-        v-model="inputValue"
-        class="text-black"
-        @keyup.enter="handleEdit"
-      />
+      <in-input v-if="isEditing" v-model="title" class="text-black" @keyup.enter="handleEdit" />
       <template v-else>
         <nuxt-link
           :to="`/partner/courses/${$route.params.courseId}/chapters/lesson/${id}`"
@@ -54,12 +49,17 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import type { Option } from '@/components/in-dropdown.vue'
 import useNotification from '~/stores/useNotification'
 import useConfirm from '~/stores/useConfirm'
+import useEditCourse from '~/stores/useEditCourse'
 
+const app = useNuxtApp()
+const route = useRoute()
 const { confirm } = useConfirm()
 const { notification } = useNotification()
+const { currentCourse: course } = storeToRefs(useEditCourse())
 
 const props = defineProps({
   value: {
@@ -70,13 +70,17 @@ const props = defineProps({
     type: String,
     required: true
   },
+  chapterId: {
+    type: String,
+    required: true
+  },
   publish: {
     type: Boolean,
     required: true
   }
 })
 
-const inputValue = ref('')
+const title = ref('')
 const isEditing = ref(false)
 const isPublish = computed({
   get() {
@@ -110,23 +114,42 @@ const options: Option[] = [
 const emit = defineEmits(['updated', 'deleted', 'loadingStart', 'loadingEnd'])
 
 watch(isEditing, (editing) => {
-  if (editing) inputValue.value = props.value
+  if (editing) title.value = props.value
 })
 
-function handleEdit() {
+async function handleEdit() {
   emit('loadingStart')
-  setTimeout(() => {
-    notification.success('更新成功')
+  try {
+    const { updatedChapter } = await app.$api.course.renameLesson(
+      route.params.courseId as string,
+      props.chapterId,
+      props.id,
+      title.value
+    )
+    course.value.chapters = updatedChapter
     isEditing.value = false
+    notification.success('更新成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
     emit('loadingEnd')
-    emit('deleted')
-  }, 300)
+  }
 }
 
-async function handleDelete() {
-  const isConfirm = await confirm('確定刪除?', '將連同課程內容一起刪除')
-  if (isConfirm) notification.success('刪除成功')
-  emit('deleted')
+async function handleDelete(courseId: string, chapterId: string, lessonId: string) {
+  if (!chapterId) return
+  const isConfirm = await confirm('刪除課堂', '將連同內容一起刪除')
+  if (!isConfirm) return
+  try {
+    emit('loadingStart')
+    const { updatedChapter } = await app.$api.course.deleteLesson(courseId, chapterId, lessonId)
+    course.value.chapters = updatedChapter
+    notification.success('刪除成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    emit('loadingEnd')
+  }
 }
 
 function handleOptionSelect(option: Option) {
@@ -136,7 +159,7 @@ function handleOptionSelect(option: Option) {
       isEditing.value = true
       break
     case 'delete':
-      handleDelete()
+      handleDelete(route.params.courseId as string, props.chapterId, props.id)
       break
     default:
   }

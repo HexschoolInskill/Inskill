@@ -110,6 +110,11 @@ export interface CollectCourse {
   courseType: CollectCourseType
 }
 
+interface ChapterAndLessonResponse {
+  success: boolean
+  updatedChapter: CourseChapter[]
+}
+
 class CoursesModule extends HttpFactory {
   private RESOURCE = '/courses'
 
@@ -151,32 +156,39 @@ class CoursesModule extends HttpFactory {
   }
 
   async createLesson(courseId: string, chapterId: string, title: string) {
-    return await this.call<{
-      success: boolean
-      updatedChapter: CourseChapter[]
-    }>(`${this.RESOURCE}/lesson`, 'POST', {
+    return await this.call<ChapterAndLessonResponse>(`${this.RESOURCE}/lesson`, 'POST', {
       courseId,
       chapterId,
       title
     })
   }
 
+  async deleteLesson(courseId: string, chapterId: string, lessonId: string) {
+    return await this.call<ChapterAndLessonResponse>(
+      `${this.RESOURCE}/lesson?courseId=${courseId}&chapterId=${chapterId}&lessonId=${lessonId}`,
+      'DELETE'
+    )
+  }
+
+  async renameLesson(courseId: string, chapterId: string, lessonId: string, title: string) {
+    return await this.call<ChapterAndLessonResponse>(`${this.RESOURCE}/lesson`, 'PATCH', {
+      courseId,
+      chapterId,
+      lessonId,
+      title,
+      field: 'title'
+    })
+  }
+
   async createChapter(courseId: string, title: string) {
-    return await this.call<{
-      success: boolean
-      sort: number
-      updatedChapter: CourseChapter[]
-    }>(`${this.RESOURCE}/chapter`, 'POST', {
+    return await this.call<ChapterAndLessonResponse>(`${this.RESOURCE}/chapter`, 'POST', {
       courseId,
       title
     })
   }
 
   async renameChapter(courseId: string, chapterId: string, title: string) {
-    return await this.call<{
-      success: boolean
-      updatedChapter: CourseChapter[]
-    }>(`${this.RESOURCE}/chapter`, 'PATCH', {
+    return await this.call<ChapterAndLessonResponse>(`${this.RESOURCE}/chapter`, 'PATCH', {
       courseId,
       chapterId,
       title,

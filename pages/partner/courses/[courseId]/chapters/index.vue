@@ -31,6 +31,7 @@
                 <template #item="{ element: lesson }">
                   <lesson-item
                     :id="lesson._id"
+                    :chapter-id="chapter._id"
                     :value="lesson.title"
                     :publish="lesson.isPublish"
                     @loading-start="isLoading = true"

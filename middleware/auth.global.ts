@@ -54,6 +54,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
         )
 
         courseStore.setPurchased(coursePurchasedIndex > -1)
+        // courseStore.setPurchased(true)
         courseStore.setCollected(courseCollectedIndex > -1)
       }
     } else {

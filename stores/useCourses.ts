@@ -153,34 +153,29 @@ export default defineStore('courses', () => {
   }
 
   // 新增評價
-  const addingReview = (content: any) => {
+  const createReview = (content: any) => {
     const { star, userId, username, comment } = content
     currentCourse.value.reviews.push({
-      _id: '',
       userId,
       username,
       rating: star,
-      comment,
-      createdAt: new Date().getTime().toLocaleString()
+      comment
     })
   }
 
   // 新增提問
-  const addingQuestion = (content: any) => {
+  const createQuestion = (content: any) => {
     const { chapter, lesson, userId, username, comment } = content
     currentCourse.value.chapters[chapter].lessons[lesson].question.push({
-      _id: '',
       userId,
       username,
       comment,
-      replies: [],
-      createdAt: new Date().getTime().toLocaleString(),
-      updatedAt: new Date().getTime().toLocaleString()
+      replies: []
     })
   }
 
   // 新增回復
-  const addingReply = (content: any) => {
+  const createReply = (content: any) => {
     const { chapter, lesson, index, userId, comment } = content
     currentCourse.value.chapters[chapter].lessons[lesson].question[index].replies.push({
       userId,
@@ -204,8 +199,8 @@ export default defineStore('courses', () => {
     setCollected,
     setChapter,
     setContent,
-    addingReview,
-    addingQuestion,
-    addingReply
+    createReview,
+    createQuestion,
+    createReply
   }
 })

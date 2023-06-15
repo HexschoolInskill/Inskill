@@ -14,17 +14,17 @@ export interface LessonContent {
   contentType: string
   content: string
   sort: number
-  _id: string
-  createdAt: string
-  updatedAt: string
+  _id?: string
+  createdAt?: string
+  updatedAt?: string
   duration?: number
 }
 export interface LessonQuestion {
   userId: string
   comment: string
-  _id: string
-  createdAt: string
-  updatedAt: string
+  _id?: string
+  createdAt?: string
+  updatedAt?: string
   replies: any[]
   username: string
 }
@@ -32,8 +32,8 @@ export interface CourseReview {
   userId: string
   rating: number
   comment: string
-  createdAt: string
-  _id: string
+  createdAt?: string
+  _id?: string
   username: string
 }
 export interface CourseLesson {
@@ -43,9 +43,9 @@ export interface CourseLesson {
   sort: number
   lessonContent: LessonContent[]
   question: LessonQuestion[]
-  _id: string
-  createdAt: string
-  updatedAt: string
+  _id?: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface CourseChapter {
@@ -53,12 +53,12 @@ export interface CourseChapter {
   description: string
   sort: number
   lessons: CourseLesson[]
-  _id: string
-  createdAt: string
-  updatedAt: string
+  _id?: string
+  createdAt?: string
+  updatedAt?: string
 }
 export interface Course {
-  _id: string
+  _id?: string
   title: string
   description: string
   price: number
@@ -71,7 +71,7 @@ export interface Course {
 }
 export interface NormalCourse extends Course {
   isPublic: boolean
-  createdAt: string
+  createdAt?: string
   scoreCount: number
   course: number
   chapter: number
@@ -106,7 +106,7 @@ interface CollectCoursePayload {
 }
 
 export interface CollectCourse {
-  _id: string
+  _id?: string
   courseId: string
   courseType: CollectCourseType
 }

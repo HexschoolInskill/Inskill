@@ -12,8 +12,8 @@
     <in-content-question
       v-if="route.query.courseType === 'normal'"
       :questions="currenChapterLesson?.question || []"
-      @add-question="($value: any) => addingQuestion({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, comment: $value })"
-      @add-reply="($value: any) => addingReply({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, index: $value.index, comment: $value.msg })"
+      @add-question="($value: any) => createQuestion({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, comment: $value })"
+      @add-reply="($value: any) => createReply({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, index: $value.index, comment: $value.msg })"
     ></in-content-question>
   </div>
 </template>
@@ -35,7 +35,7 @@ const { currentCourse, content, purchased } = storeToRefs(useCourses())
 const { userProfile } = storeToRefs(useUser())
 const route = useRoute()
 
-const { addingQuestion, addingReply } = useCourses()
+const { createQuestion, createReply } = useCourses()
 
 const { chapter, lesson } = content.value
 
@@ -44,9 +44,10 @@ definePageMeta({
 })
 
 const currenChapterLesson = computed(() => {
-  return route.query.courseType === 'normal' ? currentCourse.value?.chapters[chapter].lessons[lesson] : {}
+  return route.query.courseType === 'normal'
+    ? currentCourse.value?.chapters[chapter].lessons[lesson]
+    : {}
 })
-
 </script>
 
 <style scope>

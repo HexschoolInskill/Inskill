@@ -105,9 +105,3 @@ onMounted(() => {
   console.log(currenChapterLesson)
 })
 </script>
-
-<style scope>
-.gradient {
-  background: linear-gradient(90deg, rgb(38, 43, 47), #000);
-}
-</style>

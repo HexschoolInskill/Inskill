@@ -26,4 +26,8 @@
 .border-bottom {
   @apply border border-l-0 border-r-0 border-t-0;
 }
+
+.gradient {
+  background: linear-gradient(90deg, rgb(38, 43, 47), #000);
+}
 </style>

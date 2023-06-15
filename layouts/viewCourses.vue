@@ -148,14 +148,14 @@
       </in-course-float-button>
 
       <!-- 直播課程聊天室 -->
-      <in-course-chat-room v-else></in-course-chat-room>
+      <in-course-chat-room v-else class="w-2/12"></in-course-chat-room>
     </div>
   </in-container>
-  <slot name="footer"></slot>
+  <slot v-if="courseType === 'Course'" name="footer"></slot>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
 // components
@@ -175,7 +175,7 @@ const { setChapter, setContent, setCollected, createReview } = useCourses()
 
 const { $api } = useNuxtApp()
 
-const router = useRouter('')
+const router = useRouter()
 const courseType = computed(() => {
   return currentCourse.value.chapters ? 'Course' : 'LiveCourse'
 })
@@ -187,6 +187,7 @@ const isInCart = ref(() =>
 const open = ref(false) // 評價modal 開關
 
 const deepDive = ref(false) // 直播課程時進入沉浸模式
+deepDive.value = currentCourse.value.chapters === undefined
 
 // 加入/取消收藏
 const collector = async () => {
@@ -280,10 +281,6 @@ const goToLesson = (index: number) => {
     }
   }
 }
-
-onMounted(() => {
-  deepDive.value = currentCourse.value.chapters === undefined
-})
 </script>
 
 <style lang="scss" scoped>

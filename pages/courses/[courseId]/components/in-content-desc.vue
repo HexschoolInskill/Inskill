@@ -19,7 +19,7 @@
       <span class="mr-auto"
         >章節數量: {{ currentCourse.chapters?.length }}章 {{ getTotalLessons }}節</span
       >
-      <span v-if="!purchased" class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span>
+      <!-- <span v-if="!purchased" class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span> -->
     </span>
 
     <span class="border-bottom mt-1 flex items-center pb-2">
@@ -37,13 +37,13 @@
 
       <span class="mr-auto">{{ currentCourse.purchasedCount }}人已加入</span>
 
-      <button
+      <!-- <button
         v-if="!purchased"
         class="rounded border border-white bg-white px-3 text-black"
         type="button"
       >
         加入購物車
-      </button>
+      </button> -->
     </span>
 
     <div class="py-4">{{ currentCourse.description }}</div>

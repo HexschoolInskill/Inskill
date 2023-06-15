@@ -66,7 +66,6 @@ const showReviews = ref(props.review.length < 3 ? props.review.length : 3)
 
 // 計算平均評價
 const sumUpReviews = computed(() => {
-  console.log('安安')
   const total = props.review.reduce(
     (accumulator: number, currentReview: any) => accumulator + currentReview.rating,
     0
@@ -77,7 +76,6 @@ const sumUpReviews = computed(() => {
 
 // 載入更多評價
 const getMoreReviews = () => {
-  console.log('hi')
   if (props.review.length < showReviews.value + 3) {
     showReviews.value = props.review.length
   } else {

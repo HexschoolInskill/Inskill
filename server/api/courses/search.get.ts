@@ -173,6 +173,7 @@ export default defineEventHandler(async (event) => {
       }
 
       let searchCourses = []
+      // TODO: 用 API 新增的課程沒有 reviews 內容，會抓不出資料
       if (category === 'normal') {
         searchCourses = await models.Course.aggregate([
           { $unwind: '$reviews' },

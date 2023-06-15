@@ -139,6 +139,17 @@ class CoursesModule extends HttpFactory {
     )
   }
 
+  async createLesson(courseId: string, chapterId: string, title: string) {
+    return await this.call<{
+      success: boolean
+      updatedChapter: CourseChapter[]
+    }>(`${this.RESOURCE}/lesson`, 'POST', {
+      courseId,
+      chapterId,
+      title
+    })
+  }
+
   async createChapter(courseId: string, title: string) {
     return await this.call<{
       success: boolean
@@ -150,14 +161,15 @@ class CoursesModule extends HttpFactory {
     })
   }
 
-  async createLesson(courseId: string, chapterId: string, title: string) {
+  async renameChapter(courseId: string, chapterId: string, title: string) {
     return await this.call<{
       success: boolean
       updatedChapter: CourseChapter[]
-    }>(`${this.RESOURCE}/lesson`, 'POST', {
+    }>(`${this.RESOURCE}/chapter`, 'PATCH', {
       courseId,
       chapterId,
-      title
+      title,
+      field: 'title'
     })
   }
 

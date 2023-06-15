@@ -1,12 +1,7 @@
 <template>
   <div class="flex h-15 w-full items-center border-b border-solid border-white/50 px-6">
     <div class="flex-1 text-white">
-      <in-input
-        v-if="isEditing"
-        v-model="inputValue"
-        class="text-black"
-        @keyup.enter="handleEdit"
-      />
+      <in-input v-if="isEditing" v-model="title" class="text-black" @keyup.enter="handleEdit" />
       <h5 v-else class="text-h5 font-bold line-clamp-1">{{ value }}</h5>
     </div>
     <div class="flex flex-shrink-0 items-center gap-5 pl-6">
@@ -62,11 +57,12 @@ const props = defineProps({
     required: true
   }
 })
+const emit = defineEmits(['updated', 'deleted', 'loadingStart', 'loadingEnd'])
 
-const inputValue = ref('')
+const title = ref('')
 const isEditing = ref(false)
 
-const options: Option[] = [
+const options = [
   {
     label: '重新命名',
     value: 'rename'
@@ -77,19 +73,26 @@ const options: Option[] = [
   }
 ]
 
-const emit = defineEmits(['updated', 'deleted', 'loadingStart', 'loadingEnd'])
-
 watch(isEditing, (editing) => {
-  if (editing) inputValue.value = props.value
+  if (editing) title.value = props.value
 })
 
-function handleEdit() {
+async function handleEdit() {
   emit('loadingStart')
-  setTimeout(() => {
-    notification.success('更新成功')
-    emit('loadingEnd')
+  try {
+    const { updatedChapter } = await app.$api.course.renameChapter(
+      route.params.courseId as string,
+      props.id,
+      title.value
+    )
+    course.value.chapters = updatedChapter
     isEditing.value = false
-  }, 300)
+    notification.success('更新成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    emit('loadingEnd')
+  }
 }
 
 async function deleteChapter(courseId: string, chapterId: string) {
@@ -97,12 +100,15 @@ async function deleteChapter(courseId: string, chapterId: string) {
   const isConfirm = await confirm('刪除章節', '將連同所有課堂一起刪除')
   if (!isConfirm) return
   try {
+    emit('loadingStart')
     await app.$api.course.deleteChapter(courseId, chapterId)
     course.value.chapters = course.value.chapters.filter((chapter) => chapter._id !== chapterId)
     course.value.chapters.forEach((chapter, index) => (chapter.sort = index + 1))
     notification.success('刪除成功')
   } catch (error) {
     notification.error((error as Error).message)
+  } finally {
+    emit('loadingEnd')
   }
 }
 

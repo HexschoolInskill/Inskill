@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!showChatRoom" @click="() => (showChatRoom = !showChatRoom)">
+  <!-- <div v-if="!showChatRoom" @click="() => (showChatRoom = !showChatRoom)">
     <svg
       class="w-[100px]"
       xmlns="http://www.w3.org/2000/svg"
@@ -11,16 +11,25 @@
         fill="currentColor"
       ></path>
     </svg>
-  </div>
+  </div> -->
 
-  <div v-else>
-    <div class="mb-4 h-[60vh] rounded-lg bg-white p-4 py-6">
+  <div>
+    <div class="mt-2 mb-4 h-[60vh] rounded-lg bg-white text-black p-3">
       <ul v-for="msg in props.chatroomMessage" :key="msg">
-        <li>{{ msg }}</li>
+        <li class="flex">
+          <span class="mr-1 text-black" :class="{'bg-black text-white rounded px-1': msg.isTeacher}">{{ msg.username }}</span>
+          :
+          <span class="ml-1">{{ msg.comment }}</span>
+        </li>
       </ul>
     </div>
 
-    <input v-model="newChatMessage" class="w-full" type="text" placeholder="enter 送出文字內容" />
+    <input
+    v-model="newChatMessage"
+    class="w-full rounded p-1 text-black"
+    type="text"
+    placeholder="enter 送出文字內容"
+    @keypress.enter="submitComment"/>
   </div>
 </template>
 
@@ -34,6 +43,15 @@ const props = defineProps({
   }
 })
 
-const showChatRoom = ref(false)
+const emit = defineEmits(['update:chatroomMessage'])
+
+// const showChatRoom = ref(false)
 const newChatMessage = ref('')
+
+const submitComment = () => {
+  if(newChatMessage.value.length){
+    emit('update:chatroomMessage', newChatMessage.value)
+    newChatMessage.value = ''
+  }
+}
 </script>

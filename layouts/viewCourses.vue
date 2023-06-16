@@ -148,7 +148,12 @@
       </in-course-float-button>
 
       <!-- 直播課程聊天室 -->
-      <in-course-chat-room v-else class="w-2/12"></in-course-chat-room>
+      <in-course-chat-room
+      v-else
+      class="w-3/12"
+      :chatroom-message="chatroomMessage"
+      @update:chatroom-message="addChatroomMessage">
+      </in-course-chat-room>
     </div>
   </in-container>
   <slot v-if="courseType === 'Course'" name="footer"></slot>
@@ -179,11 +184,15 @@ const router = useRouter()
 const courseType = computed(() => {
   return currentCourse.value.chapters ? 'Course' : 'LiveCourse'
 })
-const isInCart = ref(() =>
-  userProfile.value.cartCourses.findIndex(
+
+const chatroomMessage: any = ref([])
+
+// 課程是否加入購物車
+const isInCart = ref(-1)
+isInCart.value = userProfile.value.cartCourses.findIndex(
     (course: any) => course?.courseId === currentCourse.value._id
   )
-)
+
 const open = ref(false) // 評價modal 開關
 
 const deepDive = ref(false) // 直播課程時進入沉浸模式
@@ -193,7 +202,7 @@ deepDive.value = currentCourse.value.chapters === undefined
 const collector = async () => {
   try {
     const alterCollection = await $api.course.collectCourse({
-      courseId: currentCourse.value._id,
+      courseId: currentCourse.value._id as string,
       courseType: courseType.value,
       isCollect: !collected.value
     })
@@ -232,8 +241,8 @@ const selectLesson = (index: number) => {
 // 加入購物車
 const addToCart = async () => {
   try {
-    const alterCart = await $api.course.pushToCart({
-      courseId: currentCourse.value._id,
+    const alterCart: any = await $api.course.pushToCart({
+      courseId: currentCourse.value._id as string,
       courseType: courseType.value,
       isCart: !purchased.value
     })
@@ -247,7 +256,7 @@ const addToCart = async () => {
 }
 
 // 送出評價
-const addReview = ($value) => {
+const addReview = ($value: any) => {
   if ($value.comment.length) {
     createReview({ userId: userProfile.value._id, username: userProfile.value.username, ...$value })
     open.value = false
@@ -281,6 +290,18 @@ const goToLesson = (index: number) => {
     }
   }
 }
+
+const addChatroomMessage = ($value: any) => {
+  console.log($value)
+
+  chatroomMessage.value.push({
+    userId: userProfile.value._id,
+    username: userProfile.value.username,
+    isTeacher: userProfile.value.isTeacher,
+    comment: $value
+  })
+}
+
 </script>
 
 <style lang="scss" scoped>

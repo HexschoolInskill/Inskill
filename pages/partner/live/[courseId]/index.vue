@@ -1,14 +1,47 @@
 <template>
-  <!-- webRoomHeader -->
-
   <div class="main gradient p-4 px-6">
+
+    <div class="courseTitle">
+      <span class="flex items-center py-1">
+        <h1 class="mb-1 mr-auto text-3xl font-bold">{{ currentCourse.title }}</h1>
+
+        <svg
+          class="mr-4 w-[15px]"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 448 512"
+        >
+          <path
+            d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0S96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
+            fill="currentColor"
+          ></path>
+        </svg>
+        <span class="">{{ currentCourse.purchasedCount }}人已加入</span>
+        <!-- <span v-if="!purchased" class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span> -->
+      </span>
+    </div>
+
     <div class="screen" @click="showToolPopup = false">
-      <div class="rounded-lg border">
-        <video class="h-[40vh] w-full">
-          <source :src="video" type="video/mp4" />
+      <div class="rounded-lg border w-full inline-block">
+        <video v-if="goLive" class="h-[55vh] w-full" :class="{'h-[35vh]': goLive}">
+          <source :src="currentCourse.videoUrl" type="video/mp4" />
         </video>
 
-        <div class="smallScreen text-7xl">
+        <!-- <iframe 
+        v-if="goLive"
+        class="h-[55vh] w-full" 
+        :class="{'h-[35vh]': goLive}" 
+        :src="currentCourse.videoUrl" 
+        frameborder="0">
+        </iframe> -->
+
+        <div
+        v-else
+        class="relative bg-black text-white text-center rounded-lg h-[55vh] text-3xl">
+            <span class="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">直播尚未開始</span>
+        </div>
+
+        <div v-if="goLive" class="smallScreen text-7xl">
           <svg
             class="smallProfile"
             xmlns="http://www.w3.org/2000/svg"
@@ -242,12 +275,15 @@
       </div>
       <!-- item -->
       <div class="item">
-        <div class="btnRed">
+        <div
+        class="broadcastBtn"
+        :class="[goLive? 'bg-[#ea4335]' : 'bg-[#66BC2A]']"
+        @click="broadcast">
           <div class="img">
-            <!-- <svg style="transform:rotate(135deg)" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" fill="#ffffff"/></svg> -->
+            <svg class="w-[100px]" style="transform:rotate(135deg)" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" fill="#ffffff"/></svg>
           </div>
 
-          {{ goLive ? '開始' : '結束' }}
+          {{ goLive ? '結束' : '開始'  }}
         </div>
         <!-- webItemPopup -->
         <div v-if="showToolPopup" class="webItemPopup">
@@ -449,14 +485,23 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { storeToRefs } from 'pinia';
+import useCourses from '~/stores/useCourses';
 
 definePageMeta({
   layout: 'view-courses'
 })
 
+
+const { currentCourse } = storeToRefs(useCourses())
+
 const goLive = ref(false)
 const showToolPopup = ref(false)
-const video = ref('/video/short.mp4')
+// const video = ref('/video/short.mp4')
+
+const broadcast = () => {
+  goLive.value = !goLive.value
+}
 </script>
 
 <style lang="scss" scoped>
@@ -467,16 +512,11 @@ const video = ref('/video/short.mp4')
 .screen {
   @apply my-4 rounded-lg;
 
-  .name,
-  .more {
-    @apply absolute bottom-[5px] text-base font-semibold text-white;
-  }
-
   .smallScreen {
-    @apply relative mb-4 ml-auto mr-4 h-[180px] w-[280px] rounded-lg bg-[#6C757D];
+    @apply absolute mb-4 ml-auto mr-4 h-[180px] w-[280px] bottom-[50px] right-[315px] rounded-lg bg-[#6C757D];
 
     .smallProfile {
-      @apply absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%];
+      @apply relative left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%];
     }
   }
 
@@ -510,7 +550,7 @@ const video = ref('/video/short.mp4')
 }
 
 .webBottomTool {
-  @apply fixed bottom-[30px] mx-auto flex w-[66vw] items-center justify-around;
+  @apply absolute bg-black rounded-lg bottom-[-100px] left-[0px] mx-auto flex w-[65vw] items-center justify-around;
 
   .item {
     @apply w-[100px] cursor-pointer text-center;
@@ -520,8 +560,12 @@ const video = ref('/video/short.mp4')
     }
   }
 
-  .btnRed {
-    @apply relative w-[100px] rounded-lg bg-[#ea4335] py-5 text-center text-white;
+  .broadcastBtn {
+    @apply w-[100px] rounded-lg pt-2 pb-[10px] mt-[35px] text-center text-white;
+
+    .img{
+      @apply my-2;
+    }
   }
 }
 

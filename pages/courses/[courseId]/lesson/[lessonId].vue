@@ -61,8 +61,8 @@
 
     <in-content-question
       :questions="currenChapterLesson?.question || []"
-      @add-question="($value: any) => addingQuestion({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, comment: $value })"
-      @add-reply="($value: any) => addingReply({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, index: $value.index, comment: $value.msg })"
+      @add-question="($value: any) => createQuestion({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, comment: $value })"
+      @add-reply="($value: any) => createReply({ userId: userProfile._id, chapter: content.chapter, lesson: content.lesson, index: $value.index, comment: $value.msg })"
     >
     </in-content-question>
   </div>
@@ -92,7 +92,7 @@ const purchased = ref(false)
 
 const { currentCourse, content } = storeToRefs(useCourse())
 const { userProfile } = storeToRefs(useUser())
-const { addingQuestion, addingReply } = useCourse()
+const { createQuestion, createReply } = useCourse()
 const route = useRoute()
 
 const currenChapterLesson = ref(
@@ -105,9 +105,3 @@ onMounted(() => {
   console.log(currenChapterLesson)
 })
 </script>
-
-<style scope>
-.gradient {
-  background: linear-gradient(90deg, rgb(38, 43, 47), #000);
-}
-</style>

@@ -22,7 +22,7 @@
       </div>
 
       <div class="ml-4 w-full">
-        <h2 class="mb-2 text-xl font-bold">講師名稱</h2>
+        <h2 class="mb-2 text-xl font-bold">{{ props.teacher }}</h2>
         <p>
           冰而雲黃游抱哪奶校，雨手嗎回小鼻常禾草民「目雞停苦發訴人比」不現今美白寫即世汗根又麼兒候面奶新昌月：女兩後念，兌這條同給圓嗎喜出布。
           巴目包辛正幼戊子來唱都間詞月兩卜貝乙詞：尺空字王音步動爬亭合開放生。
@@ -31,3 +31,12 @@
     </div>
   </div>
 </template>
+
+<script lang="ts" setup>
+const props = defineProps({
+  teacher: {
+    type: String,
+    default: '講師名稱'
+  }
+})
+</script>

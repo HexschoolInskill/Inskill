@@ -64,17 +64,3 @@ export default defineEventHandler(async (event) => {
     })
   }
 })
-
-// const find: any = await models.Course.find({ 'chapters._id': chapterId }).exec()
-// const find: any = await models.Course.find({ 'chapters._id': chapterId, 'chapters.lessons._id': '64829ace5dac7ea13bd4153c' })
-// const find: any = await models.Course.find({
-//   'chapters.lessons.lessonContent._id': '647a1336fc747cba02b8a2a8'
-// }).select('chapters.lessons.lessonContent')
-
-// const findResult = await models.Course.aggregate([
-//   { $match: { $expr: { $eq: ['$_id', { $toObjectId: courseId }] } } },
-//   { $unwind: '$chapters' },
-//   { $unwind: '$chapters.lessons' },
-//   { $unwind: '$chapters.lessons.lessonContent' },
-//   { $project: { _id: 0, lessonContent: '$chapters.lessons.lessonContent' } }
-// ])

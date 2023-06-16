@@ -1,23 +1,20 @@
 import models from '../../model/schema'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
   try {
-    const { userInfo } = event.context.auth
-
-    const { purchasedCourses } = userInfo
-    const courses = []
-    await Promise.all(
-      purchasedCourses.map(async (courseID: string) => {
-        console.log(`courseID : `, courseID)
-        const course = await models.Course.findById(courseID)
-        if (course) {
-          courses.push(course)
-        }
-      })
+    const lessonId = '647a1336fc747cba02b8a2b2'
+    const findLessonContent: any = await models.Course.findOne(
+      { 'chapters.lessons._id': lessonId },
+      { 'chapters.lessons.$': 1 }
     )
+
+    const result = findLessonContent.chapters[0].lessons.find(
+      (content: any) => content._id.toString() === lessonId
+    ).lessonContent
+
     return {
       success: true,
-      courses
+      result
     }
   } catch (error: any) {
     return createError({

@@ -7,13 +7,19 @@
           <label
             class="transition-2 group relative mt-5 block cursor-pointer overflow-hidden rounded-6 border border-solid border-white/50 pt-6/10 hover:border-white"
           >
-            <input type="file" class="hidden" @change="handleThumbnailChange" />
+            <input
+              type="file"
+              class="hidden"
+              :accept="acceptImageType.join(',')"
+              @change="handleThumbnailChange"
+            />
             <div
               class="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center"
             >
-              <template v-if="thumbnailPreview">
+              <div v-if="isLoading"></div>
+              <template v-else-if="course.thumbnail">
                 <img
-                  :src="thumbnailPreview"
+                  :src="course.thumbnail"
                   alt=""
                   class="absolute left-0 top-0 h-full w-full object-cover"
                 />
@@ -22,12 +28,11 @@
                 >
                   <in-btn ghost size="small" class="pointer-events-none mt-5">重新選擇圖片</in-btn>
                   <in-btn
-                    v-if="thumbnailPreview"
+                    v-if="course.thumbnail"
                     ghost
                     type="error"
                     size="small"
                     class="mt-5 gap-3"
-                    @click.prevent.stop="course.thumbnail = ''"
                   >
                     <i class="icon-trash"></i>
                     <p class="text-fs-6">刪除圖片</p>
@@ -55,6 +60,7 @@
           <h3 class="text-h3 font-bold">課程說明</h3>
           <div class="mt-5">
             <in-editor v-model="course.description" />
+            <p v-if="v$.description.required.$invalid" class="mt-2 text-red-500">課程說明為必填</p>
           </div>
         </section>
       </in-card>
@@ -100,20 +106,22 @@ import { storeToRefs } from 'pinia'
 import useConfirm from '~/stores/useConfirm'
 import useEditCourse from '~/stores/useEditCourse'
 import { Option } from '@/components/in-dropdown.vue'
+import useNotification from '~/stores/useNotification'
 
-const { currentCourse: course } = storeToRefs(useEditCourse())
+const app = useNuxtApp()
+const route = useRoute()
+const { currentCourse: course, isLoading } = storeToRefs(useEditCourse())
 const { confirm } = useConfirm()
-
-const thumbnailPreview = computed(() => {
-  if (course.value.thumbnail instanceof File) {
-    return URL.createObjectURL(course.value.thumbnail)
-  } else {
-    return course.value.thumbnail
-  }
-})
+const { notification } = useNotification()
+const acceptImageType = ref(['image/png', 'image/jpeg', 'image/wepb'])
 
 const rules = {
   title: {
+    required,
+    $lazy: true,
+    $autoDirty: true
+  },
+  description: {
     required,
     $lazy: true,
     $autoDirty: true
@@ -139,15 +147,57 @@ const options: Option[] = [
 
 const v$ = useVuelidate(rules, course)
 
-function handleThumbnailChange(event: Event) {
+async function handleThumbnailChange(event: Event) {
   const target = event.target as HTMLInputElement
   const file = target?.files?.[0]
   if (!file) return
-  course.value.thumbnail = file
+  if (!acceptImageType.value.includes(file.type)) {
+    notification.error('不支援的圖片格式')
+    return
+  }
+
+  isLoading.value = true
+  try {
+    const { course: response } = await app.$api.course.updateThumbnail(
+      route.params.courseId as string,
+      file
+    )
+    Object.assign(course.value, response)
+    notification.success('更新成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    isLoading.value = false
+  }
 }
 
+watch(
+  course,
+  () => {
+    console.log('@@')
+  },
+  { deep: true }
+)
+
 async function saveCourse() {
-  await v$.value.$validate()
+  const isValid = await v$.value.$validate()
+  if (!isValid) return
+  try {
+    isLoading.value = true
+    const { course: response } = await app.$api.course.updateCourse({
+      courseId: route.params.courseId as string,
+      title: course.value.title,
+      description: course.value.description,
+      isPublic: course.value.isPublic,
+      price: course.value.price
+    })
+    Object.assign(course.value, response)
+    notification.success('更新成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    isLoading.value = false
+  }
 }
 
 async function handlePublish(value: boolean) {
@@ -158,7 +208,13 @@ async function handlePublish(value: boolean) {
       : '取消發布後所有學生皆無法看見課程'
   )
   if (isConfirm) {
-    course.value.isPublic = value
+    const prevPublic = course.value.isPublic
+    try {
+      course.value.isPublic = value
+      await saveCourse()
+    } catch (e) {
+      course.value.isPublic = prevPublic
+    }
   }
 }
 </script>

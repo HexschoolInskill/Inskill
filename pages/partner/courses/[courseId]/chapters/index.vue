@@ -52,14 +52,6 @@
     <div class="mt-5 text-center">
       <in-btn @click="showCreatePopup('chapter')">新增章節</in-btn>
     </div>
-    <transition name="loading">
-      <div
-        v-if="isLoading"
-        class="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black/80"
-      >
-        <in-spin :size="40" color="#fff" />
-      </div>
-    </transition>
     <in-popup :show="!!currentPopupType" :size="640">
       <in-container>
         <in-card class="w-full p-8">
@@ -99,9 +91,8 @@ type ItemType = 'chapter' | 'lesson'
 
 const app = useNuxtApp()
 const route = useRoute()
-const { currentCourse: course } = storeToRefs(useEditCourse())
+const { currentCourse: course, isLoading } = storeToRefs(useEditCourse())
 const { notification } = useNotification()
-const isLoading = ref(false)
 
 async function handleSort(event: any, type: ItemType, chapterId?: string) {
   isLoading.value = true

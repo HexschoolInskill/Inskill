@@ -80,6 +80,7 @@ export default defineEventHandler(async (event) => {
           title: { $first: '$title' },
           description: { $first: '$description' },
           price: { $first: '$price' },
+          isPublic: { $first: '$isPublic' },
           purchasedCount: { $first: '$purchasedCount' },
           thumbnail: { $first: '$thumbnail' },
           teacherId: { $first: '$teacherId' },

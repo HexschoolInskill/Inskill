@@ -1,10 +1,8 @@
 import { defineStore } from 'pinia'
 import { NormalCourse } from '@/http/modules/courses'
 
-export type EditCourse = Omit<NormalCourse, 'thumbnail'> & { thumbnail: string | File }
-
 export default defineStore('editCourse', () => {
-  const currentCourse = reactive<EditCourse>({
+  const currentCourse = reactive<NormalCourse>({
     _id: '',
     title: '',
     description: '',
@@ -23,7 +21,10 @@ export default defineStore('editCourse', () => {
     createdAt: ''
   })
 
+  const isLoading = ref(false)
+
   return {
-    currentCourse
+    currentCourse,
+    isLoading
   }
 })

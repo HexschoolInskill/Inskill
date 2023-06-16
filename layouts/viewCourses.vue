@@ -149,10 +149,11 @@
 
       <!-- 直播課程聊天室 -->
       <in-course-chat-room
-      v-else
-      class="w-3/12"
-      :chatroom-message="chatroomMessage"
-      @update:chatroom-message="addChatroomMessage">
+        v-else
+        class="w-3/12"
+        :chatroom-message="chatroomMessage"
+        @update:chatroom-message="addChatroomMessage"
+      >
       </in-course-chat-room>
     </div>
   </in-container>
@@ -190,8 +191,8 @@ const chatroomMessage: any = ref([])
 // 課程是否加入購物車
 const isInCart = ref(-1)
 isInCart.value = userProfile.value.cartCourses.findIndex(
-    (course: any) => course?.courseId === currentCourse.value._id
-  )
+  (course: any) => course?.courseId === currentCourse.value._id
+)
 
 const open = ref(false) // 評價modal 開關
 
@@ -301,7 +302,6 @@ const addChatroomMessage = ($value: any) => {
     comment: $value
   })
 }
-
 </script>
 
 <style lang="scss" scoped>

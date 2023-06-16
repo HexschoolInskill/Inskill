@@ -14,10 +14,14 @@
   </div> -->
 
   <div>
-    <div class="mt-2 mb-4 h-[60vh] rounded-lg bg-white text-black p-3">
+    <div class="mb-4 mt-2 h-[60vh] rounded-lg bg-white p-3 text-black">
       <ul v-for="msg in props.chatroomMessage" :key="msg">
         <li class="flex">
-          <span class="mr-1 text-black" :class="{'bg-black text-white rounded px-1': msg.isTeacher}">{{ msg.username }}</span>
+          <span
+            class="mr-1 text-black"
+            :class="{ 'rounded bg-black px-1 text-white': msg.isTeacher }"
+            >{{ msg.username }}</span
+          >
           :
           <span class="ml-1">{{ msg.comment }}</span>
         </li>
@@ -25,11 +29,12 @@
     </div>
 
     <input
-    v-model="newChatMessage"
-    class="w-full rounded p-1 text-black"
-    type="text"
-    placeholder="enter 送出文字內容"
-    @keypress.enter="submitComment"/>
+      v-model="newChatMessage"
+      class="w-full rounded p-1 text-black"
+      type="text"
+      placeholder="enter 送出文字內容"
+      @keypress.enter="submitComment"
+    />
   </div>
 </template>
 
@@ -49,7 +54,7 @@ const emit = defineEmits(['update:chatroomMessage'])
 const newChatMessage = ref('')
 
 const submitComment = () => {
-  if(newChatMessage.value.length){
+  if (newChatMessage.value.length) {
     emit('update:chatroomMessage', newChatMessage.value)
     newChatMessage.value = ''
   }

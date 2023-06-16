@@ -1,6 +1,5 @@
 <template>
   <div class="main gradient p-4 px-6">
-
     <div class="courseTitle">
       <span class="flex items-center py-1">
         <h1 class="mb-1 mr-auto text-3xl font-bold">{{ currentCourse.title }}</h1>
@@ -22,8 +21,8 @@
     </div>
 
     <div class="screen" @click="showToolPopup = false">
-      <div class="rounded-lg border w-full inline-block">
-        <video v-if="goLive" class="h-[55vh] w-full" :class="{'h-[35vh]': goLive}">
+      <div class="inline-block w-full rounded-lg">
+        <video v-if="goLive" class="h-[55vh] w-full border rounded-lg" :class="{ 'h-[35vh]': goLive }">
           <source :src="currentCourse.videoUrl" type="video/mp4" />
         </video>
 
@@ -35,10 +34,10 @@
         frameborder="0">
         </iframe> -->
 
-        <div
-        v-else
-        class="relative bg-black text-white text-center rounded-lg h-[55vh] text-3xl">
-            <span class="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">直播尚未開始</span>
+        <div v-else class="relative h-[55vh] rounded-lg bg-black text-center text-3xl text-white">
+          <span class="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+            >直播尚未開始</span
+          >
         </div>
 
         <div v-if="goLive" class="smallScreen text-7xl">
@@ -276,14 +275,26 @@
       <!-- item -->
       <div class="item">
         <div
-        class="broadcastBtn"
-        :class="[goLive? 'bg-[#ea4335]' : 'bg-[#66BC2A]']"
-        @click="broadcast">
+          class="broadcastBtn"
+          :class="[goLive ? 'bg-[#ea4335]' : 'bg-[#66BC2A]']"
+          @click="broadcast"
+        >
           <div class="img">
-            <svg class="w-[100px]" style="transform:rotate(135deg)" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" fill="#ffffff"/></svg>
+            <svg
+              class="w-[100px]"
+              style="transform: rotate(135deg)"
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"
+                fill="#ffffff"
+              />
+            </svg>
           </div>
 
-          {{ goLive ? '結束' : '開始'  }}
+          {{ goLive ? '結束' : '開始' }}
         </div>
         <!-- webItemPopup -->
         <div v-if="showToolPopup" class="webItemPopup">
@@ -485,13 +496,12 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { storeToRefs } from 'pinia';
-import useCourses from '~/stores/useCourses';
+import { storeToRefs } from 'pinia'
+import useCourses from '~/stores/useCourses'
 
 definePageMeta({
   layout: 'view-courses'
 })
-
 
 const { currentCourse } = storeToRefs(useCourses())
 
@@ -513,7 +523,7 @@ const broadcast = () => {
   @apply my-4 rounded-lg;
 
   .smallScreen {
-    @apply absolute mb-4 ml-auto mr-4 h-[180px] w-[280px] bottom-[50px] right-[315px] rounded-lg bg-[#6C757D];
+    @apply absolute bottom-[50px] right-[315px] mb-4 ml-auto mr-4 h-[180px] w-[280px] rounded-lg bg-[#6C757D];
 
     .smallProfile {
       @apply relative left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%];
@@ -550,7 +560,7 @@ const broadcast = () => {
 }
 
 .webBottomTool {
-  @apply absolute bg-black rounded-lg bottom-[-100px] left-[0px] mx-auto flex w-[65vw] items-center justify-around;
+  @apply absolute bottom-[-100px] left-[0px] mx-auto flex w-[65vw] items-center justify-around rounded-lg bg-black;
 
   .item {
     @apply w-[100px] cursor-pointer text-center;
@@ -561,9 +571,9 @@ const broadcast = () => {
   }
 
   .broadcastBtn {
-    @apply w-[100px] rounded-lg pt-2 pb-[10px] mt-[35px] text-center text-white;
+    @apply mt-[35px] w-[100px] rounded-lg pb-[10px] pt-2 text-center text-white;
 
-    .img{
+    .img {
       @apply my-2;
     }
   }

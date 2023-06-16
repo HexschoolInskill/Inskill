@@ -1,12 +1,11 @@
 <template>
   <!--課程內容介紹-->
-  <div class="w-11/12">
+  <div :class="{'w-11/12': currentCourse.chapters}">
     <div class="wrapper gradient rounded-lg p-4 px-6">
-
       <in-content-video v-if="currentCourse.videoUrl"></in-content-video>
 
-      <div v-else class="courseTitle">
-        <span class="flex items-center py-1 mb-2">
+      <div v-else class="courseTitle w-full">
+        <span class="mb-2 flex items-center py-1">
           <h1 class="mb-1 mr-auto text-3xl font-bold">{{ currentCourse.title }}</h1>
 
           <svg
@@ -24,13 +23,18 @@
           <!-- <span v-if="!purchased" class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span> -->
         </span>
 
-        <div
-        class="relative bg-black text-white text-center rounded-lg h-[55vh] text-3xl">
-            <span class="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">直播尚未開始</span>
-        </div>           
-      </div>   
+        <div class="relative h-[55vh] rounded-lg bg-black text-center text-3xl text-white">
+          <span class="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+            >直播尚未開始</span
+          >
+        </div>
+      </div>
 
-      <in-content-desc v-if="currentCourse.chapters" :current-course="currentCourse" :purchased="purchased"></in-content-desc>
+      <in-content-desc
+        v-if="currentCourse.chapters"
+        :current-course="currentCourse"
+        :purchased="purchased"
+      ></in-content-desc>
     </div>
 
     <in-content-teacher :teacher="currentCourse.teacherName"></in-content-teacher>

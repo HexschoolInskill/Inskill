@@ -24,8 +24,7 @@ const init = reactive({
   height: props.height,
   skin: 'oxide-dark',
   content_css: 'dark',
-  toolbar:
-    'undo redo link aligncenter alignjustify alignleft bold fontfamily fontsize forecolor h1 h2 h3 h4 h5 h6 hr'
+  toolbar: 'undo redo link aligncenter alignjustify alignleft bold fontfamily fontsize forecolor hr'
 })
 
 const editorContent = computed({

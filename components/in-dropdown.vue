@@ -1,7 +1,7 @@
 <template>
   <div class="in-dropdown">
     <div class="relative">
-      <div ref="triggerRef" @click="isOptionsShow = !isOptionsShow">
+      <div ref="triggerRef" class="inline-block" @click="isOptionsShow = !isOptionsShow">
         <slot :show="isOptionsShow"></slot>
       </div>
       <teleport to="body">
@@ -19,7 +19,7 @@
           >
             <div
               v-for="option in options"
-              :key="option.value"
+              :key="String(option.value)"
               :label="option.label"
               class="cursor-pointer whitespace-nowrap border-b border-solid border-gray-l px-6 py-2 last:border-0 hover:bg-gray-l"
               @click="handleSelect(option)"
@@ -37,7 +37,7 @@ const OPTIONS_SCALE_RATIO = 0.9
 
 export interface Option {
   label: string
-  value: string | number
+  value: string | number | boolean
 }
 </script>
 <script setup lang="ts">

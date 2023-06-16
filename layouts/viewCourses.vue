@@ -157,7 +157,7 @@
       </in-course-chat-room>
     </div>
   </in-container>
-  <slot v-if="courseType === 'Course'" name="footer"></slot>
+  <slot v-if="$route.fullPath.includes('course')" name="footer"></slot>
 </template>
 
 <script lang="ts" setup>

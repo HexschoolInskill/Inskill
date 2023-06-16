@@ -1,6 +1,6 @@
 <template>
   <!--課程內容介紹-->
-  <div :class="{'w-11/12': currentCourse.chapters}">
+  <div :class="{ 'w-11/12': currentCourse.chapters }">
     <div class="wrapper gradient rounded-lg p-4 px-6">
       <in-content-video v-if="currentCourse.videoUrl"></in-content-video>
 

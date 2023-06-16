@@ -1,5 +1,5 @@
 <template>
-  <div class="main gradient p-4 px-6">
+  <div class="main gradient rounded-lg p-4 px-6">
     <div class="courseTitle">
       <span class="flex items-center py-1">
         <h1 class="mb-1 mr-auto text-3xl font-bold">{{ currentCourse.title }}</h1>
@@ -22,7 +22,11 @@
 
     <div class="screen" @click="showToolPopup = false">
       <div class="inline-block w-full rounded-lg">
-        <video v-if="goLive" class="h-[55vh] w-full border rounded-lg" :class="{ 'h-[35vh]': goLive }">
+        <video
+          v-if="goLive"
+          class="h-[55vh] w-full rounded-lg border"
+          :class="{ 'h-[35vh]': goLive }"
+        >
           <source :src="currentCourse.videoUrl" type="video/mp4" />
         </video>
 
@@ -281,20 +285,18 @@
         >
           <div class="img">
             <svg
-              class="w-[100px]"
-              style="transform: rotate(135deg)"
               xmlns="http://www.w3.org/2000/svg"
-              height="1em"
-              viewBox="0 0 512 512"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 24 24"
             >
               <path
-                d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"
-                fill="#ffffff"
-              />
+                d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9c-.98.49-1.87 1.12-2.66 1.85c-.18.18-.43.28-.7.28c-.28 0-.53-.11-.71-.29L.29 13.08a.956.956 0 0 1-.29-.7c0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71c0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29c-.27 0-.52-.11-.7-.28a11.27 11.27 0 0 0-2.67-1.85a.996.996 0 0 1-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"
+                fill="currentColor"
+              ></path>
             </svg>
           </div>
 
-          {{ goLive ? '結束' : '開始' }}
+          <!-- {{ goLive ? '結束' : '開始' }} -->
         </div>
         <!-- webItemPopup -->
         <div v-if="showToolPopup" class="webItemPopup">
@@ -529,10 +531,6 @@ const broadcast = () => {
       @apply relative left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%];
     }
   }
-
-  // .smallMore{
-  //     @apply absolute bottom-[5px] right-[15px] text-lg font-semibold text-white;
-  // }
 }
 
 .btnNormal {
@@ -544,13 +542,17 @@ const broadcast = () => {
 }
 
 .webItemPopup {
-  @apply absolute top-0 min-h-[40px] w-[260px] translate-x-[-150px] translate-y-[-360px] rounded-sm bg-white px-[15px] pb-0 pt-[15px] text-black;
+  @apply absolute top-[50px] min-h-[40px] w-[260px] translate-x-[-150px] translate-y-[-360px] rounded rounded-sm bg-white px-[15px] pb-0 pt-[15px] text-black shadow;
 
   .popupItem {
     @apply flex items-start justify-start px-0 pb-[15px] pt-0 text-sm;
 
     .svg {
-      @apply px-0 pb-0 pt-[1px];
+      @apply flex items-center px-0 pb-0 pt-[1px];
+
+      svg {
+        @apply h-[20px] w-[20px];
+      }
     }
 
     .text {
@@ -565,13 +567,17 @@ const broadcast = () => {
   .item {
     @apply w-[100px] cursor-pointer text-center;
 
+    .btnNormal {
+      @apply rounded-lg pb-2 pt-1 transition-all hover:bg-[#262b2f];
+    }
+
     svg {
-      @apply mx-auto w-[50px];
+      @apply mx-auto h-[50px] w-[50px];
     }
   }
 
   .broadcastBtn {
-    @apply mt-[35px] w-[100px] rounded-lg pb-[10px] pt-2 text-center text-white;
+    @apply mt-[15px] w-[100px] rounded-lg pb-[10px] pt-2 text-center text-white transition-all;
 
     .img {
       @apply my-2;

@@ -16,10 +16,10 @@
             <div
               class="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center"
             >
-              <div v-if="isLoading"></div>
-              <template v-else-if="course.thumbnail">
+              <in-spin v-if="isLoading" :size="40" color="white" />
+              <div v-else-if="course.thumbnail">
                 <img
-                  :src="course.thumbnail"
+                  :src="previewNoCache()"
                   alt=""
                   class="absolute left-0 top-0 h-full w-full object-cover"
                 />
@@ -27,22 +27,12 @@
                   class="transition-base absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100"
                 >
                   <in-btn ghost size="small" class="pointer-events-none mt-5">重新選擇圖片</in-btn>
-                  <in-btn
-                    v-if="course.thumbnail"
-                    ghost
-                    type="error"
-                    size="small"
-                    class="mt-5 gap-3"
-                  >
-                    <i class="icon-trash"></i>
-                    <p class="text-fs-6">刪除圖片</p>
-                  </in-btn>
                 </div>
-              </template>
-              <template v-else>
+              </div>
+              <div v-else>
                 <p class="text-fs-6 text-white">課程圖片建議尺寸 1200 * 2000</p>
                 <in-btn size="small" ghost class="pointer-events-none mt-5">上傳課程圖片</in-btn>
-              </template>
+              </div>
             </div>
           </label>
         </section>
@@ -147,6 +137,10 @@ const options: Option[] = [
 
 const v$ = useVuelidate(rules, course)
 
+const previewNoCache = () => {
+  return course.value.thumbnail + `&ver=${Date.now()}`
+}
+
 async function handleThumbnailChange(event: Event) {
   const target = event.target as HTMLInputElement
   const file = target?.files?.[0]
@@ -162,7 +156,7 @@ async function handleThumbnailChange(event: Event) {
       route.params.courseId as string,
       file
     )
-    Object.assign(course.value, response)
+    course.value = response
     notification.success('更新成功')
   } catch (error) {
     notification.error((error as Error).message)
@@ -170,14 +164,6 @@ async function handleThumbnailChange(event: Event) {
     isLoading.value = false
   }
 }
-
-watch(
-  course,
-  () => {
-    console.log('@@')
-  },
-  { deep: true }
-)
 
 async function saveCourse() {
   const isValid = await v$.value.$validate()

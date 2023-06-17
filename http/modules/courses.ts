@@ -110,6 +110,14 @@ interface UpdateLessonPayload {
   freePreview?: boolean
 }
 
+interface UpdateChapterPayload {
+  courseId: string
+  chapterId: string
+  field: 'title' | 'sort'
+  title?: string
+  sort?: number
+}
+
 interface CollectCoursePayload {
   courseId: string
   courseType: CollectCourseType
@@ -167,7 +175,6 @@ class CoursesModule extends HttpFactory {
     )
   }
 
-  // updateCourse()
   async updateCourse({
     courseId,
     ...payload
@@ -221,28 +228,14 @@ class CoursesModule extends HttpFactory {
     })
   }
 
-  async renameChapter(courseId: string, chapterId: string, title: string) {
-    return await this.call<ChapterAndLessonResponse>(`${this.RESOURCE}/chapter`, 'PATCH', {
-      courseId,
-      chapterId,
-      title,
-      field: 'title'
-    })
+  async updateChapter(payload: UpdateChapterPayload) {
+    return await this.call<ChapterAndLessonResponse>(`${this.RESOURCE}/chapter`, 'PATCH', payload)
   }
 
   async deleteChapter(courseId: string, chapterId: string) {
     return await this.call<{
       success: boolean
     }>(`${this.RESOURCE}/chapter?courseId=${courseId}&chapterId=${chapterId}`, 'DELETE')
-  }
-
-  async sortChapter(sortPayload: {
-    courseId: string
-    chapterId: string
-    sort: number
-    field: string
-  }) {
-    return await this.call<{ success: boolean }>(`${this.RESOURCE}/chapter`, 'PATCH', sortPayload)
   }
 
   searchCourse(payload: SearchPayload): Promise<SearchCourses<NormalCourse | StreamCourse>>

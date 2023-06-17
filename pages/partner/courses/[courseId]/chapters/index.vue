@@ -100,19 +100,15 @@ async function sortChapter(event: any) {
   try {
     const targetId = (event?.item as HTMLDivElement)?.dataset?.id
     if (!targetId) return
-
-    const targetChapter = course.value.chapters
-      .map((chapter, index) => ({
-        chapterId: chapter._id,
-        courseId: route.params.courseId as string,
-        sort: index + 1,
-        field: 'sort'
-      }))
-      .find((chapter) => chapter.chapterId === targetId)
-    if (!targetChapter) return
-    await app.$api.course.sortChapter(targetChapter)
     course.value.chapters.forEach((chapter, index) => (chapter.sort = index + 1))
-
+    const targetChapter = course.value.chapters.find((chapter) => chapter._id === targetId)
+    if (!targetChapter) return
+    await app.$api.course.updateChapter({
+      courseId: route.params.courseId as string,
+      chapterId: targetChapter._id,
+      sort: targetChapter.sort,
+      field: 'sort'
+    })
     notification.success('更新成功')
   } catch (error) {
     notification.error((error as Error).message)

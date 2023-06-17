@@ -80,11 +80,12 @@ watch(isEditing, (editing) => {
 async function handleEdit() {
   emit('loadingStart')
   try {
-    const { updatedChapter } = await app.$api.course.renameChapter(
-      route.params.courseId as string,
-      props.id,
-      title.value
-    )
+    const { updatedChapter } = await app.$api.course.updateChapter({
+      courseId: route.params.courseId as string,
+      chapterId: props.id,
+      title: title.value,
+      field: 'title'
+    })
     course.value.chapters = updatedChapter
     isEditing.value = false
     notification.success('更新成功')

@@ -2,7 +2,9 @@
   <div class="main gradient rounded-lg p-4 px-6">
     <div class="courseTitle">
       <span class="flex items-center py-1">
-        <h1 class="mb-1 mr-auto text-3xl font-bold">{{ currentCourse.title }}</h1>
+        <h1 class="mb-1 mr-auto text-3xl font-bold" @click="checkStreamNode">
+          {{ currentCourse.title }}
+        </h1>
 
         <svg
           class="mr-4 w-[15px]"
@@ -23,11 +25,13 @@
     <div class="screen" @click="showToolPopup = false">
       <div class="inline-block w-full rounded-lg">
         <video
-          v-if="goLive"
           class="h-[55vh] w-full rounded-lg border"
           :class="{ 'h-[35vh]': goLive }"
+          id="partnerScreen"
+          autoplay
+          playsinline
         >
-          <source :src="currentCourse.videoUrl" type="video/mp4" />
+          <!-- <source :src="currentCourse.videoUrl" type="video/mp4" /> -->
         </video>
 
         <!-- <iframe 
@@ -38,13 +42,13 @@
         frameborder="0">
         </iframe> -->
 
-        <div v-else class="relative h-[55vh] rounded-lg bg-black text-center text-3xl text-white">
+        <!-- <div v-else class="relative h-[55vh] rounded-lg bg-black text-center text-3xl text-white">
           <span class="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
             >直播尚未開始</span
           >
-        </div>
+        </div> -->
 
-        <div v-if="goLive" class="smallScreen text-7xl">
+        <div v-if="goLive" class="smallScreen text-7xl" v-show="false">
           <svg
             class="smallProfile"
             xmlns="http://www.w3.org/2000/svg"
@@ -125,7 +129,7 @@
     <!-- webBottom -->
     <div class="webBottomTool">
       <!-- item -->
-      <div class="item">
+      <div class="item" @click="shareScreen">
         <div class="btnNormal">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -144,7 +148,7 @@
         </div>
       </div>
       <!-- item -->
-      <div class="item">
+      <div class="item" @click="switchCamera">
         <div class="btnNormal">
           <div class="img">
             <svg
@@ -163,7 +167,7 @@
         </div>
       </div>
       <!-- item -->
-      <div class="item">
+      <div class="item" @click="switchMic">
         <div class="btnNormal">
           <div class="img">
             <svg
@@ -500,20 +504,152 @@
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import useCourses from '~/stores/useCourses'
-
+import { WebRTCAdaptor } from '../../../../plugins/webRtcApp'
 definePageMeta({
   layout: 'view-courses'
 })
 
 const { currentCourse } = storeToRefs(useCourses())
-
+console.log(`currentCourse`, currentCourse.value)
 const goLive = ref(false)
 const showToolPopup = ref(false)
 // const video = ref('/video/short.mp4')
+let streamNode = null
+const videoDevices = ref([])
+const audioDevices = ref([])
+const streamId = ref('')
+const cameraOn = ref(true)
+const screenOn = ref(false)
+const micOn = ref(true)
 
-const broadcast = () => {
+const broadcast = async () => {
+  await getStreamId()
   goLive.value = !goLive.value
+  if (goLive.value) {
+    const status = streamNode.iceConnectionState(streamId.value)
+    console.log(`publish status`, status)
+    streamNode.publish(streamId.value)
+  } else {
+    console.log(`stop`)
+    streamNode.stop(streamId.value)
+  }
 }
+
+onMounted(async () => {
+  const devices = await navigator.mediaDevices.enumerateDevices()
+  videoDevices.value = devices.filter((device) => device.kind === 'videoinput')
+  audioDevices.value = devices.filter((device) => device.kind === 'audioinput')
+  await initWebRTC()
+})
+
+const getStreamId = async () => {
+  if (streamId.value) return streamId.value
+
+  const response = await $fetch(`/api/liveCourses/startLive`, {
+    method: 'POST',
+    body: JSON.stringify({
+      courseId: currentCourse.value._id
+    })
+  })
+  streamId.value = response.data.streamId
+  console.info(`streamId`, streamId.value)
+}
+const initWebRTC = async () => {
+  // connect to rtmp media server https://inskillmedia.demoto.me:5443/webRtcApp
+  streamNode = new WebRTCAdaptor({
+    websocket_url: 'wss://inskillmedia.demoto.me:5443/WebRTCApp/websocket?target=origin',
+    mediaConstraints: {
+      video: true,
+      audio: true
+    },
+    peerconnection_config: {
+      iceServers: [{ urls: 'stun:stun1.l.google.com:19302' }]
+    },
+    sdp_constraints: {
+      OfferToReceiveAudio: false,
+      OfferToReceiveVideo: false
+    },
+    localVideoId: 'partnerScreen', // <video id="id-of-video-element" autoplay muted></video>
+    bandwidth: 900, // default is 900 kbps, string can be 'unlimited'
+    dataChannelEnabled: false, // enable or disable data channel
+    callback: (info: string, obj: any) => {
+      if (info === 'publish_started') {
+        console.info('publish started')
+      } else if (info === 'publish_finished') {
+        console.info('publish finished')
+      } else {
+        // console.log(info + ' notification received')
+      }
+    },
+    callbackError: function (error: any) {
+      // console.info('error callback: ' + JSON.stringify(error))
+    }
+  })
+}
+
+const shareScreen = async () => {
+  await getStreamId()
+  if (screenOn.value) {
+    const camera = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+    })
+    streamNode.updateVideoTrack(camera, streamId.value, () => {}, true)
+    // streamNode.switchVideoCameraCapture(streamId.value)
+    screenOn.value = false
+  } else {
+    if (cameraOn.value) {
+      streamNode.switchDesktopCaptureWithCamera(streamId.value)
+      // console.log(streamNode)
+    } else {
+      streamNode.switchDesktopCapture(streamId.value)
+    }
+    screenOn.value = true
+  }
+}
+
+const switchCamera = async () => {
+  await getStreamId()
+  if (cameraOn.value) {
+    console.log(332)
+    // streamNode.switchDesktopCapture(streamId.value)
+    const camera = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+    })
+    streamNode.updateVideoTrack(camera, streamId.value, () => {}, true)
+    cameraOn.value = false
+  } else {
+    if (screenOn.value) {
+      streamNode.switchDesktopCaptureWithCamera(streamId.value)
+    } else {
+      streamNode.switchVideoCameraCapture(streamId.value)
+    }
+  }
+  // TODO: switch camera 的時候icon要變動
+}
+
+const switchMic = async () => {
+  await getStreamId()
+  if (micOn.value) {
+    streamNode.muteLocalMic()
+    micOn.value = !micOn.value
+  } else {
+    streamNode.unmuteLocalMic()
+    micOn.value = !micOn.value
+  }
+
+  //TODO : switch mic 的時候icon要變動
+}
+
+const checkStreamNode = async () => {
+  console.log(streamNode)
+}
+
+const studentPlayUrl = computed(() => {
+  // 如果是學生身分的話就把這個url 帶進iframe 即可
+  return `https://inskillmedia.demoto.me:5443/WebRTCApp/play.html?name=${streamId.value}&autoplay=true`
+})
 </script>
 
 <style lang="scss" scoped>

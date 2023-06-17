@@ -106,9 +106,9 @@ export async function createWebRTCApp(roomName: string): Promise<any> {
       })
     })
     const { status, statusText } = response
-    console.log(`createWebRTCApp status-statusText:`, status, statusText)
+    // console.log(`createWebRTCApp status-statusText:`, status, statusText)
     const data = await response.json()
-    console.log(`createWebRTCApp data:`, data)
+    // console.log(`createWebRTCApp data:`, data)
     return {
       success: true,
       data

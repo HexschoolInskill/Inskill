@@ -27,7 +27,7 @@ export async function getWebRTCAppList(): Promise<any> {
 
 export async function updateWebRTCAppEndPointList(
   webRTCAppId: string,
-  rtmpUrl: string
+  rtmpUrl: string 
 ): Promise<any> {
   // 更新媒體伺服器的webRTCApp 某個 stream 的 endPointList
   try {
@@ -106,9 +106,9 @@ export async function createWebRTCApp(roomName: string): Promise<any> {
       })
     })
     const { status, statusText } = response
-    console.log(`createWebRTCApp status-statusText:`, status, statusText)
+    // console.log(`createWebRTCApp status-statusText:`, status, statusText)
     const data = await response.json()
-    console.log(`createWebRTCApp data:`, data)
+    // console.log(`createWebRTCApp data:`, data)
     return {
       success: true,
       data

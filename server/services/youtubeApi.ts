@@ -152,7 +152,7 @@ async function bindBroadcast2Stream(liveBroadcastId: string, liveStreamId: strin
     // console.log(`bindBroadcast2StreamResponse : `,data)
     if (status === 400) throw data
     return {
-      success: true,
+      success: true, 
       data
     }
   } catch (err) {

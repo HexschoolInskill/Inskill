@@ -1,3 +1,4 @@
+/* eslint-disable */
 const API_ENDPOINT = process.env.MEDIA_SERVER_ENDPOINT
 export async function getWebRTCAppList(): Promise<any> {
   // 獲取媒體伺服器的webRTCApp list
@@ -121,3 +122,4 @@ export async function createWebRTCApp(roomName: string): Promise<any> {
     }
   }
 }
+/* eslint-disable */

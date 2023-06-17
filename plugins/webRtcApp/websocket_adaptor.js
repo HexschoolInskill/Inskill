@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable */
 export class WebSocketAdaptor {
   constructor(initialValues) {
     this.debug = false
@@ -165,3 +166,4 @@ export class WebSocketAdaptor {
     return this.connecting
   }
 }
+/* eslint-disable */

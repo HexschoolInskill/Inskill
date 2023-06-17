@@ -2,9 +2,9 @@
   <!--課程內容介紹-->
   <div :class="{ 'w-11/12': currentCourse.chapters }">
     <div class="wrapper gradient rounded-lg p-4 px-6">
-      <in-content-video v-if="currentCourse.videoUrl"></in-content-video>
+      <!-- <in-content-video v-if="currentCourse.videoUrl"></in-content-video> -->y
 
-      <div v-else class="courseTitle w-full">
+      <div class="courseTitle w-full">
         <span class="mb-2 flex items-center py-1">
           <h1 class="mb-1 mr-auto text-3xl font-bold">{{ currentCourse.title }}</h1>
 
@@ -23,7 +23,15 @@
           <!-- <span v-if="!purchased" class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span> -->
         </span>
 
-        <div class="relative h-[55vh] rounded-lg bg-black text-center text-3xl text-white">
+        <iframe
+          v-if="currentCourse.videoUrl"
+          class="h-[55vh] w-full"
+          :src="studentPlayUrl"
+          frameborder="0"
+        >
+        </iframe>
+
+        <div v-else class="relative h-[55vh] rounded-lg bg-black text-center text-3xl text-white">
           <span class="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
             >直播尚未開始</span
           >
@@ -59,7 +67,7 @@ import inContentDesc from './components/in-content-desc.vue'
 import inContentTeacher from './components/in-content-teacher.vue'
 import inContentReview from './components/in-content-review.vue'
 import inContentQuestion from './components/in-content-question.vue'
-import inContentVideo from './components/in-content-video.vue'
+// import inContentVideo from './components/in-content-video.vue'
 
 import useCourses from '~/stores/useCourses'
 import useUser from '~/stores/useUser'
@@ -80,5 +88,10 @@ const currenChapterLesson: any = computed(() => {
   return route.query.courseType === 'normal'
     ? currentCourse.value?.chapters[chapter].lessons[lesson]
     : {}
+})
+
+const studentPlayUrl = computed(() => {
+  // 如果是學生身分的話就把這個url 帶進iframe 即可
+  return `https://inskillmedia.demoto.me:5443/WebRTCApp/play.html?name=${currentCourse.value.videoUrl}&autoplay=true`
 })
 </script>

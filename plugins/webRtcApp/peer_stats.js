@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable */
 export class PeerStats {
   constructor(streamId) {
     this.streamId = streamId
@@ -117,3 +118,4 @@ export class PeerStats {
     }
   }
 }
+/* eslint-disable */

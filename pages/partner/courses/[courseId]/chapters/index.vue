@@ -4,7 +4,7 @@
       v-model="course.chapters"
       item-key="_id"
       handle=".chapter-handler"
-      @end="handleSort($event, 'chapter')"
+      @end="sortChapter"
     >
       <template #item="{ element: chapter }">
         <div :data-id="chapter._id" class="chapter mb-5 last:mb-0">
@@ -26,7 +26,7 @@
                 v-model="chapter.lessons"
                 item-key="_id"
                 handle=".lesson-handler"
-                @end="handleSort($event, 'lesson', chapter.id)"
+                @end="sortLesson($event, chapter._id)"
               >
                 <template #item="{ element: lesson }">
                   <lesson-item
@@ -70,8 +70,9 @@
               :disabled="isLoading"
               size="small"
               @click="createItem(currentPopupType, currentItemTitle, currentChapterId)"
-              >確定</in-btn
             >
+              確定
+            </in-btn>
           </div>
         </in-card>
       </in-container>
@@ -94,37 +95,24 @@ const route = useRoute()
 const { currentCourse: course, isLoading } = storeToRefs(useEditCourse())
 const { notification } = useNotification()
 
-async function handleSort(event: any, type: ItemType, chapterId?: string) {
+async function sortChapter(event: any) {
   isLoading.value = true
-
   try {
     const targetId = (event?.item as HTMLDivElement)?.dataset?.id
     if (!targetId) return
 
-    if (type === 'chapter') {
-      const targetChapter = course.value.chapters
-        .map((chapter, index) => ({
-          chapterId: chapter._id,
-          courseId: route.params.courseId as string,
-          sort: index + 1,
-          field: 'sort'
-        }))
-        .find((chapter) => chapter.chapterId === targetId)
-      if (!targetChapter) return
-      await app.$api.course.sortChapter(targetChapter)
-      course.value.chapters.forEach((chapter, index) => (chapter.sort = index + 1))
-    }
+    const targetChapter = course.value.chapters
+      .map((chapter, index) => ({
+        chapterId: chapter._id,
+        courseId: route.params.courseId as string,
+        sort: index + 1,
+        field: 'sort'
+      }))
+      .find((chapter) => chapter.chapterId === targetId)
+    if (!targetChapter) return
+    await app.$api.course.sortChapter(targetChapter)
+    course.value.chapters.forEach((chapter, index) => (chapter.sort = index + 1))
 
-    if (type === 'lesson') {
-      if (!chapterId) return
-      const targetChapter = course.value.chapters.find((chapter) => chapter._id === chapterId)
-      console.log(
-        targetChapter?.lessons.map((lesson, index) => ({
-          id: lesson._id,
-          sort: index + 1
-        }))
-      )
-    }
     notification.success('更新成功')
   } catch (error) {
     notification.error((error as Error).message)
@@ -132,6 +120,35 @@ async function handleSort(event: any, type: ItemType, chapterId?: string) {
     isLoading.value = false
   }
 }
+
+async function sortLesson(event: any, chapterId: string) {
+  isLoading.value = true
+  try {
+    const targetId = (event?.item as HTMLDivElement)?.dataset?.id
+    if (!targetId) return
+
+    const targetChapter = course.value.chapters.find((chapter) => chapter._id === chapterId)
+    if (!targetChapter) return
+    targetChapter.lessons.forEach((lesson, index) => (lesson.sort = index + 1))
+    const targetLesson = targetChapter.lessons.find((chapter) => chapter._id === targetId)
+    if (!targetLesson) return
+    const { updatedChapter } = await app.$api.course.updateLesson({
+      courseId: route.params.courseId as string,
+      chapterId,
+      lessonId: targetLesson._id,
+      sort: targetLesson.sort,
+      field: 'sort'
+    })
+    course.value.chapters = updatedChapter
+
+    notification.success('更新成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    isLoading.value = false
+  }
+}
+
 const currentPopupType = ref<ItemType | ''>('')
 const currentChapterId = ref('')
 const currentItemTitle = ref('')

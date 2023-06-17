@@ -1,5 +1,8 @@
 <template>
-  <div class="flex h-15 w-full items-center border-b border-solid border-white/50 px-6">
+  <div
+    :data-id="id"
+    class="flex h-15 w-full items-center border-b border-solid border-white/50 px-6"
+  >
     <div class="flex-shrink-0 cursor-grab pr-6">
       <i class="lesson-handler icon-reorder text-white"></i>
     </div>
@@ -23,7 +26,7 @@
         <button @click="isEditing = false"><i class="icon-close"></i></button>
       </template>
       <template v-else>
-        <in-select v-model="isPublish" :options="publishOptions" />
+        <in-select :value="publish" :options="publishOptions" @select="handlePublish" />
         <in-dropdown v-slot="{ show }" :options="options" @select="handleOptionSelect">
           <div
             class="transition-base flex h-10 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full text-white group-hover:bg-gray"
@@ -59,7 +62,7 @@ const app = useNuxtApp()
 const route = useRoute()
 const { confirm } = useConfirm()
 const { notification } = useNotification()
-const { currentCourse: course } = storeToRefs(useEditCourse())
+const { currentCourse: course, isLoading } = storeToRefs(useEditCourse())
 
 const props = defineProps({
   value: {
@@ -82,22 +85,14 @@ const props = defineProps({
 
 const title = ref('')
 const isEditing = ref(false)
-const isPublish = computed({
-  get() {
-    return props.publish ? 'publish' : 'unpublish'
-  },
-  set(value) {
-    console.log(value)
-  }
-})
 const publishOptions: Option[] = [
   {
     label: '發布',
-    value: 'publish'
+    value: true
   },
   {
     label: '未發布',
-    value: 'unpublish'
+    value: false
   }
 ]
 const options: Option[] = [
@@ -120,12 +115,13 @@ watch(isEditing, (editing) => {
 async function handleEdit() {
   emit('loadingStart')
   try {
-    const { updatedChapter } = await app.$api.course.renameLesson(
-      route.params.courseId as string,
-      props.chapterId,
-      props.id,
-      title.value
-    )
+    const { updatedChapter } = await app.$api.course.updateLesson({
+      courseId: route.params.courseId as string,
+      chapterId: props.chapterId,
+      lessonId: props.id,
+      title: title.value,
+      field: 'title'
+    })
     course.value.chapters = updatedChapter
     isEditing.value = false
     notification.success('更新成功')
@@ -162,6 +158,29 @@ function handleOptionSelect(option: Option) {
       handleDelete(route.params.courseId as string, props.chapterId, props.id)
       break
     default:
+  }
+}
+
+async function handlePublish(isPublish: boolean) {
+  const confirmTitle = props.publish ? '取消發布' : '發布課堂'
+  const confirmMessage = props.publish ? '所有學生都將看不到該課堂' : '將會把該課堂向所有學生公開'
+  const isConfirm = await confirm(confirmTitle, confirmMessage)
+  if (!isConfirm) return
+  isLoading.value = true
+  try {
+    const { updatedChapter } = await app.$api.course.updateLesson({
+      courseId: route.params.courseId as string,
+      chapterId: props.chapterId,
+      lessonId: props.id,
+      isPublish,
+      field: 'isPublish'
+    })
+    course.value.chapters = updatedChapter
+    notification.success('更新成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    isLoading.value = false
   }
 }
 </script>

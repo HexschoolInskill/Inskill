@@ -4,15 +4,12 @@ import Joi from 'joi'
 import models from '../../model/schema'
 import { createLive } from '../../services/youtubeApi'
 // import { createLive, startLive } from '../../services/youtubeApi'
-import {
-  createWebRTCApp,
-  updateWebRTCAppEndPointList
-} from '../../services/mediaServer'
+import { createWebRTCApp, updateWebRTCAppEndPointList } from '../../services/mediaServer'
 import { model } from 'mongoose'
 const youtubeRTMPEndpoint = 'rtmp://a.rtmp.youtube.com/live2'
 export default defineEventHandler(async (event) => {
   const schema = Joi.object({
-    courseId: Joi.string().required(),
+    courseId: Joi.string().required()
     // chapterId: Joi.string().required(),
     // lessonId: Joi.number().required()
   })
@@ -23,19 +20,19 @@ export default defineEventHandler(async (event) => {
     const { userInfo, userID } = event.context.auth
 
     // check user is the teacher belong to LiveCourse
-    const {courseId} = value
+    const { courseId } = value
     const liveCourse = await models.LiveCourse.findById(courseId)
     if (!liveCourse) {
-        return createError({
-            statusCode: 400,
-            message: 'LiveCourse not found'
-        })
+      return createError({
+        statusCode: 400,
+        message: 'LiveCourse not found'
+      })
     }
     if (liveCourse.teacherId.toString() !== userID) {
-        return createError({
-            statusCode: 400,
-            message: 'User is not the teacher belong to LiveCourse'
-        })
+      return createError({
+        statusCode: 400,
+        message: 'User is not the teacher belong to LiveCourse'
+      })
     }
 
     // create a live stream from youtubeApi
@@ -48,12 +45,13 @@ export default defineEventHandler(async (event) => {
     // }
     // create new stream in media server with course title
     const courseTitle = liveCourse.title
-    const { success: createWebRTCAppResponseSuccess, data: createWebRTCAppResponse } = await createWebRTCApp(courseTitle)
+    const { success: createWebRTCAppResponseSuccess, data: createWebRTCAppResponse } =
+      await createWebRTCApp(courseTitle)
     if (!createWebRTCAppResponseSuccess) {
-        return createError({
-          statusCode: 400,
-          message: 'Create webRTCApp fail'
-        })
+      return createError({
+        statusCode: 400,
+        message: 'Create webRTCApp fail'
+      })
     }
     const { streamId } = createWebRTCAppResponse
     console.log('streamId', streamId)
@@ -64,7 +62,7 @@ export default defineEventHandler(async (event) => {
     // const {
     //     success: updateWebRTCAppEndPointListResponseSuccess,
     // } = await updateWebRTCAppEndPointList(streamId, `${youtubeRTMPEndpoint}/${liveResponse.id}`)
-    
+
     // if (!updateWebRTCAppEndPointListResponseSuccess) {
     //     return createError({
     //         statusCode: 400,
@@ -72,10 +70,10 @@ export default defineEventHandler(async (event) => {
     //     })
     // }
     return {
-        statusCode: 200,
-        data: {
-          streamId
-        }
+      statusCode: 200,
+      data: {
+        streamId
+      }
     }
   } catch (error: any) {
     return createError({

@@ -27,7 +27,7 @@ export async function getWebRTCAppList(): Promise<any> {
 
 export async function updateWebRTCAppEndPointList(
   webRTCAppId: string,
-  rtmpUrl: string 
+  rtmpUrl: string
 ): Promise<any> {
   // 更新媒體伺服器的webRTCApp 某個 stream 的 endPointList
   try {

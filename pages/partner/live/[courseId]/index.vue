@@ -2,7 +2,9 @@
   <div class="main gradient rounded-lg p-4 px-6">
     <div class="courseTitle">
       <span class="flex items-center py-1">
-        <h1 class="mb-1 mr-auto text-3xl font-bold" @click="checkStreamNode" >{{ currentCourse.title }}</h1>
+        <h1 class="mb-1 mr-auto text-3xl font-bold" @click="checkStreamNode">
+          {{ currentCourse.title }}
+        </h1>
 
         <svg
           class="mr-4 w-[15px]"
@@ -502,7 +504,7 @@
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import useCourses from '~/stores/useCourses'
-import {WebRTCAdaptor} from '../../../../plugins/webRtcApp'
+import { WebRTCAdaptor } from '../../../../plugins/webRtcApp'
 definePageMeta({
   layout: 'view-courses'
 })
@@ -523,7 +525,7 @@ const micOn = ref(true)
 const broadcast = async () => {
   await getStreamId()
   goLive.value = !goLive.value
-  if(goLive.value) {
+  if (goLive.value) {
     const status = streamNode.iceConnectionState(streamId.value)
     console.log(`publish status`, status)
     streamNode.publish(streamId.value)
@@ -531,23 +533,22 @@ const broadcast = async () => {
     console.log(`stop`)
     streamNode.stop(streamId.value)
   }
-} 
+}
 
 onMounted(async () => {
   const devices = await navigator.mediaDevices.enumerateDevices()
   videoDevices.value = devices.filter((device) => device.kind === 'videoinput')
   audioDevices.value = devices.filter((device) => device.kind === 'audioinput')
   await initWebRTC()
-  
 })
 
 const getStreamId = async () => {
-  if(streamId.value) return streamId.value
+  if (streamId.value) return streamId.value
 
   const response = await $fetch(`/api/liveCourses/startLive`, {
-    method : 'POST',
-    body : JSON.stringify({
-      courseId : currentCourse.value._id
+    method: 'POST',
+    body: JSON.stringify({
+      courseId: currentCourse.value._id
     })
   })
   streamId.value = response.data.streamId
@@ -586,10 +587,9 @@ const initWebRTC = async () => {
   })
 }
 
-
 const shareScreen = async () => {
   await getStreamId()
-  if(screenOn.value) {
+  if (screenOn.value) {
     const camera = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: true
@@ -598,7 +598,7 @@ const shareScreen = async () => {
     // streamNode.switchVideoCameraCapture(streamId.value)
     screenOn.value = false
   } else {
-    if(cameraOn.value) {
+    if (cameraOn.value) {
       streamNode.switchDesktopCaptureWithCamera(streamId.value)
       // console.log(streamNode)
     } else {
@@ -606,22 +606,21 @@ const shareScreen = async () => {
     }
     screenOn.value = true
   }
-
 }
 
 const switchCamera = async () => {
   await getStreamId()
-  if(cameraOn.value) {
+  if (cameraOn.value) {
     console.log(332)
     // streamNode.switchDesktopCapture(streamId.value)
     const camera = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: true
     })
-    streamNode.updateVideoTrack(camera, streamId.value, ()=>{}, true)
+    streamNode.updateVideoTrack(camera, streamId.value, () => {}, true)
     cameraOn.value = false
   } else {
-    if(screenOn.value) {
+    if (screenOn.value) {
       streamNode.switchDesktopCaptureWithCamera(streamId.value)
     } else {
       streamNode.switchVideoCameraCapture(streamId.value)
@@ -632,7 +631,7 @@ const switchCamera = async () => {
 
 const switchMic = async () => {
   await getStreamId()
-  if(micOn.value) {
+  if (micOn.value) {
     streamNode.muteLocalMic()
     micOn.value = !micOn.value
   } else {
@@ -643,7 +642,7 @@ const switchMic = async () => {
   //TODO : switch mic 的時候icon要變動
 }
 
-const checkStreamNode = async () =>{
+const checkStreamNode = async () => {
   console.log(streamNode)
 }
 

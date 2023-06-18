@@ -11,13 +11,12 @@
   </client-only>
 </template>
 <script lang="ts" setup>
-import { CodeJar } from 'codejar'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github-dark.css'
 
 const editorRef = ref<HTMLElement | null>(null)
 const currentLang = ref<string>('html')
-let jar: ReturnType<typeof CodeJar>
+let jar: any
 
 const props = defineProps({
   modelValue: {
@@ -43,7 +42,7 @@ if (process.client) {
         }).value
         editor.innerHTML = result
       })
-      jar.onUpdate((code) => {
+      jar.onUpdate((code: string) => {
         position = jar && jar.save()
         emit('update:modelValue', code)
       })

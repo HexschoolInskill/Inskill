@@ -10,7 +10,7 @@
       <in-input v-if="isEditing" v-model="title" class="text-black" @keyup.enter="handleEdit" />
       <template v-else>
         <nuxt-link
-          :to="`/partner/courses/${$route.params.courseId}/chapters/lesson/${id}`"
+          :to="`/partner/courses/${$route.params.courseId}/${chapterId}/${id}`"
           class="text-fs-6 group relative inline-block"
         >
           <p class="line-clamp-1">{{ value }}</p>

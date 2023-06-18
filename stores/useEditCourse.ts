@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
-import { NormalCourse } from '@/http/modules/courses'
+import { NormalCourse, CourseLesson } from '@/http/modules/courses'
+import { LessonContent } from '@/http/modules/lessonContent'
 
 export default defineStore('editCourse', () => {
-  const currentCourse = reactive<NormalCourse>({
+  const currentCourse = ref<NormalCourse>({
     _id: '',
     title: '',
     description: '',
@@ -20,11 +21,15 @@ export default defineStore('editCourse', () => {
     chapter: 0,
     createdAt: ''
   })
+  const currentLesson = ref<CourseLesson | null>(null)
+  const currentContents = ref<LessonContent[]>([])
 
   const isLoading = ref(false)
 
   return {
     currentCourse,
+    currentLesson,
+    currentContents,
     isLoading
   }
 })

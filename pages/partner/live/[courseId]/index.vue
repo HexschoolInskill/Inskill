@@ -25,9 +25,9 @@
     <div class="screen" @click="showToolPopup = false">
       <div class="inline-block w-full rounded-lg">
         <video
+          id="partnerScreen"
           class="h-[55vh] w-full rounded-lg border"
           :class="{ 'h-[35vh]': goLive }"
-          id="partnerScreen"
           autoplay
           playsinline
         >
@@ -48,7 +48,7 @@
           >
         </div> -->
 
-        <div v-if="goLive" class="smallScreen text-7xl" v-show="false">
+        <div v-if="goLive" v-show="false" class="smallScreen text-7xl">
           <svg
             class="smallProfile"
             xmlns="http://www.w3.org/2000/svg"
@@ -503,8 +503,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import useCourses from '~/stores/useCourses'
 import { WebRTCAdaptor } from '../../../../plugins/webRtcApp'
+import useCourses from '~/stores/useCourses'
 definePageMeta({
   layout: 'view-courses'
 })
@@ -619,12 +619,10 @@ const switchCamera = async () => {
     })
     streamNode.updateVideoTrack(camera, streamId.value, () => {}, true)
     cameraOn.value = false
+  } else if (screenOn.value) {
+    streamNode.switchDesktopCaptureWithCamera(streamId.value)
   } else {
-    if (screenOn.value) {
-      streamNode.switchDesktopCaptureWithCamera(streamId.value)
-    } else {
-      streamNode.switchVideoCameraCapture(streamId.value)
-    }
+    streamNode.switchVideoCameraCapture(streamId.value)
   }
   // TODO: switch camera 的時候icon要變動
 }
@@ -639,7 +637,7 @@ const switchMic = async () => {
     micOn.value = !micOn.value
   }
 
-  //TODO : switch mic 的時候icon要變動
+  // TODO : switch mic 的時候icon要變動
 }
 
 const checkStreamNode = async () => {

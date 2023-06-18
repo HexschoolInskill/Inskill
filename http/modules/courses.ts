@@ -1,4 +1,5 @@
 import HttpFactory from '../factory'
+import type { LessonContent } from './lessonContent'
 
 export type CourseSortBy = 'popular' | 'praise' | 'time'
 export type CourseCategory = 'normal' | 'stream'
@@ -10,15 +11,6 @@ interface cart {
   isCart: boolean
 }
 
-export interface LessonContent {
-  contentType: string
-  content: string
-  sort: number
-  _id: string
-  createdAt?: string
-  updatedAt?: string
-  duration?: number
-}
 export interface LessonQuestion {
   userId: string
   comment: string
@@ -41,6 +33,7 @@ export interface CourseLesson {
   description: string
   freePreview: boolean
   sort: number
+  isPublish: boolean
   lessonContent: LessonContent[]
   question: LessonQuestion[]
   _id: string
@@ -73,8 +66,8 @@ export interface NormalCourse extends Course {
   isPublic: boolean
   createdAt: string
   scoreCount: number
-  course?: number
-  chapter?: number
+  course: number
+  chapter: number
   chapters: CourseChapter[]
 }
 export interface StreamCourse extends Course {
@@ -238,6 +231,7 @@ class CoursesModule extends HttpFactory {
     }>(`${this.RESOURCE}/chapter?courseId=${courseId}&chapterId=${chapterId}`, 'DELETE')
   }
 
+  searchCourse(): Promise<IndexCourses>
   searchCourse(payload: SearchPayload): Promise<SearchCourses<NormalCourse | StreamCourse>>
   async searchCourse(payload?: SearchPayload) {
     if (payload) {

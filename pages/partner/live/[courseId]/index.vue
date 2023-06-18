@@ -26,9 +26,9 @@
     <div class="screen" @click="showToolPopup = false">
       <div class="inline-block w-full rounded-lg">
         <video
+          id="partnerScreen"
           class="h-[55vh] w-full rounded-lg border"
           :class="{ 'h-[35vh]': goLive }"
-          id="partnerScreen"
           autoplay
           playsinline
         >
@@ -49,7 +49,7 @@
           >
         </div> -->
 
-        <div v-if="goLive" class="smallScreen text-7xl" v-show="false">
+        <div v-if="goLive" v-show="false" class="smallScreen text-7xl">
           <svg
             class="smallProfile"
             xmlns="http://www.w3.org/2000/svg"
@@ -153,6 +153,7 @@
         <div class="btnNormal">
           <div class="img">
             <svg
+              v-if="cameraOn"
               xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink"
               viewBox="0 0 576 512"
@@ -161,6 +162,20 @@
                 d="M336.2 64H47.8C21.4 64 0 85.4 0 111.8v288.4C0 426.6 21.4 448 47.8 448h288.4c26.4 0 47.8-21.4 47.8-47.8V111.8c0-26.4-21.4-47.8-47.8-47.8zm189.4 37.7L416 177.3v157.4l109.6 75.5c21.2 14.6 50.4-.3 50.4-25.8V127.5c0-25.4-29.1-40.4-50.4-25.8z"
                 fill="currentColor"
               ></path>
+            </svg>
+
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 20 20"
+            >
+              <g fill="none">
+                <path
+                  d="M2.854 2.146a.5.5 0 1 0-.708.708l1.355 1.354A2.5 2.5 0 0 0 2 6.5v7A2.5 2.5 0 0 0 4.5 16h6a2.5 2.5 0 0 0 2.492-2.3l4.154 4.154a.5.5 0 0 0 .708-.708l-15-15zm13.91 12.286l-1.41-1.199L14 11.88V7.93l2.77-2.314a.75.75 0 0 1 1.23.576v7.667a.75.75 0 0 1-1.236.572zM13 10.879l-6.879-6.88H10.5A2.5 2.5 0 0 1 13 6.5v4.38z"
+                  fill="currentColor"
+                ></path>
+              </g>
             </svg>
 
             <span>視訊鏡頭</span>
@@ -172,6 +187,7 @@
         <div class="btnNormal">
           <div class="img">
             <svg
+              v-if="micOn"
               version="1.1"
               xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -205,6 +221,50 @@
   c0,0,0,0,0,0s0,0,0,0C317.4,228.2,306.8,202.1,287.5,182.5z"
                   fill="currentColor"
                 ></path>
+              </g>
+            </svg>
+
+            <svg
+              v-else
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 512 512"
+              enable-background="new 0 0 512 512"
+              xml:space="preserve"
+            >
+              <g>
+                <path
+                  d="M390.1,464c-4.9,0-9.7-2.5-12.3-7L149.7,69.3c-4-6.7-1.7-15.4,5.1-19.3c6.8-3.9,15.5-1.7,19.5,5.1l228.1,387.7
+  c4,6.7,1.7,15.4-5.1,19.3C395.1,463.4,392.6,464,390.1,464z"
+                  fill="currentColor"
+                ></path>
+                <g>
+                  <path
+                    d="M133,200H80c-8.9,0-16,7.2-16,16v80c0,8.8,7.2,16,16,16H133l65.4,52.5c2.9,2.3,6.5,3.5,10.1,3.5c2.4,0,4.7-0.5,6.9-1.6
+    c5.6-2.7,9.1-8.3,9.1-14.4V227.9l-40.5-68.8L133,200z"
+                    fill="currentColor"
+                  ></path>
+                  <path
+                    d="M448,256C448,256,448,256,448,256c0-59.3-23.3-114.9-65.5-156.5c-4.7-4.7-12.3-4.6-17,0.1c-4.7,4.7-4.6,12.3,0.1,17
+    c37.7,37.1,58.4,86.6,58.4,139.4c0,0,0,0,0,0s0,0,0,0c0,44.4-14.7,86.4-41.7,120.8l13,22C429.4,359.1,448,309,448,256
+    C448,256,448,256,448,256z"
+                    fill="currentColor"
+                  ></path>
+                  <path
+                    d="M385.2,256C385.2,256,385.2,256,385.2,256C385.2,256,385.2,256,385.2,256c0-43.5-16.7-84.3-46.9-114.9
+    c-4.7-4.7-12.3-4.8-17-0.1c-4.7,4.7-4.8,12.3-0.1,17c25.8,26.1,40,60.9,40,98.1c0,0,0,0,0,0s0,0,0,0c0,21.6-4.8,42.5-13.9,61.2
+    l14.2,24.1C376.9,316,385.2,286.7,385.2,256z"
+                    fill="currentColor"
+                  ></path>
+                  <path
+                    d="M317.6,256C317.6,256,317.6,256,317.6,256C317.6,256,317.6,256,317.6,256c0-27.8-10.7-53.9-30-73.4
+    c-4.7-4.7-12.3-4.8-17-0.1c-0.6,0.6-1.1,1.2-1.6,1.9l48.1,81.8C317.4,262.8,317.6,259.4,317.6,256z"
+                    fill="currentColor"
+                  ></path>
+                </g>
               </g>
             </svg>
 
@@ -504,20 +564,22 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import useCourses from '~/stores/useCourses'
 import { WebRTCAdaptor } from '../../../../plugins/webRtcApp'
+import useCourses from '~/stores/useCourses'
+import useNotification from '~~/stores/useNotification'
+
 definePageMeta({
   layout: 'view-courses'
 })
 
+const { notification } = useNotification()
 const { currentCourse } = storeToRefs(useCourses())
-console.log(`currentCourse`, currentCourse.value)
 const goLive = ref(false)
 const showToolPopup = ref(false)
 // const video = ref('/video/short.mp4')
-let streamNode = null
-const videoDevices = ref([])
-const audioDevices = ref([])
+let streamNode: any = null
+const videoDevices: any = ref([])
+const audioDevices: any = ref([])
 const streamId = ref('')
 const cameraOn = ref(true)
 const screenOn = ref(false)
@@ -546,18 +608,23 @@ onMounted(async () => {
 const getStreamId = async () => {
   if (streamId.value) return streamId.value
 
-  const response = await $fetch(`/api/liveCourses/startLive`, {
-    method: 'POST',
-    body: JSON.stringify({
-      courseId: currentCourse.value._id
+  try {
+    const response = await $fetch(`/api/liveCourses/startLive`, {
+      method: 'POST',
+      body: JSON.stringify({
+        courseId: currentCourse.value._id
+      })
     })
-  })
-  streamId.value = response.data.streamId
-  console.info(`streamId`, streamId.value)
+    streamId.value = response.data.streamId
+    console.info(`streamId`, streamId.value)
+  } catch (error: any) {
+    console.log(error)
+    notification.error(error.message)
+  }
 }
 const initWebRTC = async () => {
   // connect to rtmp media server https://inskillmedia.demoto.me:5443/webRtcApp
-  streamNode = new WebRTCAdaptor({
+  streamNode = await new WebRTCAdaptor({
     websocket_url: 'wss://inskillmedia.demoto.me:5443/WebRTCApp/websocket?target=origin',
     mediaConstraints: {
       video: true,
@@ -573,7 +640,8 @@ const initWebRTC = async () => {
     localVideoId: 'partnerScreen', // <video id="id-of-video-element" autoplay muted></video>
     bandwidth: 900, // default is 900 kbps, string can be 'unlimited'
     dataChannelEnabled: false, // enable or disable data channel
-    callback: (info: string, obj: any) => {
+    // callback: (info: string, obj: any) => {
+    callback: (info: string) => {
       if (info === 'publish_started') {
         console.info('publish started')
       } else if (info === 'publish_finished') {
@@ -584,6 +652,7 @@ const initWebRTC = async () => {
     },
     callbackError: function (error: any) {
       // console.info('error callback: ' + JSON.stringify(error))
+      notification.error(error.message)
     }
   })
 }
@@ -620,12 +689,10 @@ const switchCamera = async () => {
     })
     streamNode.updateVideoTrack(camera, streamId.value, () => {}, true)
     cameraOn.value = false
+  } else if (screenOn.value) {
+    streamNode.switchDesktopCaptureWithCamera(streamId.value)
   } else {
-    if (screenOn.value) {
-      streamNode.switchDesktopCaptureWithCamera(streamId.value)
-    } else {
-      streamNode.switchVideoCameraCapture(streamId.value)
-    }
+    streamNode.switchVideoCameraCapture(streamId.value)
   }
   // TODO: switch camera 的時候icon要變動
 }
@@ -640,17 +707,17 @@ const switchMic = async () => {
     micOn.value = !micOn.value
   }
 
-  //TODO : switch mic 的時候icon要變動
+  // TODO : switch mic 的時候icon要變動
 }
 
-const checkStreamNode = async () => {
+const checkStreamNode = () => {
   console.log(streamNode)
 }
 
-const studentPlayUrl = computed(() => {
-  // 如果是學生身分的話就把這個url 帶進iframe 即可
-  return `https://inskillmedia.demoto.me:5443/WebRTCApp/play.html?name=${streamId.value}&autoplay=true`
-})
+// const studentPlayUrl = computed(() => {
+//   // 如果是學生身分的話就把這個url 帶進iframe 即可
+//   return `https://inskillmedia.demoto.me:5443/WebRTCApp/play.html?name=${streamId.value}&autoplay=true`
+// })
 </script>
 
 <style lang="scss" scoped>

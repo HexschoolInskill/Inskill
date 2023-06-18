@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable */
 import { PeerStats } from './peer_stats.js'
 import { WebSocketAdaptor } from './websocket_adaptor.js'
 import { MediaManager } from './media_manager.js'

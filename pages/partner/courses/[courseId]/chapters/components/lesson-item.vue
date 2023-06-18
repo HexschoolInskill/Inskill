@@ -1,15 +1,13 @@
 <template>
-  <div class="flex h-15 w-full items-center border-b border-solid border-white/50 px-6">
+  <div
+    :data-id="id"
+    class="flex h-15 w-full items-center border-b border-solid border-white/50 px-6"
+  >
     <div class="flex-shrink-0 cursor-grab pr-6">
       <i class="lesson-handler icon-reorder text-white"></i>
     </div>
     <div class="flex-1 text-white">
-      <in-input
-        v-if="isEditing"
-        v-model="inputValue"
-        class="text-black"
-        @keyup.enter="handleEdit"
-      />
+      <in-input v-if="isEditing" v-model="title" class="text-black" @keyup.enter="handleEdit" />
       <template v-else>
         <nuxt-link
           :to="`/partner/courses/${$route.params.courseId}/chapters/lesson/${id}`"
@@ -28,7 +26,7 @@
         <button @click="isEditing = false"><i class="icon-close"></i></button>
       </template>
       <template v-else>
-        <in-select v-model="isPublish" :options="publishOptions" />
+        <in-select :value="publish" :options="publishOptions" @select="handlePublish" />
         <in-dropdown v-slot="{ show }" :options="options" @select="handleOptionSelect">
           <div
             class="transition-base flex h-10 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full text-white group-hover:bg-gray"
@@ -54,12 +52,17 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import type { Option } from '@/components/in-dropdown.vue'
 import useNotification from '~/stores/useNotification'
 import useConfirm from '~/stores/useConfirm'
+import useEditCourse from '~/stores/useEditCourse'
 
+const app = useNuxtApp()
+const route = useRoute()
 const { confirm } = useConfirm()
 const { notification } = useNotification()
+const { currentCourse: course, isLoading } = storeToRefs(useEditCourse())
 
 const props = defineProps({
   value: {
@@ -70,30 +73,26 @@ const props = defineProps({
     type: String,
     required: true
   },
+  chapterId: {
+    type: String,
+    required: true
+  },
   publish: {
     type: Boolean,
     required: true
   }
 })
 
-const inputValue = ref('')
+const title = ref('')
 const isEditing = ref(false)
-const isPublish = computed({
-  get() {
-    return props.publish ? 'publish' : 'unpublish'
-  },
-  set(value) {
-    console.log(value)
-  }
-})
 const publishOptions: Option[] = [
   {
     label: '發布',
-    value: 'publish'
+    value: true
   },
   {
     label: '未發布',
-    value: 'unpublish'
+    value: false
   }
 ]
 const options: Option[] = [
@@ -110,23 +109,43 @@ const options: Option[] = [
 const emit = defineEmits(['updated', 'deleted', 'loadingStart', 'loadingEnd'])
 
 watch(isEditing, (editing) => {
-  if (editing) inputValue.value = props.value
+  if (editing) title.value = props.value
 })
 
-function handleEdit() {
+async function handleEdit() {
   emit('loadingStart')
-  setTimeout(() => {
-    notification.success('更新成功')
+  try {
+    const { updatedChapter } = await app.$api.course.updateLesson({
+      courseId: route.params.courseId as string,
+      chapterId: props.chapterId,
+      lessonId: props.id,
+      title: title.value,
+      field: 'title'
+    })
+    course.value.chapters = updatedChapter
     isEditing.value = false
+    notification.success('更新成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
     emit('loadingEnd')
-    emit('deleted')
-  }, 300)
+  }
 }
 
-async function handleDelete() {
-  const isConfirm = await confirm('確定刪除?', '將連同課程內容一起刪除')
-  if (isConfirm) notification.success('刪除成功')
-  emit('deleted')
+async function handleDelete(courseId: string, chapterId: string, lessonId: string) {
+  if (!chapterId) return
+  const isConfirm = await confirm('刪除課堂', '將連同內容一起刪除')
+  if (!isConfirm) return
+  try {
+    emit('loadingStart')
+    const { updatedChapter } = await app.$api.course.deleteLesson(courseId, chapterId, lessonId)
+    course.value.chapters = updatedChapter
+    notification.success('刪除成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    emit('loadingEnd')
+  }
 }
 
 function handleOptionSelect(option: Option) {
@@ -136,9 +155,32 @@ function handleOptionSelect(option: Option) {
       isEditing.value = true
       break
     case 'delete':
-      handleDelete()
+      handleDelete(route.params.courseId as string, props.chapterId, props.id)
       break
     default:
+  }
+}
+
+async function handlePublish(isPublish: boolean) {
+  const confirmTitle = props.publish ? '取消發布' : '發布課堂'
+  const confirmMessage = props.publish ? '所有學生都將看不到該課堂' : '將會把該課堂向所有學生公開'
+  const isConfirm = await confirm(confirmTitle, confirmMessage)
+  if (!isConfirm) return
+  isLoading.value = true
+  try {
+    const { updatedChapter } = await app.$api.course.updateLesson({
+      courseId: route.params.courseId as string,
+      chapterId: props.chapterId,
+      lessonId: props.id,
+      isPublish,
+      field: 'isPublish'
+    })
+    course.value.chapters = updatedChapter
+    notification.success('更新成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    isLoading.value = false
   }
 }
 </script>

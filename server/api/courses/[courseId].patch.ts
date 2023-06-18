@@ -56,10 +56,10 @@ export default defineEventHandler(async (event) => {
 
       // update course
       const { title, description, price, isPublic } = value
-      if (title) course.title = title
-      if (description) course.description = description
-      if (price) course.price = price
-      if (isPublic === true || isPublic === false) course.isPublic = isPublic
+      course.title = title
+      course.description = description
+      course.price = price
+      course.isPublic = isPublic
       // save course
       const targetCourse = await course.save()
       return {

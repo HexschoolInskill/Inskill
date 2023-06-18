@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable */
 import { SoundMeter } from './soundmeter.js'
 
 /**

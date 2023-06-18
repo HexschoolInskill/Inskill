@@ -2,7 +2,7 @@
   <!--課程內容介紹-->
   <div :class="{ 'w-11/12': currentCourse.chapters }">
     <div class="wrapper gradient rounded-lg p-4 px-6">
-      <!-- <in-content-video v-if="currentCourse.videoUrl"></in-content-video> -->y
+      <!-- <in-content-video v-if="currentCourse.videoUrl"></in-content-video> -->
 
       <div class="courseTitle w-full">
         <span class="mb-2 flex items-center py-1">

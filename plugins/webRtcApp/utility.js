@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable */
 import { getUrlParameter } from './fetch.stream.js'
 
 export function generateRandomString(n) {
@@ -128,3 +129,4 @@ export function errorHandler(error, message) {
     console.error(message)
   }
 }
+/* eslint-disable */

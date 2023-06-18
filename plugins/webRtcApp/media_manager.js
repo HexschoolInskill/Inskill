@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable */
 import { SoundMeter } from './soundmeter.js'
 
 /**
@@ -1430,3 +1431,4 @@ export class MediaManager {
     return promise
   }
 }
+/* eslint-disable */

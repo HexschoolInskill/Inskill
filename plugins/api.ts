@@ -1,12 +1,17 @@
 import { FetchOptions } from 'ofetch'
+import useUser from '~/stores/useUser'
 import UserModule from '~~/http/modules/user'
 import CoursesModule from '~~/http/modules/courses'
+import LiveCoursesModule from '~~/http/modules/liveCourse'
 import PartnerModule from '~/http/modules/partner'
+import LessonContentModule from '~/http/modules/lessonContent'
 
 interface IApiInstance {
   user: UserModule
   course: CoursesModule
+  liveCourse: LiveCoursesModule
   partner: PartnerModule
+  lessonContent: LessonContentModule
 }
 
 export default defineNuxtPlugin(() => {
@@ -19,7 +24,13 @@ export default defineNuxtPlugin(() => {
     },
     onResponseError({ response }) {
       if (response.status === 401) {
-        navigateTo('/login')
+        const route = useRoute()
+        const userStore = useUser()
+        userStore.resetUserProfile()
+        const path = route.path
+        const query = route.query
+        if (route.name !== 'login')
+          navigateTo({ path: '/login', query: { redirect: path, ...query } })
       } else {
         throw new Error(response._data.message)
       }
@@ -35,7 +46,9 @@ export default defineNuxtPlugin(() => {
   const modules: IApiInstance = {
     user: new UserModule(fetcher),
     course: new CoursesModule(fetcher),
-    partner: new PartnerModule(fetcher)
+    liveCourse: new LiveCoursesModule(fetcher),
+    partner: new PartnerModule(fetcher),
+    lessonContent: new LessonContentModule(fetcher)
   }
 
   return {

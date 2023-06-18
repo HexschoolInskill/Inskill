@@ -1,0 +1,866 @@
+// @ts-nocheck
+<template>
+  <div class="main gradient rounded-lg p-4 px-6">
+    <div class="courseTitle">
+      <span class="flex items-center py-1">
+        <h1 class="mb-1 mr-auto text-3xl font-bold" @click="checkStreamNode">
+          {{ currentCourse.title }}
+        </h1>
+
+        <svg
+          class="mr-4 w-[15px]"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 448 512"
+        >
+          <path
+            d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0S96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
+            fill="currentColor"
+          ></path>
+        </svg>
+        <span class="">{{ currentCourse.purchasedCount }}人已加入</span>
+        <!-- <span v-if="!purchased" class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span> -->
+      </span>
+    </div>
+
+    <div class="screen" @click="showToolPopup = false">
+      <div class="inline-block w-full rounded-lg">
+        <video
+          id="partnerScreen"
+          class="h-[55vh] w-full rounded-lg border"
+          :class="{ 'h-[35vh]': goLive }"
+          autoplay
+          playsinline
+        >
+          <!-- <source :src="currentCourse.videoUrl" type="video/mp4" /> -->
+        </video>
+
+        <!-- <iframe 
+        v-if="goLive"
+        class="h-[55vh] w-full" 
+        :class="{'h-[35vh]': goLive}" 
+        :src="currentCourse.videoUrl" 
+        frameborder="0">
+        </iframe> -->
+
+        <!-- <div v-else class="relative h-[55vh] rounded-lg bg-black text-center text-3xl text-white">
+          <span class="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+            >直播尚未開始</span
+          >
+        </div> -->
+
+        <div v-if="goLive" v-show="false" class="smallScreen text-7xl">
+          <svg
+            class="smallProfile"
+            xmlns="http://www.w3.org/2000/svg"
+            height="1em"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M399 384.2C376.9 345.8 335.4 320 288 320H224c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"
+              fill="#ffffff"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <!-- bottom -->
+    <div class="mobileBottomTool hidden">
+      <div class="item">
+        <div class="btnRed">
+          <div class="img">
+            <svg
+              style="transform: rotate(135deg)"
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="btnNormal">
+          <div class="img">
+            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
+              <path
+                d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM559.1 99.8c10.4 5.6 16.9 16.4 16.9 28.2V384c0 11.8-6.5 22.6-16.9 28.2s-23 5-32.9-1.6l-96-64L416 337.1V320 192 174.9l14.2-9.5 96-64c9.8-6.5 22.4-7.2 32.9-1.6z"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="btnNormal">
+          <div class="img">
+            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+              <path
+                d="M192 0C139 0 96 43 96 96V256c0 53 43 96 96 96s96-43 96-96V96c0-53-43-96-96-96zM64 216c0-13.3-10.7-24-24-24s-24 10.7-24 24v40c0 89.1 66.2 162.7 152 174.4V464H120c-13.3 0-24 10.7-24 24s10.7 24 24 24h72 72c13.3 0 24-10.7 24-24s-10.7-24-24-24H216V430.4c85.8-11.7 152-85.3 152-174.4V216c0-13.3-10.7-24-24-24s-24 10.7-24 24v40c0 70.7-57.3 128-128 128s-128-57.3-128-128V216z"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="btnNormal">
+          <div class="img">
+            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+              <path
+                d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V240c0 8.8-7.2 16-16 16s-16-7.2-16-16V64c0-17.7-14.3-32-32-32s-32 14.3-32 32V336c0 1.5 0 3.1 .1 4.6L67.6 283c-16-15.2-41.3-14.6-56.6 1.4s-14.6 41.3 1.4 56.6L124.8 448c43.1 41.1 100.4 64 160 64H304c97.2 0 176-78.8 176-176V128c0-17.7-14.3-32-32-32s-32 14.3-32 32V240c0 8.8-7.2 16-16 16s-16-7.2-16-16V64c0-17.7-14.3-32-32-32s-32 14.3-32 32V240c0 8.8-7.2 16-16 16s-16-7.2-16-16V32z"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="btnNormal" @click="showToolPopup = true">
+          <div class="img">
+            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 128 512">
+              <path
+                d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- webBottom -->
+    <div class="webBottomTool">
+      <!-- item -->
+      <div class="item" @click="shareScreen">
+        <div class="btnNormal">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 28 28"
+          >
+            <g fill="none">
+              <path
+                d="M2 7.249a2.25 2.25 0 0 1 2.25-2.25h19.5A2.25 2.25 0 0 1 26 7.249v13.5A2.25 2.25 0 0 1 23.75 23H4.25A2.25 2.25 0 0 1 2 20.75V7.25zm2.25-.75a.75.75 0 0 0-.75.75v13.5c0 .415.336.75.75.75h19.5a.75.75 0 0 0 .75-.75V7.25a.75.75 0 0 0-.75-.75H4.25zm9.748 2.122a.75.75 0 0 1 .53.22l3.255 3.254a.75.75 0 0 1-1.061 1.06l-1.974-1.974v7.447a.75.75 0 1 1-1.5 0v-7.445l-1.97 1.972a.75.75 0 1 1-1.061-1.06l3.25-3.254a.75.75 0 0 1 .53-.22z"
+                fill="currentColor"
+              ></path>
+            </g>
+          </svg>
+
+          <span>分享畫面</span>
+        </div>
+      </div>
+      <!-- item -->
+      <div class="item" @click="switchCamera">
+        <div class="btnNormal">
+          <div class="img">
+            <svg
+              v-if="cameraOn"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 576 512"
+            >
+              <path
+                d="M336.2 64H47.8C21.4 64 0 85.4 0 111.8v288.4C0 426.6 21.4 448 47.8 448h288.4c26.4 0 47.8-21.4 47.8-47.8V111.8c0-26.4-21.4-47.8-47.8-47.8zm189.4 37.7L416 177.3v157.4l109.6 75.5c21.2 14.6 50.4-.3 50.4-25.8V127.5c0-25.4-29.1-40.4-50.4-25.8z"
+                fill="currentColor"
+              ></path>
+            </svg>
+
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 20 20"
+            >
+              <g fill="none">
+                <path
+                  d="M2.854 2.146a.5.5 0 1 0-.708.708l1.355 1.354A2.5 2.5 0 0 0 2 6.5v7A2.5 2.5 0 0 0 4.5 16h6a2.5 2.5 0 0 0 2.492-2.3l4.154 4.154a.5.5 0 0 0 .708-.708l-15-15zm13.91 12.286l-1.41-1.199L14 11.88V7.93l2.77-2.314a.75.75 0 0 1 1.23.576v7.667a.75.75 0 0 1-1.236.572zM13 10.879l-6.879-6.88H10.5A2.5 2.5 0 0 1 13 6.5v4.38z"
+                  fill="currentColor"
+                ></path>
+              </g>
+            </svg>
+
+            <span>視訊鏡頭</span>
+          </div>
+        </div>
+      </div>
+      <!-- item -->
+      <div class="item" @click="switchMic">
+        <div class="btnNormal">
+          <div class="img">
+            <svg
+              v-if="micOn"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 512 512"
+              enable-background="new 0 0 512 512"
+              xml:space="preserve"
+            >
+              <g>
+                <path
+                  d="M215.4,145.5c-2.2-1.1-4.6-1.6-6.9-1.6c-3.6,0-7.1,1.2-10,3.5L133.3,200H80.5c-8.8,0-16,7.2-16,16v80c0,8.8,7.2,16,16,16
+  h52.8l65.2,52.5c2.9,2.3,6.5,3.5,10,3.5c2.3,0,4.7-0.5,6.9-1.6c5.6-2.7,9.1-8.3,9.1-14.4V160C224.5,153.8,221,148.2,215.4,145.5z"
+                  fill="currentColor"
+                ></path>
+                <path
+                  d="M447.5,256c0-59.3-23.2-114.8-65.4-156.5c-4.7-4.7-12.3-4.6-17,0.1c-4.7,4.7-4.6,12.3,0.1,17
+  c37.6,37.1,58.2,86.6,58.2,139.4c0,0,0,0,0,0c0,0,0,0,0,0c0,52.8-20.7,102.3-58.2,139.4c-4.7,4.7-4.8,12.3-0.1,17
+  c2.3,2.4,5.4,3.6,8.5,3.6c3,0,6.1-1.2,8.4-3.5C424.3,370.9,447.5,315.3,447.5,256C447.5,256,447.5,256,447.5,256
+  C447.5,256,447.5,256,447.5,256z"
+                  fill="currentColor"
+                ></path>
+                <path
+                  d="M384.9,256C384.9,256,384.9,256,384.9,256c0-43.5-16.6-84.3-46.8-114.9c-4.7-4.7-12.3-4.8-17-0.1c-4.7,4.7-4.8,12.3-0.1,17
+  c25.7,26.1,39.9,60.9,39.9,98.1c0,0,0,0,0,0s0,0,0,0c0,37.2-14.2,72-39.9,98.1c-4.7,4.7-4.6,12.3,0.1,17c2.3,2.3,5.4,3.5,8.4,3.5
+  c3.1,0,6.2-1.2,8.5-3.6C368.2,340.3,384.9,299.5,384.9,256C384.9,256,384.9,256,384.9,256z"
+                ></path>
+                <path
+                  d="M287.5,182.5c-4.7-4.7-12.3-4.8-17-0.1c-4.7,4.7-4.8,12.3-0.1,17c14.8,15,23,35.1,23,56.6c0,0,0,0,0,0s0,0,0,0
+  c0,21.4-8.2,41.5-23,56.6c-4.7,4.7-4.6,12.3,0.1,17c2.3,2.3,5.4,3.5,8.4,3.5c3.1,0,6.2-1.2,8.5-3.6c19.3-19.6,29.9-45.6,29.9-73.4
+  c0,0,0,0,0,0s0,0,0,0C317.4,228.2,306.8,202.1,287.5,182.5z"
+                  fill="currentColor"
+                ></path>
+              </g>
+            </svg>
+
+            <svg
+              v-else
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 512 512"
+              enable-background="new 0 0 512 512"
+              xml:space="preserve"
+            >
+              <g>
+                <path
+                  d="M390.1,464c-4.9,0-9.7-2.5-12.3-7L149.7,69.3c-4-6.7-1.7-15.4,5.1-19.3c6.8-3.9,15.5-1.7,19.5,5.1l228.1,387.7
+  c4,6.7,1.7,15.4-5.1,19.3C395.1,463.4,392.6,464,390.1,464z"
+                  fill="currentColor"
+                ></path>
+                <g>
+                  <path
+                    d="M133,200H80c-8.9,0-16,7.2-16,16v80c0,8.8,7.2,16,16,16H133l65.4,52.5c2.9,2.3,6.5,3.5,10.1,3.5c2.4,0,4.7-0.5,6.9-1.6
+    c5.6-2.7,9.1-8.3,9.1-14.4V227.9l-40.5-68.8L133,200z"
+                    fill="currentColor"
+                  ></path>
+                  <path
+                    d="M448,256C448,256,448,256,448,256c0-59.3-23.3-114.9-65.5-156.5c-4.7-4.7-12.3-4.6-17,0.1c-4.7,4.7-4.6,12.3,0.1,17
+    c37.7,37.1,58.4,86.6,58.4,139.4c0,0,0,0,0,0s0,0,0,0c0,44.4-14.7,86.4-41.7,120.8l13,22C429.4,359.1,448,309,448,256
+    C448,256,448,256,448,256z"
+                    fill="currentColor"
+                  ></path>
+                  <path
+                    d="M385.2,256C385.2,256,385.2,256,385.2,256C385.2,256,385.2,256,385.2,256c0-43.5-16.7-84.3-46.9-114.9
+    c-4.7-4.7-12.3-4.8-17-0.1c-4.7,4.7-4.8,12.3-0.1,17c25.8,26.1,40,60.9,40,98.1c0,0,0,0,0,0s0,0,0,0c0,21.6-4.8,42.5-13.9,61.2
+    l14.2,24.1C376.9,316,385.2,286.7,385.2,256z"
+                    fill="currentColor"
+                  ></path>
+                  <path
+                    d="M317.6,256C317.6,256,317.6,256,317.6,256C317.6,256,317.6,256,317.6,256c0-27.8-10.7-53.9-30-73.4
+    c-4.7-4.7-12.3-4.8-17-0.1c-0.6,0.6-1.1,1.2-1.6,1.9l48.1,81.8C317.4,262.8,317.6,259.4,317.6,256z"
+                    fill="currentColor"
+                  ></path>
+                </g>
+              </g>
+            </svg>
+
+            <span>輸出音量</span>
+          </div>
+        </div>
+      </div>
+      <!-- item -->
+      <div class="item">
+        <div class="btnNormal">
+          <div class="img">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 32 32"
+            >
+              <g fill="none">
+                <path
+                  d="M15.5 4C9.149 4 4 9.149 4 15.5V18h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H6.5A4.5 4.5 0 0 1 2 25.5v-10C2 8.044 8.044 2 15.5 2S29 8.044 29 15.5v10a4.5 4.5 0 0 1-4.5 4.5H20a1 1 0 0 1-1-1V19a1 1 0 0 1 1-1h7v-2.5C27 9.149 21.851 4 15.5 4z"
+                  fill="currentColor"
+                ></path>
+              </g>
+            </svg>
+
+            <span>音訊</span>
+          </div>
+        </div>
+      </div>
+      <!-- item -->
+      <div class="item">
+        <div class="btnNormal">
+          <div class="img">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 12.75c1.63 0 3.07.39 4.24.9c1.08.48 1.76 1.56 1.76 2.73V17c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-.61c0-1.18.68-2.26 1.76-2.73c1.17-.52 2.61-.91 4.24-.91zM4 13c1.1 0 2-.9 2-2s-.9-2-2-2s-2 .9-2 2s.9 2 2 2zm1.13 1.1c-.37-.06-.74-.1-1.13-.1c-.99 0-1.93.21-2.78.58A2.01 2.01 0 0 0 0 16.43V17c0 .55.45 1 1 1h3.5v-1.61c0-.83.23-1.61.63-2.29zM20 13c1.1 0 2-.9 2-2s-.9-2-2-2s-2 .9-2 2s.9 2 2 2zm4 3.43c0-.81-.48-1.53-1.22-1.85A6.95 6.95 0 0 0 20 14c-.39 0-.76.04-1.13.1c.4.68.63 1.46.63 2.29V18H23c.55 0 1-.45 1-1v-.57zM12 6c1.66 0 3 1.34 3 3s-1.34 3-3 3s-3-1.34-3-3s1.34-3 3-3z"
+                fill="currentColor"
+              ></path>
+            </svg>
+
+            <span>參與者</span>
+          </div>
+        </div>
+      </div>
+      <!-- item -->
+      <!-- <div class="item">
+                  <div class="btnNormal">
+                      <div class="img">
+                          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 20 20"><g fill="none"><path d="M17.331 3.461l.11.102l.102.11a1.928 1.928 0 0 1-.103 2.606l-3.603 3.617a1.892 1.892 0 0 1-.794.477l-1.96.591a.841.841 0 0 1-1.047-.567a.851.851 0 0 1 .005-.503l.621-1.942c.093-.289.252-.55.465-.765l3.612-3.625a1.904 1.904 0 0 1 2.592-.1zm-1.884.806l-3.611 3.626a.906.906 0 0 0-.221.363l-.533 1.664l1.672-.505c.14-.042.27-.12.374-.224l3.603-3.617a.929.929 0 0 0 .06-1.24l-.06-.065l-.064-.06a.904.904 0 0 0-1.22.058zM12.891 4H5a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7.134l-1 1.004V13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.23c.573-.486 1.34-1.11 2.074-1.535c.41-.237.772-.39 1.062-.439c.281-.048.423.01.51.098a.327.327 0 0 1 .106.185a.59.59 0 0 1-.04.276c-.093.276-.31.602-.602 1.01l-.094.132c-.252.35-.538.747-.736 1.144c-.225.447-.392.995-.204 1.557c.17.508.498.845.926 1.011c.402.156.844.144 1.236.073c.785-.14 1.584-.552 2.02-.813a.5.5 0 0 0-.515-.858c-.399.24-1.075.578-1.681.687c-.303.054-.537.042-.698-.021c-.136-.053-.26-.153-.34-.395c-.062-.188-.03-.435.15-.793c.16-.32.396-.649.656-1.01l.093-.131c.276-.386.587-.832.737-1.273c.077-.229.122-.486.08-.753a1.323 1.323 0 0 0-.386-.736c-.397-.396-.914-.456-1.386-.376c-.462.079-.945.3-1.394.559c-.546.315-1.096.722-1.574 1.104V7a2 2 0 0 1 2-2h6.895l.996-1z" fill="currentColor"></path></g></svg>
+
+                          <span>白板</span>
+                      </div>
+                  </div>
+              </div> -->
+      <!-- item -->
+      <div class="item">
+        <div class="btnNormal" @click="showToolPopup = !showToolPopup">
+          <div class="img">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2z"
+                fill="currentColor"
+              ></path>
+            </svg>
+
+            <span>更多</span>
+          </div>
+        </div>
+      </div>
+      <!-- item -->
+      <div class="item">
+        <div
+          class="broadcastBtn"
+          :class="[goLive ? 'bg-[#ea4335]' : 'bg-[#66BC2A]']"
+          @click="broadcast"
+        >
+          <div class="img">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9c-.98.49-1.87 1.12-2.66 1.85c-.18.18-.43.28-.7.28c-.28 0-.53-.11-.71-.29L.29 13.08a.956.956 0 0 1-.29-.7c0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71c0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29c-.27 0-.52-.11-.7-.28a11.27 11.27 0 0 0-2.67-1.85a.996.996 0 0 1-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </div>
+
+          <!-- {{ goLive ? '結束' : '開始' }} -->
+        </div>
+        <!-- webItemPopup -->
+        <div v-if="showToolPopup" class="webItemPopup">
+          <!-- popupItem -->
+          <div class="popupItem">
+            <div class="svg">
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 512 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                  d="M448 96V224H288V96H448zm0 192V416H288V288H448zM224 224H64V96H224V224zM64 288H224V416H64V288zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"
+                />
+              </svg>
+            </div>
+            <div class="text">變更版面配置</div>
+          </div>
+          <!-- popupItem -->
+          <div class="popupItem">
+            <div class="svg">
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 448 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                  d="M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z"
+                />
+              </svg>
+            </div>
+            <div class="text">全螢幕</div>
+          </div>
+          <!-- popupItem -->
+          <div class="popupItem">
+            <div class="svg">
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 512 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                  d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM96 96H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32s14.3-32 32-32z"
+                />
+              </svg>
+            </div>
+            <div class="text">開啟子母畫面</div>
+          </div>
+          <!-- popupItem -->
+          <div class="popupItem">
+            <div class="svg">
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 576 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                  d="M234.7 42.7L197 56.8c-3 1.1-5 4-5 7.2s2 6.1 5 7.2l37.7 14.1L248.8 123c1.1 3 4 5 7.2 5s6.1-2 7.2-5l14.1-37.7L315 71.2c3-1.1 5-4 5-7.2s-2-6.1-5-7.2L277.3 42.7 263.2 5c-1.1-3-4-5-7.2-5s-6.1 2-7.2 5L234.7 42.7zM46.1 395.4c-18.7 18.7-18.7 49.1 0 67.9l34.6 34.6c18.7 18.7 49.1 18.7 67.9 0L529.9 116.5c18.7-18.7 18.7-49.1 0-67.9L495.3 14.1c-18.7-18.7-49.1-18.7-67.9 0L46.1 395.4zM484.6 82.6l-105 105-23.3-23.3 105-105 23.3 23.3zM7.5 117.2C3 118.9 0 123.2 0 128s3 9.1 7.5 10.8L64 160l21.2 56.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L128 160l56.5-21.2c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L128 96 106.8 39.5C105.1 35 100.8 32 96 32s-9.1 3-10.8 7.5L64 96 7.5 117.2zm352 256c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 416l21.2 56.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 416l56.5-21.2c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 352l-21.2-56.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 352l-56.5 21.2z"
+                />
+              </svg>
+            </div>
+            <div class="text">套用視覺效果</div>
+          </div>
+          <!-- popupItem -->
+          <div class="popupItem bottomPadding">
+            <div class="svg">
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 576 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                  d="M512 80c8.8 0 16 7.2 16 16V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V96c0-8.8 7.2-16 16-16H512zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM200 208c14.2 0 27 6.1 35.8 16c8.8 9.9 24 10.7 33.9 1.9s10.7-24 1.9-33.9c-17.5-19.6-43.1-32-71.5-32c-53 0-96 43-96 96s43 96 96 96c28.4 0 54-12.4 71.5-32c8.8-9.9 8-25-1.9-33.9s-25-8-33.9 1.9c-8.8 9.9-21.6 16-35.8 16c-26.5 0-48-21.5-48-48s21.5-48 48-48zm144 48c0-26.5 21.5-48 48-48c14.2 0 27 6.1 35.8 16c8.8 9.9 24 10.7 33.9 1.9s10.7-24 1.9-33.9c-17.5-19.6-43.1-32-71.5-32c-53 0-96 43-96 96s43 96 96 96c28.4 0 54-12.4 71.5-32c8.8-9.9 8-25-1.9-33.9s-25-8-33.9 1.9c-8.8 9.9-21.6 16-35.8 16c-26.5 0-48-21.5-48-48z"
+                />
+              </svg>
+            </div>
+            <div class="text">開啟字幕</div>
+          </div>
+          <!-- popupItem -->
+          <div class="popupItem">
+            <div class="svg">
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 512 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+                />
+              </svg>
+            </div>
+            <div class="text">回報問題</div>
+          </div>
+          <!-- popupItem -->
+          <div class="popupItem">
+            <div class="svg">
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 576 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                  d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l44.9 74.7c-16.1 17.6-28.6 38.5-36.6 61.5c-1.9-1.8-3.5-3.9-4.9-6.3L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352H152zM432 224a144 144 0 1 1 0 288 144 144 0 1 1 0-288zm0 240a24 24 0 1 0 0-48 24 24 0 1 0 0 48zm0-192c-8.8 0-16 7.2-16 16v80c0 8.8 7.2 16 16 16s16-7.2 16-16V288c0-8.8-7.2-16-16-16z"
+                />
+              </svg>
+            </div>
+            <div class="text">檢舉違規情形</div>
+          </div>
+          <!-- popupItem -->
+          <div class="popupItem">
+            <div class="svg">
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 512 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                  d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"
+                />
+              </svg>
+            </div>
+            <div class="text">設定</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- mobileToolpopup -->
+  <div v-if="showToolPopup" class="mobileToolpopup hidden">
+    <div class="top" @click="showToolPopup = false"></div>
+    <div class="bottom">
+      <!-- item -->
+      <div class="item">
+        <div class="svgTag">
+          <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 640 512">
+            <path
+              d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"
+            />
+          </svg>
+        </div>
+        <div>新增其他參與者</div>
+      </div>
+      <!-- item -->
+      <div class="item">
+        <div class="svgTag">
+          <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 640 512">
+            <path
+              d="M208 352c114.9 0 208-78.8 208-176S322.9 0 208 0S0 78.8 0 176c0 38.6 14.7 74.3 39.6 103.4c-3.5 9.4-8.7 17.7-14.2 24.7c-4.8 6.2-9.7 11-13.3 14.3c-1.8 1.6-3.3 2.9-4.3 3.7c-.5 .4-.9 .7-1.1 .8l-.2 .2 0 0 0 0C1 327.2-1.4 334.4 .8 340.9S9.1 352 16 352c21.8 0 43.8-5.6 62.1-12.5c9.2-3.5 17.8-7.4 25.3-11.4C134.1 343.3 169.8 352 208 352zM448 176c0 112.3-99.1 196.9-216.5 207C255.8 457.4 336.4 512 432 512c38.2 0 73.9-8.7 104.7-23.9c7.5 4 16 7.9 25.2 11.4c18.3 6.9 40.3 12.5 62.1 12.5c6.9 0 13.1-4.5 15.2-11.1c2.1-6.6-.2-13.8-5.8-17.9l0 0 0 0-.2-.2c-.2-.2-.6-.4-1.1-.8c-1-.8-2.5-2-4.3-3.7c-3.6-3.3-8.5-8.1-13.3-14.3c-5.5-7-10.7-15.4-14.2-24.7c24.9-29 39.6-64.7 39.6-103.4c0-92.8-84.9-168.9-192.6-175.5c.4 5.1 .6 10.3 .6 15.5z"
+            />
+          </svg>
+        </div>
+        <div>通話中的訊息</div>
+      </div>
+      <!-- item -->
+      <div class="item">
+        <div class="svgTag">
+          <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 640 512">
+            <path
+              d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
+            />
+          </svg>
+        </div>
+        <div>分享螢幕畫面</div>
+      </div>
+      <!-- item -->
+      <div class="item">
+        <div class="svgTag">
+          <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 576 512">
+            <path
+              d="M512 80c8.8 0 16 7.2 16 16V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V96c0-8.8 7.2-16 16-16H512zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM200 208c14.2 0 27 6.1 35.8 16c8.8 9.9 24 10.7 33.9 1.9s10.7-24 1.9-33.9c-17.5-19.6-43.1-32-71.5-32c-53 0-96 43-96 96s43 96 96 96c28.4 0 54-12.4 71.5-32c8.8-9.9 8-25-1.9-33.9s-25-8-33.9 1.9c-8.8 9.9-21.6 16-35.8 16c-26.5 0-48-21.5-48-48s21.5-48 48-48zm144 48c0-26.5 21.5-48 48-48c14.2 0 27 6.1 35.8 16c8.8 9.9 24 10.7 33.9 1.9s10.7-24 1.9-33.9c-17.5-19.6-43.1-32-71.5-32c-53 0-96 43-96 96s43 96 96 96c28.4 0 54-12.4 71.5-32c8.8-9.9 8-25-1.9-33.9s-25-8-33.9 1.9c-8.8 9.9-21.6 16-35.8 16c-26.5 0-48-21.5-48-48z"
+            />
+          </svg>
+        </div>
+        <div>顯示字幕</div>
+      </div>
+      <!-- item -->
+      <div class="item">
+        <div class="svgTag">
+          <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512">
+            <path
+              d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+            />
+          </svg>
+        </div>
+        <div>回報問題</div>
+      </div>
+      <!-- item -->
+      <div class="item">
+        <div class="svgTag">
+          <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 576 512">
+            <path
+              d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l44.9 74.7c-16.1 17.6-28.6 38.5-36.6 61.5c-1.9-1.8-3.5-3.9-4.9-6.3L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352H152zM432 224a144 144 0 1 1 0 288 144 144 0 1 1 0-288zm0 240a24 24 0 1 0 0-48 24 24 0 1 0 0 48zm0-192c-8.8 0-16 7.2-16 16v80c0 8.8 7.2 16 16 16s16-7.2 16-16V288c0-8.8-7.2-16-16-16z"
+            />
+          </svg>
+        </div>
+        <div>檢舉濫用行為</div>
+      </div>
+      <!-- item -->
+      <div class="item">
+        <div class="svgTag">
+          <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 640 512">
+            <path
+              d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H392.6c-5.4-9.4-8.6-20.3-8.6-32V352c0-2.1 .1-4.2 .3-6.3c-31-26-71-41.7-114.6-41.7H178.3zM528 240c17.7 0 32 14.3 32 32v48H496V272c0-17.7 14.3-32 32-32zm-80 32v48c-17.7 0-32 14.3-32 32V480c0 17.7 14.3 32 32 32H608c17.7 0 32-14.3 32-32V352c0-17.7-14.3-32-32-32V272c0-44.2-35.8-80-80-80s-80 35.8-80 80z"
+            />
+          </svg>
+        </div>
+        <div>主辦人控制項</div>
+      </div>
+      <!-- item -->
+      <div class="item">
+        <div class="svgTag">
+          <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512">
+            <path
+              d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"
+            />
+          </svg>
+        </div>
+        <div>設定</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { WebRTCAdaptor } from '../../../../plugins/webRtcApp'
+import useCourses from '~/stores/useCourses'
+import useNotification from '~~/stores/useNotification'
+
+definePageMeta({
+  layout: 'view-courses'
+})
+
+const { notification } = useNotification()
+const { currentCourse } = storeToRefs(useCourses())
+const goLive = ref(false)
+const showToolPopup = ref(false)
+// const video = ref('/video/short.mp4')
+let streamNode: any = null
+const videoDevices: any = ref([])
+const audioDevices: any = ref([])
+const streamId = ref('')
+const cameraOn = ref(true)
+const screenOn = ref(false)
+const micOn = ref(true)
+
+const broadcast = async () => {
+  await getStreamId()
+  goLive.value = !goLive.value
+  if (goLive.value) {
+    const status = streamNode.iceConnectionState(streamId.value)
+    console.log(`publish status`, status)
+    streamNode.publish(streamId.value)
+  } else {
+    console.log(`stop`)
+    streamNode.stop(streamId.value)
+  }
+}
+
+onMounted(async () => {
+  const devices = await navigator.mediaDevices.enumerateDevices()
+  videoDevices.value = devices.filter((device) => device.kind === 'videoinput')
+  audioDevices.value = devices.filter((device) => device.kind === 'audioinput')
+  await initWebRTC()
+})
+
+const getStreamId = async () => {
+  if (streamId.value) return streamId.value
+
+  try {
+    const response = await $fetch(`/api/liveCourses/startLive`, {
+      method: 'POST',
+      body: JSON.stringify({
+        courseId: currentCourse.value._id
+      })
+    })
+    streamId.value = response.data.streamId
+    console.info(`streamId`, streamId.value)
+  } catch (error: any) {
+    console.log(error)
+    notification.error(error.message)
+  }
+}
+const initWebRTC = async () => {
+  // connect to rtmp media server https://inskillmedia.demoto.me:5443/webRtcApp
+  streamNode = await new WebRTCAdaptor({
+    websocket_url: 'wss://inskillmedia.demoto.me:5443/WebRTCApp/websocket?target=origin',
+    mediaConstraints: {
+      video: true,
+      audio: true
+    },
+    peerconnection_config: {
+      iceServers: [{ urls: 'stun:stun1.l.google.com:19302' }]
+    },
+    sdp_constraints: {
+      OfferToReceiveAudio: false,
+      OfferToReceiveVideo: false
+    },
+    localVideoId: 'partnerScreen', // <video id="id-of-video-element" autoplay muted></video>
+    bandwidth: 900, // default is 900 kbps, string can be 'unlimited'
+    dataChannelEnabled: false, // enable or disable data channel
+    // callback: (info: string, obj: any) => {
+    callback: (info: string) => {
+      if (info === 'publish_started') {
+        console.info('publish started')
+      } else if (info === 'publish_finished') {
+        console.info('publish finished')
+      } else {
+        // console.log(info + ' notification received')
+      }
+    },
+    callbackError: function (error: any) {
+      // console.info('error callback: ' + JSON.stringify(error))
+      notification.error(error.message)
+    }
+  })
+}
+
+const shareScreen = async () => {
+  await getStreamId()
+  if (screenOn.value) {
+    const camera = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+    })
+    streamNode.updateVideoTrack(camera, streamId.value, () => {}, true)
+    // streamNode.switchVideoCameraCapture(streamId.value)
+    screenOn.value = false
+  } else {
+    if (cameraOn.value) {
+      streamNode.switchDesktopCaptureWithCamera(streamId.value)
+      // console.log(streamNode)
+    } else {
+      streamNode.switchDesktopCapture(streamId.value)
+    }
+    screenOn.value = true
+  }
+}
+
+const switchCamera = async () => {
+  await getStreamId()
+  if (cameraOn.value) {
+    console.log(332)
+    // streamNode.switchDesktopCapture(streamId.value)
+    const camera = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+    })
+    streamNode.updateVideoTrack(camera, streamId.value, () => {}, true)
+    cameraOn.value = false
+  } else if (screenOn.value) {
+    streamNode.switchDesktopCaptureWithCamera(streamId.value)
+  } else {
+    streamNode.switchVideoCameraCapture(streamId.value)
+  }
+  // TODO: switch camera 的時候icon要變動
+}
+
+const switchMic = async () => {
+  await getStreamId()
+  if (micOn.value) {
+    streamNode.muteLocalMic()
+    micOn.value = !micOn.value
+  } else {
+    streamNode.unmuteLocalMic()
+    micOn.value = !micOn.value
+  }
+
+  // TODO : switch mic 的時候icon要變動
+}
+
+const checkStreamNode = () => {
+  console.log(streamNode)
+}
+
+// const studentPlayUrl = computed(() => {
+//   // 如果是學生身分的話就把這個url 帶進iframe 即可
+//   return `https://inskillmedia.demoto.me:5443/WebRTCApp/play.html?name=${streamId.value}&autoplay=true`
+// })
+</script>
+
+<style lang="scss" scoped>
+.webRoomName {
+  @apply absolute bottom-[20px] left-[20px] text-xl font-bold text-white;
+}
+
+.screen {
+  @apply my-4 rounded-lg;
+
+  .smallScreen {
+    @apply absolute bottom-[50px] right-[315px] mb-4 ml-auto mr-4 h-[180px] w-[280px] rounded-lg bg-[#6C757D];
+
+    .smallProfile {
+      @apply relative left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%];
+    }
+  }
+}
+
+.btnNormal {
+  @apply text-white;
+
+  svg {
+    @apply my-2;
+  }
+}
+
+.webItemPopup {
+  @apply absolute top-[50px] min-h-[40px] w-[260px] translate-x-[-150px] translate-y-[-360px] rounded rounded-sm bg-white px-[15px] pb-0 pt-[15px] text-black shadow;
+
+  .popupItem {
+    @apply flex items-start justify-start px-0 pb-[15px] pt-0 text-sm;
+
+    .svg {
+      @apply flex items-center px-0 pb-0 pt-[1px];
+
+      svg {
+        @apply h-[20px] w-[20px];
+      }
+    }
+
+    .text {
+      @apply my-0 ml-[20px] mr-0 font-semibold;
+    }
+  }
+}
+
+.webBottomTool {
+  @apply absolute bottom-[-100px] left-[0px] mx-auto flex w-[65vw] items-center justify-around rounded-lg bg-black;
+
+  .item {
+    @apply w-[100px] cursor-pointer text-center;
+
+    .btnNormal {
+      @apply rounded-lg pb-2 pt-1 transition-all hover:bg-[#262b2f];
+    }
+
+    svg {
+      @apply mx-auto h-[50px] w-[50px];
+    }
+  }
+
+  .broadcastBtn {
+    @apply mt-[15px] w-[100px] rounded-lg pb-[10px] pt-2 text-center text-white transition-all;
+
+    .img {
+      @apply my-2;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .mobileTopToolbar {
+    @apply flex w-full items-center justify-start text-sm;
+
+    .down {
+      @apply w-[20%];
+
+      svg {
+        fill: '#ffffff';
+      }
+
+      .roomName {
+        @apply flex w-[60%] items-center justify-start text-white;
+
+        svg {
+          fill: '#ffffff';
+        }
+
+        .icon {
+          @apply my-0 ml-[10px] mr-0 px-0 pb-0 pt-[2px];
+        }
+      }
+
+      .camera,
+      .sound {
+        @apply w-[10%];
+
+        svg {
+          fill: '#ffffff';
+        }
+      }
+    }
+  }
+
+  .screen {
+    @apply mx-[10%] my-[10%] h-[82vh];
+  }
+
+  .mobileBottomTool {
+    @apply mx-[10px] mb-[10px] mt-[20px] flex items-center justify-start;
+
+    .item {
+      @apply w-[20%];
+    }
+  }
+
+  .mobileToolpopup {
+    @apply absolute top-0 z-[999] block h-screen w-screen bg-[#1f1f1f8f];
+
+    .top {
+      @apply h-[55%] w-full bg-[#ffffff00];
+    }
+
+    .bottom {
+      @apply flex h-[45%] w-full flex-wrap items-center justify-start rounded-sm bg-[#2a2a2a];
+
+      .item {
+        @apply w-[33%] px-0 py-[10px] text-center text-xs font-medium text-white;
+
+        .svgTag {
+          @apply h-[30px];
+        }
+        svg {
+          fill: '#ffffff';
+        }
+      }
+    }
+  }
+
+  .webRoomName,
+  .webBottomTool {
+    @apply hidden;
+  }
+}
+</style>

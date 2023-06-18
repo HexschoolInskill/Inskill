@@ -11,7 +11,20 @@
           <form class="join-form">
             <div class="flex flex-col gap-5 sm:flex-row lg:gap-10">
               <div class="flex justify-center sm:block">
-                <in-avatar-upload v-model.lazy="params.avatar" class="lg:h-32 lg:w-32" />
+                <div class="h-15 w-15 overflow-hidden rounded-full lg:h-32 lg:w-32">
+                  <img
+                    v-if="params.avatar"
+                    class="h-full w-full object-cover"
+                    :src="params.avatar"
+                    alt=""
+                  />
+                  <img
+                    v-else
+                    class="h-full w-full object-cover"
+                    src="/images/avatar-fallback.svg"
+                    alt=""
+                  />
+                </div>
               </div>
               <div class="flex-1">
                 <in-input
@@ -28,6 +41,7 @@
                 </p>
                 <in-input
                   v-model="params.username"
+                  disabled
                   class="mt-2"
                   label="要在 Inskill 顯示的名稱*"
                   placeholder="請輸入您要在 Inskill 顯示的名稱"
@@ -66,7 +80,7 @@
               label="Email(此為您註冊時的Email)"
               disabled
             />
-            <div class="mt-5 flex flex-wrap gap-y-2 gap-x-6">
+            <div class="mt-5 flex flex-wrap gap-x-6 gap-y-2">
               <div>
                 <p class="text-white">性別</p>
                 <div class="mt-3 flex gap-3">
@@ -280,18 +294,19 @@
 import { useVuelidate } from '@vuelidate/core'
 import { required, numeric, maxLength, minLength } from '@vuelidate/validators'
 import useUser from '~/stores/useUser'
+import useNotification from '~/stores/useNotification'
 
-type Avatar = File | string | null
-
-const useStore = useUser()
+const app = useNuxtApp()
+const userStore = useUser()
+const { notification } = useNotification()
 
 const emit = defineEmits(['submit'])
 
 const params = reactive({
-  avatar: useStore.userProfile.avatar as Avatar,
-  email: useStore.userProfile.email,
+  avatar: userStore.userProfile.avatar,
+  email: userStore.userProfile.email,
   realName: '',
-  username: useStore.userProfile.username,
+  username: userStore.userProfile.username,
   gender: '',
   unit: '',
   phone: '',
@@ -362,9 +377,46 @@ const v$ = useVuelidate(rules, params)
 
 async function handleSubmit() {
   const isValid = await v$.value.$validate()
-  console.log(v$.value)
   if (!isValid) return
-  emit('submit')
+
+  try {
+    const {
+      realName,
+      username,
+      gender,
+      unit,
+      phone,
+      postNumber,
+      address,
+      facebookLink,
+      youtubeLink,
+      socialLink,
+      githubLink,
+      selfMedia,
+      description,
+      longDescription
+    } = params
+    await app.$api.partner.join({
+      realName,
+      username,
+      gender,
+      unit,
+      phone,
+      postNumber,
+      address,
+      facebookLink,
+      youtubeLink,
+      socialLink,
+      githubLink,
+      selfMedia,
+      description,
+      longDescription
+    })
+    notification.success('已成功送出申請')
+    emit('submit')
+  } catch (error) {
+    notification.error((error as Error).message)
+  }
 }
 </script>
 <style lang="scss" scoped>

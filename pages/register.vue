@@ -73,7 +73,7 @@
       建立帳號
     </button>
 
-    <small class="mt-4 mb-2 text-gray">
+    <small class="mb-2 mt-4 text-gray">
       已有帳號?
       <NuxtLink to="login" class="text-sky-400 underline">登入</NuxtLink>
     </small>
@@ -81,7 +81,7 @@
 
   <div v-else>
     <p class="text-white">恭喜成功註冊 InSkill</p>
-    <p class="mt-2 mb-4 text-sm text-gray">任何技能，任何課程，任你探索!</p>
+    <p class="mb-4 mt-2 text-sm text-gray">任何技能，任何課程，任你探索!</p>
     <NuxtLink to="/">
       <button type="button" class="w-20 rounded border bg-black text-white">繼續</button>
     </NuxtLink>
@@ -94,9 +94,8 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, email, sameAs, helpers } from '@vuelidate/validators'
 import { storeToRefs } from 'pinia'
 import useUSer from '~/stores/useUser'
-import { usePolicyStore } from '@/stores/policyStore'
+import { usePolicyStore } from '@/stores/usePolicy'
 import useNotification from '~~/stores/useNotification'
-import tokenController from '~~/composables/token'
 
 definePageMeta({
   layout: 'login-form'
@@ -134,6 +133,7 @@ const rules = {
 
 const v$ = useVuelidate(rules, formFields)
 const { $api } = useNuxtApp()
+const token = useToken()
 const { userProfile } = storeToRefs(useUSer())
 const step = ref(1)
 
@@ -154,7 +154,7 @@ const register = async () => {
         step.value = 2
         userProfile.value.username = registration.username
 
-        tokenController.setToken(registration.accessToken)
+        token.setToken(registration.accessToken)
       } else {
         notification.error(registration.message)
       }

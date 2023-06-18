@@ -7,11 +7,11 @@
       </template>
       <div class="overflow-hidden">
         <banner />
-        <new-course />
-        <stream-course />
+        <new-course :courses="newCourses" />
+        <stream-course :courses="streamCourses" />
         <comments />
-        <popular-course />
-        <praise-course />
+        <popular-course :courses="popularCourses" />
+        <praise-course :courses="praiseCourses" />
       </div>
       <template #footer>
         <in-footer />
@@ -30,11 +30,26 @@ import StreamCourse from './components/stream-course.vue'
 import Comments from './components/comments.vue'
 import PopularCourse from './components/popular-course.vue'
 import PraiseCourse from './components/praise-course.vue'
+import type { NormalCourse, StreamCourse as IStreamCourse } from '@/http/modules/courses'
+
+const app = useNuxtApp()
+
+const newCourses = ref<NormalCourse[]>([])
+const praiseCourses = ref<NormalCourse[]>([])
+const streamCourses = ref<IStreamCourse[]>([])
+const popularCourses = ref<NormalCourse[]>([])
 
 definePageMeta({
   layout: false
 })
 
+const { data } = await useAsyncData(() => app.$api.course.searchCourse())
+if (data.value) {
+  newCourses.value = data.value.newCourses
+  streamCourses.value = data.value.streamCourse
+  praiseCourses.value = data.value.praiseCourses
+  popularCourses.value = data.value.popularCourses
+}
 onMounted(async () => {
   await nextTick()
 
@@ -62,9 +77,11 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .slider-pagination {
   @apply flex flex-wrap items-center justify-center gap-6;
+
   &__bullet {
     border-radius: 100%;
     @apply transition-base h-4 w-4 bg-white/50 sm:h-2 sm:w-2;
+
     &--active {
       @apply bg-white;
     }

@@ -14,7 +14,8 @@ module.exports = {
     'no-console': 'off',
     'import/no-named-as-default-member': 'off',
     'import/no-named-as-default': 'off',
-    'no-new': 'off'
+    'no-new': 'off',
+    'no-control-regex': 0
   },
   overrides: [
     {
@@ -26,7 +27,8 @@ module.exports = {
       ],
       rules: {
         'vue/multi-word-component-names': 0,
-        'vue/no-multiple-template-root': 0
+        'vue/no-multiple-template-root': 0,
+        'vue/no-v-html': 0
       }
     }
   ]

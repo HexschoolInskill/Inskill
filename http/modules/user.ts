@@ -1,13 +1,13 @@
 import HttpFactory from '../factory'
-import useUser, { IUserProfile } from '~/stores/useUser'
+import useUser, { UserProfile } from '~/stores/useUser'
 
-interface IProfileResponse extends IResponse {
-  user?: IUserProfile
+interface IProfileResponse extends Response {
+  user?: UserProfile
 }
 
-type IProfilePayload = Partial<IUserProfile>
+type ProfilePayload = Partial<UserProfile>
 
-interface IloginPayload {
+interface LoginPayload {
   email: string
   password: string
 }
@@ -31,13 +31,18 @@ interface IpasswordPayload {
 class UserModule extends HttpFactory {
   private RESOURCE = '/user'
 
-  async login(payload: IloginPayload) {
+  async login(payload: LoginPayload) {
     return await this.call(`${this.RESOURCE}/sign_in`, 'POST', payload)
   }
 
   async logout() {
     await this.call(`${this.RESOURCE}/sign_out`, 'POST')
-    location.reload()
+    const userStore = useUser()
+    const token = useToken()
+    userStore.resetUserProfile()
+    token.deleteToken()
+
+    navigateTo('/')
   }
 
   async fetchProfile() {
@@ -45,42 +50,33 @@ class UserModule extends HttpFactory {
     const { data } = await useAsyncData<IProfileResponse>(() =>
       this.call(`${this.RESOURCE}/profile`, 'GET')
     )
-
     if (data?.value?.user) {
       store.userProfile = data.value.user
     }
   }
 
-  async update(payload: IProfilePayload) {
-    try {
-      const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'POST', payload)
+  async update(payload: ProfilePayload) {
+    const res = await this.call<IProfileResponse>(`${this.RESOURCE}/profile`, 'POST', payload)
 
-      const store = useUser()
+    const store = useUser()
 
-      if (res.user) {
-        store.userProfile = res.user
-      }
-    } catch (error) {
-      return Promise.reject(error)
+    if (res.user) {
+      store.userProfile = res.user
     }
   }
 
   async updateAvatar(avatarFormData: FormData) {
-    try {
-      const res = await this.call<IProfileResponse>(
-        `${this.RESOURCE}/profile`,
-        'POST',
-        avatarFormData,
-        {
-          'Content-Type': 'multipart/form-data'
-        }
-      )
-      const store = useUser()
-      if (res.user) {
-        store.userProfile = res.user
+    const res = await this.call<IProfileResponse>(
+      `${this.RESOURCE}/profile`,
+      'POST',
+      avatarFormData,
+      {
+        'Content-Type': 'multipart/form-data'
       }
-    } catch (error) {
-      return Promise.reject(error)
+    )
+    const store = useUser()
+    if (res.user) {
+      store.userProfile = res.user
     }
   }
 

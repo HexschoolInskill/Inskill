@@ -43,7 +43,7 @@
               <i class="icon-search text-[20px] text-gray"></i>
             </button>
           </form>
-          <nuxt-link>合作申請</nuxt-link>
+          <nuxt-link to="/partner">合作申請</nuxt-link>
         </div>
         <div
           class="relative flex flex-shrink-0 items-center lg:ml-5 2xl:ml-8"
@@ -88,7 +88,7 @@
         <transition name="menu">
           <ul
             v-if="currentPopup === 'user'"
-            class="absolute right-0 top-18 grid w-[calc(100vw-24px)] gap-2 rounded-6 bg-white p-4 sm:w-52 lg:top-28"
+            class="absolute right-0 top-18 grid w-[calc(100vw-24px)] gap-2 rounded-6 bg-white p-4 shadow sm:w-52 lg:top-28"
             :class="{ 'lg:hidden': !store.userProfile.username }"
           >
             <template v-if="!store.userProfile.username">
@@ -121,6 +121,14 @@
                   會員資料
                 </nuxt-link>
               </li>
+              <li class="in-header__popup-link">
+                <nuxt-link
+                  class="block whitespace-nowrap px-3 py-2 text-center"
+                  @click="currentPopup = null"
+                >
+                  我的課程
+                </nuxt-link>
+              </li>
               <li class="in-header__popup-link" @click="app.$api.user.logout">
                 <div class="block whitespace-nowrap px-3 py-2 text-center">登出</div>
               </li>
@@ -130,7 +138,7 @@
         <transition name="menu">
           <ul
             v-if="currentPopup === 'explore'"
-            class="absolute left-0 top-18 grid w-[calc(100vw-24px)] gap-2 rounded-6 bg-white p-4 sm:w-[375px] lg:left-20 lg:top-28"
+            class="absolute left-0 top-18 grid w-[calc(100vw-24px)] gap-2 rounded-6 bg-white p-4 shadow sm:w-[375px] lg:left-20 lg:top-28"
           >
             <li class="in-header__popup-link">
               <nuxt-link class="block whitespace-nowrap px-3 py-2" to="/search"
@@ -160,10 +168,8 @@ const store = userUser()
 const searchInput = ref('')
 
 function handleSearch() {
-  const value = searchInput.value.trim()
-  if (value) {
-    navigateTo(`/search?q=${value}`)
-  }
+  const value = encodeURIComponent(searchInput.value.trim())
+  navigateTo(`/search?q=${value}&sortBy=time&category=normal`)
 }
 
 const currentPopup = ref<null | string>(null)
@@ -195,16 +201,19 @@ onBeforeUnmount(() => {
 .in-header {
   &__popup-link {
     cursor: pointer;
+
     &:not(:last-child) {
       border-bottom: 1px solid #6c757d;
       border-radius: 4px;
     }
   }
 }
+
 .menu-enter-from,
 .menu-leave-to {
   opacity: 0;
 }
+
 .menu-enter-active,
 .menu-leave-active {
   transition: 0.3s ease-in-out;

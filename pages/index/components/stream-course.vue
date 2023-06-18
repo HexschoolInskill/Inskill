@@ -5,15 +5,20 @@
       <div class="mx-auto lg:w-8/12">
         <div id="stream-course-slider" class="gsap-slide-up new-course__slider mt-10">
           <div class="swiper-wrapper">
-            <div v-for="item in list" :key="item.id" class="swiper-slide">
+            <div v-for="item in courses" :key="item._id" class="swiper-slide">
               <div class="group">
                 <in-card xs-white>
                   <div class="relative pt-7/10 sm:pt-5/10">
-                    <img
-                      :src="item.thumbnail"
-                      class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
-                      :alt="item.title"
-                    />
+                    <nuxt-link
+                      :to="`/courses/${item._id}?courseType=stream`"
+                      class="hidden cursor-pointer items-center text-white sm:flex"
+                    >
+                      <img
+                        :src="item.thumbnail"
+                        class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
+                        :alt="item.title"
+                      />
+                    </nuxt-link>
                   </div>
                   <div class="p-6 font-bold text-gray sm:p-12 sm:text-white">
                     <h3 class="text-[28px] text-blue line-clamp-1 sm:text-white">
@@ -35,7 +40,7 @@
                             <i class="icon-people text-black sm:text-inherit"></i>
                           </div>
                           <div class="flex-1 pl-4">
-                            <span>{{ item.students }}</span>
+                            <span>{{ item.purchasedCount }}</span>
                             <span class="ml-3">人已經加入</span>
                           </div>
                         </div>
@@ -46,7 +51,14 @@
                               src="/images/avatar-fallback.svg"
                               alt=""
                             />
-                            <p class="font-bol leading-normal">{{ item.teacher.name }}</p>
+                            <p class="font-bol leading-normal">
+                              <nuxt-link
+                                :to="`/partner/live/${item._id}`"
+                                class="hidden cursor-pointer items-center text-white sm:flex"
+                              >
+                                {{ item.teacherName }}
+                              </nuxt-link>
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -77,47 +89,16 @@
 </template>
 <script lang="ts" setup>
 import Swiper, { Pagination } from 'swiper'
+import { StreamCourse } from '@/http/modules/courses'
+
+defineProps({
+  courses: {
+    type: Array as PropType<StreamCourse[]>,
+    default: () => []
+  }
+})
 
 Swiper.use([Pagination])
-
-const list = ref([
-  {
-    id: 1,
-    title: '課程名稱',
-    thumbnail: '/images/stream-course-1.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    startTime: '04月01號 (六) 20:00',
-    endTime: '',
-    students: 9999
-  },
-  {
-    id: 2,
-    title: '課程名稱',
-    thumbnail: '/images/stream-course-2.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    startTime: '04月01號 (六) 20:00',
-    endTime: '',
-    students: 9999
-  },
-  {
-    id: 3,
-    title: '課程名稱',
-    thumbnail: '/images/stream-course-3.jpg',
-    price: 99999,
-    teacher: {
-      name: '我是老師'
-    },
-    startTime: '04月01號 (六) 20:00',
-    endTime: '',
-    students: 9999
-  }
-])
 
 onMounted(() => {
   new Swiper('#stream-course-slider', {
@@ -137,6 +118,7 @@ onMounted(() => {
   .swiper-slide {
     opacity: 0.5;
     transition: opacity 0.3s ease-in-out;
+
     &.swiper-slide-active {
       opacity: 1;
     }

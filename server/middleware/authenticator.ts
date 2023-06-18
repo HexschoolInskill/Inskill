@@ -1,4 +1,5 @@
 import { decoder } from '../services/jwt'
+import models from '../model/schema'
 interface JwtPayload {
   uid: string
   exp: number
@@ -11,14 +12,14 @@ export default defineEventHandler(async (event) => {
 
   const accessToken = getCookie(event, 'access_token')
 
-  const unProtectedRoutes = [/^\/api.*(?:\/(sign_up|sign_in|isEmailRegister))$/gi]
+  const unProtectedRoutes = [/^\/api.*(?:\/(sign_up|sign_in|isEmailRegister|search.*))$/gi]
 
   if (url!.startsWith('/api') && !unProtectedRoutes.some((pattern) => url!.match(pattern))) {
     try {
       if (!accessToken) {
         return createError({
           statusCode: 401,
-          message: 'Unauthorized : must have Authorization header'
+          message: 'Unauthorized : must have Authorization'
         })
       }
 
@@ -28,7 +29,13 @@ export default defineEventHandler(async (event) => {
           statusCode: 401,
           message: 'Unauthorized : token expired'
         })
-      event.context.auth = { userID: uid }
+      const user = await models.User.findById(uid)
+      if (!user)
+        return createError({
+          statusCode: 401,
+          message: 'Unauthorized : token invalid'
+        })
+      event.context.auth = { userID: uid, userInfo: user }
     } catch (err) {
       console.log(`Through authentication middleware error : `, err)
       return createError({

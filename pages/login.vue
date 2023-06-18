@@ -32,7 +32,7 @@
       登入
     </button>
 
-    <small class="mt-4 mb-2 text-sky-400 underline">
+    <small class="mb-2 mt-4 text-sky-400 underline">
       <NuxtLink to="forgetpassword">忘記密碼?</NuxtLink>
     </small>
     <small class="text-gray">
@@ -46,10 +46,7 @@
 import { reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers } from '@vuelidate/validators'
-import { storeToRefs } from 'pinia'
-import useUSer from '~/stores/useUser'
 import useNotification from '~~/stores/useNotification'
-import tokenController from '~~/composables/token'
 
 definePageMeta({
   layout: 'login-form'
@@ -74,30 +71,28 @@ const rules = {
 
 const v$ = useVuelidate(rules, formFields)
 
-const { userProfile } = storeToRefs(useUSer())
-
 const { $api } = useNuxtApp()
 const router = useRouter()
+const route = useRoute()
 
 const login = async () => {
   try {
-    const result: any = await $api.user.login({
+    await $api.user.login({
       email: formFields.userEmail,
       password: formFields.password
     })
-
-    if (result.success) {
-      tokenController.setToken(result.accessToken)
-      userProfile.value.username = result.username
-      userProfile.value.avatar = result.avatar
-
-      // 登入成功，回首頁
-      router.push('/')
+    await $api.user.fetchProfile()
+    if (route.query.redirect) {
+      const { redirect, ...query } = route.query
+      router.push({
+        path: redirect as string,
+        query
+      })
     } else {
-      notification.error(result.message)
-      formFields.password = ''
+      router.push('/')
     }
   } catch (err: any) {
+    formFields.password = ''
     notification.error(err.message)
   }
 }

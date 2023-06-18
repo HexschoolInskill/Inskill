@@ -22,6 +22,9 @@ export default defineNuxtConfig({
     FIREBASE_TOKEN_URI: process.env.FIREBASE_TOKEN_URI,
     FIREBASE_AUTH_PROVIDER_X509_CERT_URL: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
     FIREBASE_CLIENT_X509_CERT_URL: process.env.FIREBASE_CLIENT_X509_CERT_URL,
+    NEWEBPAY_MERCHANT_ID: process.env.NEWEBPAY_MERCHANT_ID,
+    NEWEBPAY_HASH_KEY: process.env.NEWEBPAY_HASH_KEY,
+    NEWEBPAY_HASH_IV: process.env.NEWEBPAY_HASH_IV,
     public: {
       apiBase: '/api'
     }

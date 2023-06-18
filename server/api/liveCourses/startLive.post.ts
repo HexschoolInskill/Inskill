@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable */
 // 老師開始直播課程
 import Joi from 'joi'

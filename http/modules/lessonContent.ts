@@ -38,6 +38,12 @@ class LessonContentModule extends HttpFactory {
   }
 
   // async updateContent(contentType: LessonContentType) {}
+  async deleteContent(lessonId: string, lessonContentId: string) {
+    return await this.call<{ success: boolean }>(
+      `${this.RESOURCE}/${lessonId}?lessonContentId=${lessonContentId}`,
+      'DELETE'
+    )
+  }
 }
 
 export default LessonContentModule

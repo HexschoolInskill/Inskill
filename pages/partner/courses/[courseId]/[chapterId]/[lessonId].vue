@@ -17,7 +17,11 @@
         </div>
         <draggable v-model="contents" handle=".content-handler" item-key="_id" @end="sortContent">
           <template #item="{ element: item }">
-            <content-item :data="item" @edit="editContent(item.content)" @delete="deleteContent" />
+            <content-item
+              :data="item"
+              @edit="editContent(item.content)"
+              @delete="deleteContent(item._id)"
+            />
           </template>
         </draggable>
         <div class="py-5 text-center">
@@ -228,10 +232,19 @@ function sortContent() {
   // notification.success('更新成功')
 }
 
-async function deleteContent() {
+async function deleteContent(contentId: string) {
   const isConfirm = await confirm('確定刪除內容?', '將刪除內容')
   if (!isConfirm) return
-  notification.success('刪除成功')
+  isLoading.value = true
+  try {
+    await app.$api.lessonContent.deleteContent(lessonId, contentId)
+    contents.value = contents.value.filter((content) => content._id !== contentId)
+    notification.success('刪除成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    isLoading.value = false
+  }
 }
 
 function closeModal() {

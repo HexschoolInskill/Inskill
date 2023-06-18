@@ -9,7 +9,7 @@
               <in-card xs-white perspective class="flex flex-col font-bold text-gray sm:text-white">
                 <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-6/10">
                   <nuxt-link
-                    :to="`/courses/${item._id}`"
+                    :to="`/courses/${item._id}?courseType=normal`"
                     class="hidden cursor-pointer items-center text-white sm:flex"
                   >
                     <img
@@ -54,7 +54,14 @@
                           src="/images/avatar-fallback.svg"
                           alt=""
                         />
-                        <p class="font-bold leading-normal">{{ item.teacherName }}</p>
+                        <p class="font-bold leading-normal">
+                          <nuxt-link
+                            :to="`/partner/courses/${item._id}`"
+                            class="hidden cursor-pointer items-center text-white sm:flex"
+                          >
+                            {{ item.teacherName }}
+                          </nuxt-link>
+                        </p>
                       </div>
                       <p class="flex items-center gap-5 text-2xl">
                         <span class="text-gray sm:text-gray-l">NT$</span>

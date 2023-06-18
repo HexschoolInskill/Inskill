@@ -9,11 +9,16 @@
               <div class="group">
                 <in-card xs-white>
                   <div class="relative pt-7/10 sm:pt-5/10">
-                    <img
-                      :src="item.thumbnail"
-                      class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
-                      :alt="item.title"
-                    />
+                    <nuxt-link
+                      :to="`/courses/${item._id}?courseType=stream`"
+                      class="hidden cursor-pointer items-center text-white sm:flex"
+                    >
+                      <img
+                        :src="item.thumbnail"
+                        class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
+                        :alt="item.title"
+                      />
+                    </nuxt-link>
                   </div>
                   <div class="p-6 font-bold text-gray sm:p-12 sm:text-white">
                     <h3 class="text-[28px] text-blue line-clamp-1 sm:text-white">
@@ -46,7 +51,14 @@
                               src="/images/avatar-fallback.svg"
                               alt=""
                             />
-                            <p class="font-bol leading-normal">{{ item.teacherName }}</p>
+                            <p class="font-bol leading-normal">
+                              <nuxt-link
+                                :to="`/partner/live/${item._id}`"
+                                class="hidden cursor-pointer items-center text-white sm:flex"
+                              >
+                                {{ item.teacherName }}
+                              </nuxt-link>
+                            </p>
                           </div>
                         </div>
                       </div>

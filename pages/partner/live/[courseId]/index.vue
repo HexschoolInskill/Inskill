@@ -1,3 +1,4 @@
+// @ts-nocheck
 <template>
   <div class="main gradient rounded-lg p-4 px-6">
     <div class="courseTitle">

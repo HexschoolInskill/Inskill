@@ -44,6 +44,7 @@ export default defineStore('courses', () => {
             sort: 0,
             createdAt: '',
             updatedAt: '',
+            isPublish: true,
             lessonContent: [
               {
                 _id: '000001',

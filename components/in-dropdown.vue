@@ -9,7 +9,7 @@
           <div
             v-if="isOptionsShow"
             ref="optionsRef"
-            class="fixed z-10 overflow-hidden rounded-1 bg-white text-black"
+            class="fixed z-50 overflow-hidden rounded-1 bg-white text-black"
             :style="{
               left: `${optionsPosition.x}px`,
               top: `${optionsPosition.y}px`,

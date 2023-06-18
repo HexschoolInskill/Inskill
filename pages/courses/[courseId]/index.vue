@@ -4,7 +4,7 @@
     <div class="wrapper gradient rounded-lg p-4 px-6">
       <!-- <in-content-video v-if="currentCourse.videoUrl"></in-content-video> -->
 
-      <div class="courseTitle w-full">
+      <div v-if="currentCourse.chapters === undefined" class="courseTitle w-full">
         <span class="mb-2 flex items-center py-1">
           <h1 class="mb-1 mr-auto text-3xl font-bold">{{ currentCourse.title }}</h1>
 

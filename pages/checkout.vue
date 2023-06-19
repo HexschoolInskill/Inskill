@@ -148,11 +148,12 @@ const order = ref({
 
 // 定義apiendpoint 如果是 production 就是正式環境 如果是 development 就是開發環境
 const apiEndpoint = computed(() => {
-  if (process.env.NODE_ENV === 'production') {
-    return 'https://core.spgateway.com/MPG/mpg_gateway'
-  } else {
-    return 'https://ccore.newebpay.com/MPG/mpg_gateway'
-  }
+  return 'https://ccore.newebpay.com/MPG/mpg_gateway'
+  // if (process.env.NODE_ENV === 'production') {
+  //   return 'https://core.spgateway.com/MPG/mpg_gateway'
+  // } else {
+  //   return 'https://ccore.newebpay.com/MPG/mpg_gateway'
+  // }
 })
 
 // 使用 nuxt fetch 呼叫後端 hello api 來取得 order, aesEncrypt, shaEncrypt

@@ -1,5 +1,5 @@
 <template>
-  <in-container class="mt-[11vh] sm:mt-[15vh]">
+  <in-container class="2xl:mt-[5vh]">
     <div class="flex h-auto flex-col justify-between py-5 sm:h-[62vh] sm:flex-row">
       <main class="mr-4 w-full rounded bg-white p-5 sm:w-9/12">
         <h2 class="cart_header border-4 border-l-0 border-r-0 border-t-0 border-black text-3xl">
@@ -13,12 +13,12 @@
         >
           <div
             v-for="(item, index) in cart"
-            :key="item.id"
+            :key="item._id"
             class="cart_item my-4 flex items-center"
           >
-            <img class="mr-2 border" :src="item.img" alt="img" />
+            <img class="mr-2 w-[100px] border" :src="item.thumbnail" alt="img" />
             <div class="w-2/12">
-              <p class="text-center">{{ item.name }}</p>
+              <p class="text-center">{{ item.title }}</p>
             </div>
             <div class="mr-auto">
               <p class="">NT$ {{ item.price }}</p>
@@ -84,48 +84,21 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, onMounted, computed } from 'vue'
-// import { storeToRefs } from 'pinia'
-// import coursesStore from '~/stores/useCourses'
+import { onMounted, computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import useCourses from '~/stores/useCourses'
 
 // const { $api } = useNuxtApp()
-// let { cart } = storeToRefs(coursesStore())
+const { cart } = storeToRefs(useCourses())
 
-// fake cart
-const cart = reactive([
-  {
-    id: 1,
-    img: 'https://fakeimg.pl/100x100/',
-    name: 'test',
-    price: 100
-  },
-  {
-    id: 1,
-    img: 'https://fakeimg.pl/100x100/',
-    name: 'test',
-    price: 100
-  },
-  {
-    id: 1,
-    img: 'https://fakeimg.pl/100x100/',
-    name: 'test',
-    price: 150
-  }
-  // {
-  //   id: 1,
-  //   img: 'https://fakeimg.pl/100x100/',
-  //   name: 'test',
-  //   price: 150
-  // }
-])
+const { removeCartItem } = useCourses()
 
 const getTotal = computed(() => {
-  return cart.reduce((accuulator, currentItem) => accuulator + currentItem.price, 0)
+  return cart.value.reduce(
+    (accumulator: number, currentItem: any) => accumulator + currentItem.price,
+    0
+  )
 })
-
-const removeCartItem = (index: number) => {
-  cart.splice(index, 1)
-}
 
 onMounted(async () => {
   // const cartData = await $api.course.getCart()

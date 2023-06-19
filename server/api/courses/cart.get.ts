@@ -34,6 +34,8 @@ export default defineEventHandler(async (event) => {
               _id: '$cartCourses.courseId',
               title: '$course.title',
               description: '$course.description',
+              price: '$course.price',
+              thumbnail: '$course.thumbnail',
               teacherId: '$course.teacherId',
               teacherName: '$teacher.username'
             }

@@ -8,14 +8,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
     try {
       const data: any = await app.$api.course.getCart()
-      console.log('cart :>>>', data.cart[0].courses)
+      // console.log('cart :>>>', data.cart[0].courses)
 
       if (data.success) {
         const courseStore = useCourses()
         courseStore.setCart(data.cart[0].courses)
       }
     } catch (error: any) {
-      console.log(error.message)
+      console.log('error: >>>', error.message)
     }
   }
   if (to.meta.auth) {

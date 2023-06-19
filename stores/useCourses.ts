@@ -119,6 +119,14 @@ export default defineStore('courses', () => {
 
   const cart = ref<any>([])
 
+  const getTotal = () => {
+    const total = cart.value.reduce(
+      (accumulator: number, currentItem: any) => accumulator + currentItem.price,
+      0
+    )
+    return total
+  }
+
   const setCourse = (type: string, coursesFromBackend: courseArray) => {
     if (type === 'student') {
       courseStudent.value = coursesFromBackend
@@ -198,6 +206,7 @@ export default defineStore('courses', () => {
     cart,
     setCourse,
     setCart,
+    getTotal,
     removeCartItem,
     setCurrentCourse,
     setPurchased,

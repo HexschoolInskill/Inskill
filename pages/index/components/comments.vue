@@ -6,7 +6,7 @@
         <p class="mt-4 text-xl">我們的學生都這麼說⋯⋯</p>
       </div>
       <div class="gsap-slide-up mt-10 grid gap-6 xl:grid-cols-3">
-        <in-card xs-white perspective class="flex h-full flex-col justify-between p-11">
+        <in-card xs-white :glow="false" class="flex h-full flex-col justify-between p-11">
           <div>
             <i class="icon-quote text-[20px] text-black sm:text-gray"></i>
           </div>
@@ -25,7 +25,7 @@
             <p class="font-bold leading-normal text-gray">我是學生</p>
           </div>
         </in-card>
-        <in-card xs-white perspective class="flex h-full flex-col justify-between p-11">
+        <in-card xs-white :glow="false" class="flex h-full flex-col justify-between p-11">
           <div>
             <i class="icon-quote text-[20px] text-black sm:text-gray"></i>
           </div>
@@ -44,7 +44,7 @@
             <p class="font-bold leading-normal text-gray">我是學生</p>
           </div>
         </in-card>
-        <in-card xs-white perspective class="flex h-full flex-col justify-between p-11">
+        <in-card xs-white :glow="false" class="flex h-full flex-col justify-between p-11">
           <div>
             <i class="icon-quote text-[20px] text-black sm:text-gray"></i>
           </div>

@@ -3,7 +3,6 @@
     ref="cardRef"
     class="in-card"
     :class="{
-      'in-card--perspective': perspective,
       'in-card--xs-white': xsWhite,
       'in-card--border': border
     }"
@@ -13,6 +12,13 @@
     @mouseover="handleMouseOver"
     @mouseleave="resetAxis"
   >
+    <div
+      v-if="glow"
+      class="in-card__glow"
+      :style="{
+        borderRadius: `${borderRadius}px`
+      }"
+    ></div>
     <div
       class="in-card__wrapper"
       v-bind="$attrs"
@@ -47,6 +53,10 @@ const props = defineProps({
   borderRadius: {
     type: Number,
     default: 24
+  },
+  glow: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -75,12 +85,57 @@ function handleMouseOver(event: MouseEvent) {
 </script>
 <style lang="scss">
 .in-card {
+  position: relative;
   &__wrapper {
     background-image: linear-gradient(90deg, #262b2f, #000);
     will-change: transform;
     transition: transform 0.3s;
     overflow: hidden;
     height: 100%;
+  }
+
+  &__glow {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    @apply transition-base;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 220%;
+      height: 220%;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      background-image: linear-gradient(to right top, rgb(147 51 234), rgb(12 24 160));
+      transform: translate(-50%, -50%);
+      @apply transition-base;
+    }
+  }
+
+  &:hover {
+    .in-card__glow {
+      filter: blur(12px);
+      transform: scale(1.01);
+
+      &::before {
+        animation: glow 2s linear both infinite;
+
+        @keyframes glow {
+          from {
+            transform: translate(-50%, -50%) rotate(0deg);
+          }
+
+          to {
+            transform: translate(-50%, -50%) rotate(360deg);
+          }
+        }
+      }
+    }
   }
 
   &--xs-white {

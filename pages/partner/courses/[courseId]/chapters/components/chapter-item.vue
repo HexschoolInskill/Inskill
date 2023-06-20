@@ -2,7 +2,7 @@
   <div class="flex h-15 w-full items-center border-b border-solid border-white/50 px-6">
     <div class="flex-1 text-white">
       <in-input v-if="isEditing" v-model="title" class="text-black" @keyup.enter="handleEdit" />
-      <h5 v-else class="text-h5 font-bold line-clamp-1">{{ value }}</h5>
+      <h5 v-else class="line-clamp-1 text-h5 font-bold">{{ value }}</h5>
     </div>
     <div class="flex flex-shrink-0 items-center gap-5 pl-6">
       <template v-if="isEditing">

@@ -20,7 +20,7 @@
                   </nuxt-link>
                 </div>
                 <div class="flex-1 p-6 sm:p-8">
-                  <h3 class="text-[28px] text-blue line-clamp-1 sm:text-white">
+                  <h3 class="line-clamp-1 text-[28px] text-blue sm:text-white">
                     {{ item.title }}
                   </h3>
                   <div class="mt-6">

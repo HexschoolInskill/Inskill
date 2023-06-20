@@ -107,7 +107,7 @@
           </div>
           <div class="flex-1 p-8 xl:px-6 xl:py-4">
             <h3
-              class="transition-base text-[28px] text-blue line-clamp-1 sm:text-[#6C757D] sm:group-hover:text-white"
+              class="transition-base line-clamp-1 text-[28px] text-blue sm:text-[#6C757D] sm:group-hover:text-white"
             >
               {{ item.title }}
             </h3>
@@ -204,7 +204,7 @@
           </div>
           <div class="flex-1 p-8 xl:px-6 xl:py-4">
             <h3
-              class="transition-base text-[28px] text-blue line-clamp-1 sm:text-[#6C757D] sm:group-hover:text-white"
+              class="transition-base line-clamp-1 text-[28px] text-blue sm:text-[#6C757D] sm:group-hover:text-white"
             >
               {{ item.title }}
             </h3>

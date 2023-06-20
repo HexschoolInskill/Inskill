@@ -21,7 +21,7 @@
                     </nuxt-link>
                   </div>
                   <div class="p-6 font-bold text-gray sm:p-12 sm:text-white">
-                    <h3 class="text-[28px] text-blue line-clamp-1 sm:text-white">
+                    <h3 class="line-clamp-1 text-[28px] text-blue sm:text-white">
                       {{ item.title }}
                     </h3>
                     <div class="mt-4 flex flex-col justify-between sm:flex-row">

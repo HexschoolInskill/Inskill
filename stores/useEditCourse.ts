@@ -24,7 +24,17 @@ export default defineStore('editCourse', () => {
   const currentLesson = ref<CourseLesson | null>(null)
   const currentContents = ref<LessonContent[]>([])
 
-  const isLoading = ref(false)
+  let loadingTimer: NodeJS.Timeout | number | undefined
+  const delayLoading = ref(false)
+  const isLoading = computed({
+    get() {
+      return delayLoading.value
+    },
+    set(value) {
+      clearTimeout(loadingTimer)
+      loadingTimer = setTimeout(() => (delayLoading.value = value), 200)
+    }
+  })
 
   return {
     currentCourse,

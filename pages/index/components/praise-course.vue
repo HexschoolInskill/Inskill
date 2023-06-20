@@ -16,13 +16,14 @@
           v-for="item in courses"
           :key="item._id"
           perspective
+          glow
           xs-white
           class="group flex cursor-pointer flex-col font-bold text-gray"
         >
           <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
             <nuxt-link
               :to="`/courses/${item._id}?courseType=normal`"
-              class="hidden cursor-pointer items-center text-white sm:flex"
+              class="cursor-pointer items-center text-white sm:flex"
             >
               <img
                 :src="item.thumbnail"

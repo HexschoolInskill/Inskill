@@ -7,11 +7,11 @@
           <div class="swiper-wrapper">
             <div v-for="item in courses" :key="item._id" class="swiper-slide">
               <div class="group">
-                <in-card xs-white>
+                <in-card xs-white glow>
                   <div class="relative pt-7/10 sm:pt-5/10">
                     <nuxt-link
                       :to="`/courses/${item._id}?courseType=stream`"
-                      class="hidden cursor-pointer items-center text-white sm:flex"
+                      class="cursor-pointer items-center text-white sm:flex"
                     >
                       <img
                         :src="item.thumbnail"

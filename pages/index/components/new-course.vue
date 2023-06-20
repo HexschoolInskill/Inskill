@@ -6,11 +6,16 @@
         <div class="swiper-wrapper">
           <div v-for="item in courses" :key="item._id" class="swiper-slide">
             <div class="group block cursor-pointer">
-              <in-card xs-white perspective class="flex flex-col font-bold text-gray sm:text-white">
+              <in-card
+                glow
+                xs-white
+                perspective
+                class="flex flex-col font-bold text-gray sm:text-white"
+              >
                 <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-6/10">
                   <nuxt-link
                     :to="`/courses/${item._id}?courseType=normal`"
-                    class="hidden cursor-pointer items-center text-white sm:flex"
+                    class="cursor-pointer items-center text-white sm:flex"
                   >
                     <img
                       :src="item.thumbnail"

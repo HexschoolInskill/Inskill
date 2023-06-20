@@ -9,7 +9,7 @@
           <div
             v-if="isOptionsShow"
             ref="optionsRef"
-            class="fixed z-50 overflow-hidden rounded-1 bg-white text-black"
+            class="fixed z-50 overflow-hidden rounded-1 bg-[#1f1f23] p-2 text-white shadow"
             :style="{
               left: `${optionsPosition.x}px`,
               top: `${optionsPosition.y}px`,
@@ -21,7 +21,7 @@
               v-for="option in options"
               :key="String(option.value)"
               :label="option.label"
-              class="cursor-pointer whitespace-nowrap border-b border-solid border-gray-l px-6 py-2 last:border-0 hover:bg-gray-l"
+              class="transition-base cursor-pointer whitespace-nowrap rounded-1 px-4 py-2 last:border-0 hover:bg-gray-600"
               @click="handleSelect(option)"
             >
               {{ option.label }}
@@ -65,13 +65,14 @@ const optionsPosition = reactive({
 const triggerRef = ref<HTMLDivElement | null>(null)
 const optionsRef = ref<HTMLDivElement | null>(null)
 
-function calculateOptionsStyle() {
+function calculateOptionsStyle(isScrollOrResize = false) {
   if (!triggerRef.value || !optionsRef.value) return
 
   const triggerRect = triggerRef.value.getBoundingClientRect()
   const optionsRect = optionsRef.value.getBoundingClientRect()
-  const basePositionX =
-    triggerRect.left + triggerRect.width / 2 - optionsRect.width / OPTIONS_SCALE_RATIO / 2
+  const basePositionX = isScrollOrResize
+    ? triggerRect.left + triggerRect.width / 2 - optionsRect.width / 2
+    : triggerRect.left + triggerRect.width / 2 - optionsRect.width / OPTIONS_SCALE_RATIO / 2
   if (basePositionX + optionsRect.width / OPTIONS_SCALE_RATIO > window.innerWidth) {
     optionsPosition.x = window.innerWidth - optionsRect.width - 40
   } else {
@@ -82,9 +83,10 @@ function calculateOptionsStyle() {
 }
 
 watch(isOptionsShow, async (current) => {
-  if (!current) return
-  await nextTick()
-  calculateOptionsStyle()
+  if (current) {
+    await nextTick()
+    calculateOptionsStyle()
+  }
 })
 
 function handleClickOutside(event: Event) {
@@ -105,6 +107,19 @@ function handleSelect(option: Option) {
   emit('select', option)
   isOptionsShow.value = false
 }
+
+function handleScrollAndResize() {
+  if (isOptionsShow) calculateOptionsStyle(true)
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScrollAndResize)
+  window.addEventListener('resize', handleScrollAndResize)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScrollAndResize)
+  window.removeEventListener('resize', handleScrollAndResize)
+})
 </script>
 <style lang="scss" scoped>
 .dropdown-options-enter-from,

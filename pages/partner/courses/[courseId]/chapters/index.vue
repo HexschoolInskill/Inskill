@@ -1,4 +1,5 @@
 <template>
+  <Title>章節管理 - Inskill</Title>
   <div class="relative">
     <draggable
       v-model="course.chapters"

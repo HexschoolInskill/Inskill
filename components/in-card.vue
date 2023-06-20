@@ -56,7 +56,7 @@ const props = defineProps({
   },
   glow: {
     type: Boolean,
-    default: true
+    default: false
   }
 })
 
@@ -101,6 +101,7 @@ function handleMouseOver(event: MouseEvent) {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    transform: scale(0.99);
     @apply transition-base;
 
     &::before {

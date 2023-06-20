@@ -27,7 +27,7 @@
           </div>
           <nuxt-link class="whitespace-nowrap">直播</nuxt-link>
           <form
-            class="transition-base flex h-11 flex-1 rounded-1 border-2 border-solid border-gray-l bg-white py-2 focus-within:border-purple-600 hover:border-purple-600"
+            class="in-header__search transition-base flex h-11 flex-1 rounded-1 border-2 border-solid border-gray-l bg-white py-2 focus-within:border-purple-600 hover:border-purple-600"
             @submit.prevent="handleSearch"
             @keyup.enter="handleSearch"
           >

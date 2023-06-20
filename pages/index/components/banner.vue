@@ -18,9 +18,9 @@
           <span class="banner__slogan block">學習最硬的技能</span>
         </div>
       </h1>
-      <div class="w-full sm:w-8/12 lg:w-5/12">
+      <div class="banner__search-wrapper w-full overflow-hidden sm:w-8/12 lg:w-5/12">
         <form
-          class="transition-base mt-6 flex h-11 w-full flex-1 rounded-1 border-2 border-solid border-gray-l bg-white py-2 focus-within:border-purple-600 hover:border-purple-600"
+          class="banner__search transition-base mt-6 flex h-11 w-full flex-1 rounded-1 border-2 border-solid border-gray-l bg-white py-2 focus-within:border-purple-600 hover:border-purple-600"
         >
           <input
             v-model="searchInput"
@@ -52,18 +52,33 @@ function handleSearch() {
 }
 
 onMounted(() => {
-  gsap.to('.banner__mask', {
+  const tl = gsap.timeline()
+  tl.to('.banner__mask', {
     opacity: 0,
     duration: 1,
     ease: 'power2.out'
   })
 
-  gsap.from('.banner__slogan', {
-    y: '100%',
-    duration: 0.6,
-    ease: 'power2.out',
-    stagger: 0.6
-  })
+  tl.from(
+    '.banner__slogan',
+    {
+      y: '100%',
+      duration: 0.6,
+      ease: 'power2.out',
+      stagger: 0.6
+    },
+    '<'
+  )
+
+  tl.from(
+    '.banner__search-wrapper',
+    {
+      width: 0,
+      duration: 0.6,
+      ease: 'power2.out'
+    },
+    '<+=0.5'
+  )
 })
 </script>
 <style lang="scss" scoped>

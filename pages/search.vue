@@ -42,28 +42,28 @@
       :class="{ 'pointer-events-none opacity-50': isLoading }"
     >
       <div class="flex items-center justify-end text-white">
-        <div
-          class="cursor-pointer underline-offset-2 hover:underline"
-          :class="{ underline: sortBy === 'popular' }"
-          @click="sortBy = 'popular'"
-        >
+        <div class="group relative cursor-pointer pb-2px" @click="sortBy = 'popular'">
           依人數
+          <div
+            class="transition-base absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-white group-hover:scale-x-100"
+            :class="{ '!scale-x-100': sortBy === 'popular' }"
+          ></div>
         </div>
         <div class="mx-2 h-4 w-px bg-white"></div>
-        <div
-          class="cursor-pointer underline-offset-2 hover:underline"
-          :class="{ underline: sortBy === 'praise' }"
-          @click="sortBy = 'praise'"
-        >
+        <div class="group relative cursor-pointer pb-2px" @click="sortBy = 'praise'">
           依評價
+          <div
+            class="transition-base absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-white group-hover:scale-x-100"
+            :class="{ '!scale-x-100': sortBy === 'praise' }"
+          ></div>
         </div>
         <div class="mx-2 h-4 w-px bg-white"></div>
-        <div
-          class="cursor-pointer underline-offset-2 hover:underline"
-          :class="{ underline: sortBy === 'time' }"
-          @click="sortBy = 'time'"
-        >
+        <div class="group relative cursor-pointer pb-2px" @click="sortBy = 'time'">
           依時間
+          <div
+            class="transition-base absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-white group-hover:scale-x-100"
+            :class="{ '!scale-x-100': sortBy === 'time' }"
+          ></div>
         </div>
       </div>
     </section>
@@ -266,6 +266,7 @@ const userStore = useUser()
 const { userProfile: profile } = storeToRefs(userStore)
 const { notification } = useNotification()
 
+let loadingTimer: NodeJS.Timeout | number | undefined
 const isLoading = ref(false)
 const normalCourses = ref<NormalCourse[]>([])
 const streamCourses = ref<StreamCourse[]>([])
@@ -278,6 +279,7 @@ await searchCourseByRouteQuery()
 watch([category, sortBy], ([category, sortBy]) => {
   router.push(`/search?q=${q.value}&category=${category}&sortBy=${sortBy}`)
 })
+
 watch(
   () => route.query,
   async (query) => {
@@ -287,7 +289,9 @@ watch(
 )
 
 async function searchCourse() {
-  isLoading.value = true
+  loadingTimer = setTimeout(() => {
+    isLoading.value = true
+  }, 200)
   try {
     const res = await app.$api.course.searchCourse({
       q: q.value,
@@ -301,6 +305,7 @@ async function searchCourse() {
   } catch (error) {
     notification.error((error as Error).message)
   } finally {
+    clearTimeout(loadingTimer)
     isLoading.value = false
   }
 }

@@ -1,12 +1,12 @@
 <template>
   <div
     :data-id="id"
-    class="flex h-15 w-full items-center border-b border-solid border-white/50 px-6"
+    class="transition-base flex h-15 w-full items-center rounded-1 px-6 hover:bg-gray-600/30"
   >
     <div class="flex-shrink-0 cursor-grab pr-6">
-      <i class="lesson-handler icon-reorder text-white"></i>
+      <i class="lesson-handler icon-reorder transition-base text-white/50 hover:text-white"></i>
     </div>
-    <div class="flex-1 text-white/90">
+    <div class="flex-1">
       <transition name="fade" mode="out-in">
         <in-input v-if="isEditing" v-model="title" class="text-black" @keyup.enter="handleEdit" />
         <div v-else>
@@ -14,9 +14,9 @@
             :to="`/partner/courses/${$route.params.courseId}/${chapterId}/${id}`"
             class="text-fs-6 group relative inline-block"
           >
-            <p class="line-clamp-1">{{ value }}</p>
+            <p class="line-clamp-1 text-white hover:text-white/80">{{ value }}</p>
             <div
-              class="transition-base absolute bottom-0 left-0 h-2px w-full origin-left scale-x-0 bg-white/90 group-hover:scale-x-100"
+              class="transition-base absolute bottom-0 left-0 h-2px w-full origin-left scale-x-0 bg-white/80 group-hover:scale-x-100"
             ></div>
           </nuxt-link>
         </div>
@@ -24,8 +24,18 @@
     </div>
     <transition name="fade" mode="out-in">
       <div v-if="isEditing" class="flex flex-shrink-0 items-center gap-5 pl-6">
-        <button @click="handleEdit"><i class="icon-check"></i></button>
-        <button @click="isEditing = false"><i class="icon-close"></i></button>
+        <button
+          class="transition-base flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full hover:bg-white/20"
+          @click="handleEdit"
+        >
+          <i class="icon-check"></i>
+        </button>
+        <button
+          class="transition-base flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full hover:bg-white/20"
+          @click="isEditing = false"
+        >
+          <i class="icon-close"></i>
+        </button>
       </div>
       <div v-else class="flex flex-shrink-0 items-center gap-5 pl-6">
         <in-select :value="publish" :options="publishOptions" @select="handlePublish" />
@@ -194,6 +204,6 @@ async function handlePublish(isPublish: boolean) {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: 0.15s ease-out;
+  transition: 0.1s linear;
 }
 </style>

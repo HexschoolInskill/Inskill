@@ -12,7 +12,7 @@
           <in-card border class="flex" :border-radius="4">
             <div class="flex-shrink-0 border-r border-solid border-white/50 px-4">
               <div class="chapter-handler flex h-15 cursor-grab items-center">
-                <i class="icon-reorder text-white"></i>
+                <i class="icon-reorder transition-base text-white/70 hover:text-white"></i>
               </div>
             </div>
             <div class="flex-1">
@@ -40,7 +40,7 @@
                   />
                 </template>
               </draggable>
-              <div class="py-2 text-center">
+              <div class="border-t border-solid border-white/50 py-2 text-center">
                 <in-btn size="small" ghost @click="showCreatePopup('lesson', chapter._id)"
                   >新增課堂</in-btn
                 >

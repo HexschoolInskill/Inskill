@@ -86,6 +86,7 @@ function handleMouseOver(event: MouseEvent) {
 <style lang="scss">
 .in-card {
   position: relative;
+
   &__wrapper {
     background-image: linear-gradient(90deg, #262b2f, #000);
     will-change: transform;
@@ -159,7 +160,7 @@ function handleMouseOver(event: MouseEvent) {
   }
 
   &--border {
-    border: 1px solid white;
+    border: 1px solid rgba(255, 255, 255, 0.7);
   }
 }
 </style>

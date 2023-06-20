@@ -1,15 +1,27 @@
 <template>
   <div class="flex h-15 w-full items-center border-b border-solid border-white/50 px-6">
     <div class="flex-1 text-white">
-      <in-input v-if="isEditing" v-model="title" class="text-black" @keyup.enter="handleEdit" />
-      <h5 v-else class="line-clamp-1 text-h5 font-bold">{{ value }}</h5>
+      <transition name="fade" mode="out-in">
+        <in-input v-if="isEditing" v-model="title" class="text-black" @keyup.enter="handleEdit" />
+        <h5 v-else class="line-clamp-1 text-h5 font-bold">{{ value }}</h5>
+      </transition>
     </div>
-    <div class="flex flex-shrink-0 items-center gap-5 pl-6">
-      <template v-if="isEditing">
-        <button @click="handleEdit"><i class="icon-check"></i></button>
-        <button @click="isEditing = false"><i class="icon-close"></i></button>
-      </template>
-      <template v-else>
+    <transition name="fade" mode="out-in">
+      <div v-if="isEditing" class="flex flex-shrink-0 items-center gap-5 pl-6">
+        <button
+          class="transition-base flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full hover:bg-white/20"
+          @click="handleEdit"
+        >
+          <i class="icon-check"></i>
+        </button>
+        <button
+          class="transition-base flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full hover:bg-white/20"
+          @click="isEditing = false"
+        >
+          <i class="icon-close"></i>
+        </button>
+      </div>
+      <div v-else class="flex flex-shrink-0 items-center gap-5 pl-6">
         <in-dropdown v-slot="{ show }" :options="options" @select="handleOptionSelect">
           <div
             class="transition-base flex h-10 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full text-white group-hover:bg-gray"
@@ -30,8 +42,8 @@
             </svg>
           </div>
         </in-dropdown>
-      </template>
-    </div>
+      </div>
+    </transition>
   </div>
 </template>
 <script lang="ts" setup>
@@ -126,4 +138,14 @@ function handleOptionSelect(option: Option) {
   }
 }
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: 0.1s linear;
+}
+</style>

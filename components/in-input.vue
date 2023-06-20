@@ -75,11 +75,6 @@ const inputValue = computed({
   &__input {
     font-family: inherit;
     @apply transition-base block w-full rounded-1 border-2 border-solid border-gray-l bg-gray-l px-5 py-2 outline-none placeholder:text-gray hover:border-purple-600 focus-visible:border-purple-600;
-
-    &:focus-visible {
-      box-shadow: 0 0 10px rgb(147 51 234);
-    }
-
     &[disabled] {
       opacity: 0.5;
       pointer-events: none;

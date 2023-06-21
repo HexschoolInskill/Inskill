@@ -27,7 +27,7 @@
           </div>
           <nuxt-link class="whitespace-nowrap">直播</nuxt-link>
           <form
-            class="transition-base flex h-11 flex-1 rounded-1 border-2 border-solid border-gray-l py-2 hover:border-black focus:border-black"
+            class="in-header__search transition-base flex h-11 flex-1 rounded-1 border-2 border-solid border-gray-l bg-white py-2 focus-within:border-purple-600 hover:border-purple-600"
             @submit.prevent="handleSearch"
             @keyup.enter="handleSearch"
           >
@@ -38,7 +38,7 @@
               placeholder="開始探索、你的硬技能"
             />
             <button
-              class="borders-solid flex w-11 flex-shrink-0 items-center justify-center border-l-2 border-gray-l"
+              class="borders-solid flex w-11 flex-shrink-0 items-center justify-center border-l-2"
             >
               <i class="icon-search text-[20px] text-gray"></i>
             </button>
@@ -151,7 +151,7 @@
               <li class="in-header__popup-link">
                 <nuxt-link
                   to="/user/profile"
-                  class="block whitespace-nowrap px-3 py-2 text-center"
+                  class="transition-base block whitespace-nowrap px-3 py-2 text-center hover:text-blue"
                   @click="currentPopup = null"
                 >
                   會員資料
@@ -159,14 +159,18 @@
               </li>
               <li class="in-header__popup-link">
                 <nuxt-link
-                  class="block whitespace-nowrap px-3 py-2 text-center"
+                  class="transition-base block whitespace-nowrap px-3 py-2 text-center hover:text-blue"
                   @click="currentPopup = null"
                 >
                   我的課程
                 </nuxt-link>
               </li>
               <li class="in-header__popup-link" @click="app.$api.user.logout">
-                <div class="block whitespace-nowrap px-3 py-2 text-center">登出</div>
+                <div
+                  class="transition-base block whitespace-nowrap px-3 py-2 text-center hover:text-blue"
+                >
+                  登出
+                </div>
               </li>
             </template>
           </ul>

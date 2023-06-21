@@ -5,6 +5,18 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (process.server) {
     const app = useNuxtApp()
     await app.$api.user.fetchProfile()
+
+    try {
+      const data: any = await app.$api.course.getCart()
+      // console.log('cart :>>>', data.cart[0].courses)
+
+      if (data.success) {
+        const courseStore = useCourses()
+        courseStore.setCart(data.cart[0].courses)
+      }
+    } catch (error: any) {
+      console.log('error: >>>', error.message)
+    }
   }
   if (to.meta.auth) {
     const store = useUser()

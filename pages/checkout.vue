@@ -1,6 +1,6 @@
 // checkout page using vue 3
 <template>
-  <in-container class="mt-[11vh] sm:mt-[15vh]">
+  <in-container class="2xl:mt-[2vh]">
     <!-- <div v-if="$fetchState.pending">Loading...</div>
     <div v-else-if="$fetchState.error">Error loading data</div> -->
 
@@ -25,23 +25,23 @@
       <input class="hidden" type="email" name="Email" :value="order.order.Email" />
 
       <main
-        class="relative mr-4 w-full rounded bg-white p-5 sm:w-9/12"
+        class="relative mr-4 w-full rounded-lg bg-[#262b2f] text-white p-5 sm:w-9/12"
         :class="{ 'overflow-y-scroll': cart.length > 3 }"
       >
         <h2
-          class="cart_header mb-4 border-4 border-l-0 border-r-0 border-t-0 border-black text-3xl"
+          class="cart_header mb-4 border-bottom text-white pb-1 text-3xl"
         >
           確認訂單
         </h2>
 
         <div
           v-if="cart.length"
-          class="cart_content border-4 border-l-0 border-r-0 border-t-0 border-black"
+          class="cart_content border-bottom text-white"
         >
           <div v-for="item in cart" :key="item.id" class="cart_item mb-4 flex items-center">
-            <img class="mr-2 border" :src="item.img" alt="img" />
-            <div class="w-2/12">
-              <p class="text-center">{{ item.name }}</p>
+            <img class="mr-2  w-[100px]" :src="item.thumbnail" alt="img" />
+            <div class="w-4/12">
+              <p class="text-center">{{ item.title }}</p>
             </div>
             <div class="mr-auto">
               <p class="">NT$ {{ item.price }}</p>
@@ -52,15 +52,15 @@
         <div class="mt-2">
           <div class="flex">
             <span class="mr-auto">小計</span>
-            <span>NT$ {{ getTotal }}</span>
+            <span>NT$ {{ getTotal() }}</span>
           </div>
 
-          <div class="mt-4 text-right text-3xl font-bold">NT$ {{ getTotal }}</div>
+          <div class="mt-4 text-right text-3xl font-bold">NT$ {{ getTotal() }}</div>
         </div>
       </main>
-      <aside class="ml-1 mt-4 flex w-full flex-col rounded bg-white p-5 sm:mt-0 sm:w-3/12">
+      <aside class="ml-1 mt-4 flex w-full flex-col rounded-lg bg-[#262b2f] text-white p-5 sm:mt-0 sm:w-3/12">
         <h2
-          class="cart_header mb-4 border-4 border-l-0 border-r-0 border-t-0 border-black text-3xl"
+          class="cart_header mb-4 border-bottom text-white pb-1 text-3xl"
         >
           購買人資訊
         </h2>
@@ -72,7 +72,7 @@
         <!-- 接後端去藍新金流 -->
         <button
           :class="[cart.length ? 'bg-black' : 'bg-slate-200']"
-          class="mb-2 mt-4 w-full rounded border p-1 text-xl text-white"
+          class="mb-2 mt-4 w-full rounded border p-1 text-xl transition-base text-white hover:bg-[#262b2f]"
           type="submit"
           :disabled="!cart.length"
         >
@@ -83,7 +83,7 @@
         <NuxtLink to="/cart">
           <button
             :class="[cart.length ? 'bg-slate-400' : 'bg-slate-200']"
-            class="w-full rounded border p-1 text-xl text-white"
+            class="w-full rounded border p-1 text-xl transition-base text-white hover:bg-slate-500"
             type="button"
             :disabled="!cart.length"
           >
@@ -96,43 +96,17 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, computed } from 'vue'
-// import { storeToRefs } from 'pinia'
-// import coursesStore from '~/stores/useCourses'
+import { ref, computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import useCourses from '~/stores/useCourses'
 import userUser from '~/stores/useUser'
 
 // const { $api } = useNuxtApp()
-// let { cart } = storeToRefs(coursesStore())
+const { cart } = storeToRefs(useCourses())
+const { getTotal } = useCourses()
 
 const store = userUser()
 
-// fake cart
-const cart = reactive([
-  {
-    id: 1,
-    img: 'https://fakeimg.pl/100x100/',
-    name: 'test',
-    price: 100
-  },
-  {
-    id: 1,
-    img: 'https://fakeimg.pl/100x100/',
-    name: 'test',
-    price: 100
-  },
-  {
-    id: 1,
-    img: 'https://fakeimg.pl/100x100/',
-    name: 'test',
-    price: 150
-  }
-])
-
-const getTotal = computed(() => {
-  return cart.reduce((accuulator, currentItem) => accuulator + currentItem.price, 0)
-})
-
-// 需要call hello api 來取得上方template 需要的資料
 // 定義order data
 const order = ref({
   aesEncrypt: '',
@@ -161,7 +135,7 @@ const randomOrderId = Date.now()
 
 try {
   const newebpay: any = await useAsyncData('orderFetch', () =>
-    $fetch(`/newebpay/${randomOrderId}?total=${getTotal.value}`)
+    $fetch(`/newebpay/${randomOrderId}?total=${getTotal}`)
   )
   console.log(`data : `, newebpay)
 
@@ -175,6 +149,6 @@ try {
     order.value.MerchantID = payment.MerchantID
   }
 } catch (error) {
-  console.log(error)
+  console.log('newebpay error :>>>', error)
 }
 </script>

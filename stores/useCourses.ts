@@ -118,7 +118,15 @@ export default defineStore('courses', () => {
   const expandChapter = ref(0) // 預設在課程第一章
   const content = ref({ chapter: expandChapter, lesson: 0 }) // 當前查看的課程內容
 
-  const cart = ref<Object[]>([])
+  const cart = ref<any>([])
+
+  const getTotal = () => {
+    const total = cart.value.reduce(
+      (accumulator: number, currentItem: any) => accumulator + currentItem.price,
+      0
+    )
+    return total
+  }
 
   const setCourse = (type: string, coursesFromBackend: courseArray) => {
     if (type === 'student') {
@@ -138,6 +146,10 @@ export default defineStore('courses', () => {
 
   const setCart = (cartFromBackend: Object[]) => {
     cart.value = cartFromBackend
+  }
+
+  const removeCartItem = (index: number) => {
+    cart.value.splice(index, 1)
   }
 
   const setCurrentCourse = (course: courseType) => {
@@ -197,6 +209,8 @@ export default defineStore('courses', () => {
     cart,
     setCourse,
     setCart,
+    getTotal,
+    removeCartItem,
     setCurrentCourse,
     setPurchased,
     setCollected,

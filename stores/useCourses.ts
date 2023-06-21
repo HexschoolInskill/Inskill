@@ -44,6 +44,7 @@ export default defineStore('courses', () => {
             sort: 0,
             createdAt: '',
             updatedAt: '',
+            isPublish: true,
             lessonContent: [
               {
                 _id: '000001',
@@ -168,6 +169,7 @@ export default defineStore('courses', () => {
   const createReview = (content: any) => {
     const { star, userId, username, comment } = content
     currentCourse.value.reviews.push({
+      _id: '',
       userId,
       username,
       rating: star,
@@ -179,6 +181,7 @@ export default defineStore('courses', () => {
   const createQuestion = (content: any) => {
     const { chapter, lesson, userId, username, comment } = content
     currentCourse.value.chapters[chapter].lessons[lesson].question.push({
+      _id: '',
       userId,
       username,
       comment,

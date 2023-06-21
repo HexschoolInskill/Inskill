@@ -122,4 +122,3 @@ export async function createWebRTCApp(roomName: string): Promise<any> {
     }
   }
 }
-/* eslint-disable */

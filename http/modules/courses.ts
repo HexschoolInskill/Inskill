@@ -1,4 +1,5 @@
 import HttpFactory from '../factory'
+import type { LessonContent } from './lessonContent'
 
 export type CourseSortBy = 'popular' | 'praise' | 'time'
 export type CourseCategory = 'normal' | 'stream'
@@ -10,19 +11,10 @@ interface cart {
   isCart: boolean
 }
 
-export interface LessonContent {
-  contentType: string
-  content: string
-  sort: number
-  _id?: string
-  createdAt?: string
-  updatedAt?: string
-  duration?: number
-}
 export interface LessonQuestion {
   userId: string
   comment: string
-  _id?: string
+  _id: string
   createdAt?: string
   updatedAt?: string
   replies: any[]
@@ -33,7 +25,7 @@ export interface CourseReview {
   rating: number
   comment: string
   createdAt?: string
-  _id?: string
+  _id: string
   username: string
 }
 export interface CourseLesson {
@@ -41,9 +33,10 @@ export interface CourseLesson {
   description: string
   freePreview: boolean
   sort: number
+  isPublish: boolean
   lessonContent: LessonContent[]
   question: LessonQuestion[]
-  _id?: string
+  _id: string
   createdAt?: string
   updatedAt?: string
 }
@@ -53,12 +46,12 @@ export interface CourseChapter {
   description: string
   sort: number
   lessons: CourseLesson[]
-  _id?: string
+  _id: string
   createdAt?: string
   updatedAt?: string
 }
 export interface Course {
-  _id?: string
+  _id: string
   title: string
   description: string
   price: number
@@ -71,7 +64,7 @@ export interface Course {
 }
 export interface NormalCourse extends Course {
   isPublic: boolean
-  createdAt?: string
+  createdAt: string
   scoreCount: number
   course: number
   chapter: number
@@ -99,6 +92,25 @@ interface SearchPayload {
   sortBy: CourseSortBy
 }
 
+interface UpdateLessonPayload {
+  courseId: string
+  chapterId: string
+  lessonId: string
+  field: 'title' | 'sort' | 'isPublish' | 'freePreview'
+  title?: string
+  sort?: number
+  isPublish?: boolean
+  freePreview?: boolean
+}
+
+interface UpdateChapterPayload {
+  courseId: string
+  chapterId: string
+  field: 'title' | 'sort'
+  title?: string
+  sort?: number
+}
+
 interface CollectCoursePayload {
   courseId: string
   courseType: CollectCourseType
@@ -106,9 +118,14 @@ interface CollectCoursePayload {
 }
 
 export interface CollectCourse {
-  _id?: string
+  _id: string
   courseId: string
   courseType: CollectCourseType
+}
+
+interface ChapterAndLessonResponse {
+  success: boolean
+  updatedChapter: CourseChapter[]
 }
 
 class CoursesModule extends HttpFactory {
@@ -151,26 +168,61 @@ class CoursesModule extends HttpFactory {
     )
   }
 
+  async updateCourse({
+    courseId,
+    ...payload
+  }: {
+    courseId: string
+    title: string
+    description: string
+    price: number
+    isPublic: boolean
+  }) {
+    return await this.call<{ success: boolean; course: NormalCourse }>(
+      `${this.RESOURCE}/${courseId}`,
+      'PATCH',
+      payload
+    )
+  }
+
+  async updateThumbnail(courseId: string, image: File) {
+    const formData = new FormData()
+    formData.append('image', image)
+    return await this.call<{ success: boolean; course: NormalCourse }>(
+      `${this.RESOURCE}/${courseId}`,
+      'PATCH',
+      formData
+    )
+  }
+
+  async createLesson(courseId: string, chapterId: string, title: string) {
+    return await this.call<ChapterAndLessonResponse>(`${this.RESOURCE}/lesson`, 'POST', {
+      courseId,
+      chapterId,
+      title
+    })
+  }
+
+  async deleteLesson(courseId: string, chapterId: string, lessonId: string) {
+    return await this.call<ChapterAndLessonResponse>(
+      `${this.RESOURCE}/lesson?courseId=${courseId}&chapterId=${chapterId}&lessonId=${lessonId}`,
+      'DELETE'
+    )
+  }
+
+  async updateLesson(payload: UpdateLessonPayload) {
+    return await this.call<ChapterAndLessonResponse>(`${this.RESOURCE}/lesson`, 'PATCH', payload)
+  }
+
   async createChapter(courseId: string, title: string) {
-    return await this.call<{
-      success: boolean
-      sort: number
-      updatedChapter: CourseChapter[]
-    }>(`${this.RESOURCE}/chapter`, 'POST', {
+    return await this.call<ChapterAndLessonResponse>(`${this.RESOURCE}/chapter`, 'POST', {
       courseId,
       title
     })
   }
 
-  async createLesson(courseId: string, chapterId: string, title: string) {
-    return await this.call<{
-      success: boolean
-      updatedChapter: CourseChapter[]
-    }>(`${this.RESOURCE}/lesson`, 'POST', {
-      courseId,
-      chapterId,
-      title
-    })
+  async updateChapter(payload: UpdateChapterPayload) {
+    return await this.call<ChapterAndLessonResponse>(`${this.RESOURCE}/chapter`, 'PATCH', payload)
   }
 
   async deleteChapter(courseId: string, chapterId: string) {
@@ -179,16 +231,7 @@ class CoursesModule extends HttpFactory {
     }>(`${this.RESOURCE}/chapter?courseId=${courseId}&chapterId=${chapterId}`, 'DELETE')
   }
 
-  async sortChapter(sortPayload: {
-    courseId: string
-    chapterId: string
-    sort: number
-    field: string
-  }) {
-    return await this.call<{ success: boolean }>(`${this.RESOURCE}/chapter`, 'PATCH', sortPayload)
-  }
-
-  // searchCourse(): Promise<IndexCourses>
+  searchCourse(): Promise<IndexCourses>
   searchCourse(payload: SearchPayload): Promise<SearchCourses<NormalCourse | StreamCourse>>
   async searchCourse(payload?: SearchPayload) {
     if (payload) {

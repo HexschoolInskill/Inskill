@@ -4,12 +4,14 @@ import UserModule from '~~/http/modules/user'
 import CoursesModule from '~~/http/modules/courses'
 import LiveCoursesModule from '~~/http/modules/liveCourse'
 import PartnerModule from '~/http/modules/partner'
+import LessonContentModule from '~/http/modules/lessonContent'
 
 interface IApiInstance {
   user: UserModule
   course: CoursesModule
   liveCourse: LiveCoursesModule
   partner: PartnerModule
+  lessonContent: LessonContentModule
 }
 
 export default defineNuxtPlugin(() => {
@@ -45,7 +47,8 @@ export default defineNuxtPlugin(() => {
     user: new UserModule(fetcher),
     course: new CoursesModule(fetcher),
     liveCourse: new LiveCoursesModule(fetcher),
-    partner: new PartnerModule(fetcher)
+    partner: new PartnerModule(fetcher),
+    lessonContent: new LessonContentModule(fetcher)
   }
 
   return {

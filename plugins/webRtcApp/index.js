@@ -2004,5 +2004,3 @@ export class WebRTCAdaptor {
 
 /* The Error Callbacks Called by This Class */
 //TODO:
-
-/* eslint-disable */

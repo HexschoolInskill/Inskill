@@ -166,4 +166,3 @@ export class WebSocketAdaptor {
     return this.connecting
   }
 }
-/* eslint-disable */

@@ -118,4 +118,3 @@ export class PeerStats {
     }
   }
 }
-/* eslint-disable */

@@ -129,4 +129,3 @@ export function errorHandler(error, message) {
     console.error(message)
   }
 }
-/* eslint-disable */

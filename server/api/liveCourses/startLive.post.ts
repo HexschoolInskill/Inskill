@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable */
 // 老師開始直播課程
 import Joi from 'joi'
@@ -45,8 +46,7 @@ export default defineEventHandler(async (event) => {
     // }
     // create new stream in media server with course title
     const courseTitle = liveCourse.title
-    const { success: createWebRTCAppResponseSuccess, data: createWebRTCAppResponse } =
-      await createWebRTCApp(courseTitle)
+    const { success: createWebRTCAppResponseSuccess, data: createWebRTCAppResponse } = await createWebRTCApp(courseTitle)
     if (!createWebRTCAppResponseSuccess) {
       return createError({
         statusCode: 400,

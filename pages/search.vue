@@ -17,22 +17,24 @@
       <div class="whitespace-nowrap border-b border-solid border-[#6C757D]">
         <div
           class="group relative mx-5 inline-block cursor-pointer pb-5 text-[20px] font-bold text-white"
+          :class="{ '!text-purple-600': category === 'normal' }"
           @click="category = 'normal'"
         >
           <p>一般課程</p>
           <div
-            class="transition-base absolute bottom-0 left-0 h-1 w-full scale-x-0 bg-white group-hover:scale-x-100"
-            :class="{ '!scale-x-100': category === 'normal' }"
+            class="transition-base absolute bottom-0 left-0 h-1 w-full scale-x-0 rounded-1 bg-white group-hover:scale-x-100"
+            :class="{ '!scale-x-100 !bg-purple-600': category === 'normal' }"
           ></div>
         </div>
         <div
           class="group relative mx-5 inline-block cursor-pointer pb-5 text-[20px] font-bold text-white"
+          :class="{ '!text-purple-600': category === 'stream' }"
           @click="category = 'stream'"
         >
           <p>直播課程</p>
           <div
-            class="transition-base absolute bottom-0 left-0 h-1 w-full scale-x-0 bg-white group-hover:scale-x-100"
-            :class="{ '!scale-x-100': category === 'stream' }"
+            class="transition-base absolute bottom-0 left-0 h-1 w-full scale-x-0 rounded-1 bg-white group-hover:scale-x-100"
+            :class="{ '!scale-x-100 !bg-purple-600': category === 'stream' }"
           ></div>
         </div>
       </div>
@@ -42,214 +44,224 @@
       :class="{ 'pointer-events-none opacity-50': isLoading }"
     >
       <div class="flex items-center justify-end text-white">
-        <div
-          class="cursor-pointer underline-offset-2 hover:underline"
-          :class="{ underline: sortBy === 'popular' }"
-          @click="sortBy = 'popular'"
-        >
+        <div class="group relative cursor-pointer pb-2px" @click="sortBy = 'popular'">
           依人數
+          <div
+            class="transition-base absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-white group-hover:scale-x-100"
+            :class="{ '!scale-x-100': sortBy === 'popular' }"
+          ></div>
         </div>
         <div class="mx-2 h-4 w-px bg-white"></div>
-        <div
-          class="cursor-pointer underline-offset-2 hover:underline"
-          :class="{ underline: sortBy === 'praise' }"
-          @click="sortBy = 'praise'"
-        >
+        <div class="group relative cursor-pointer pb-2px" @click="sortBy = 'praise'">
           依評價
+          <div
+            class="transition-base absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-white group-hover:scale-x-100"
+            :class="{ '!scale-x-100': sortBy === 'praise' }"
+          ></div>
         </div>
         <div class="mx-2 h-4 w-px bg-white"></div>
-        <div
-          class="cursor-pointer underline-offset-2 hover:underline"
-          :class="{ underline: sortBy === 'time' }"
-          @click="sortBy = 'time'"
-        >
+        <div class="group relative cursor-pointer pb-2px" @click="sortBy = 'time'">
           依時間
+          <div
+            class="transition-base absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-white group-hover:scale-x-100"
+            :class="{ '!scale-x-100': sortBy === 'time' }"
+          ></div>
         </div>
       </div>
     </section>
     <section class="mt-10 pb-32">
-      <div v-if="isLoading" class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-        <in-skeleton class="h-[480px]" />
-        <in-skeleton class="h-[480px]" />
-        <in-skeleton class="h-[480px]" />
-        <in-skeleton class="h-[480px]" />
-      </div>
-      <div
-        v-else-if="category === 'normal' && normalCourses.length"
-        class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4"
-      >
-        <in-card
-          v-for="item in normalCourses"
-          :key="item._id"
-          class="group flex cursor-pointer flex-col font-bold text-[#6C757D]"
+      <transition name="slide-up" mode="out-in">
+        <div v-if="isLoading" class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          <in-skeleton class="h-[480px]" />
+          <in-skeleton class="h-[480px]" />
+          <in-skeleton class="h-[480px]" />
+          <in-skeleton class="h-[480px]" />
+        </div>
+        <div
+          v-else-if="category === 'normal' && normalCourses.length"
+          class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4"
         >
-          <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
-            <nuxt-link
-              :to="`/courses/${item._id}?courseType=${category}`"
-              class="hidden cursor-pointer items-center text-white sm:flex"
-            >
-              <img
-                :src="item.thumbnail"
-                :alt="item.title"
-                class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
-              />
-            </nuxt-link>
-            <div
-              class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-[#FFC107] group-hover:translate-y-0 group-hover:opacity-100"
-              @click="handleCollectCourse(item._id)"
-            >
-              <i
-                v-if="isInCollection(item._id)"
-                class="icon-bookmark -mt-px text-[32px] text-yellow"
-              ></i>
-              <i v-else class="icon-bookmark-outline -mt-px text-[32px]"></i>
-            </div>
-          </div>
-          <div class="flex-1 p-8 xl:px-6 xl:py-4">
-            <h3
-              class="transition-base text-[28px] text-blue line-clamp-1 sm:text-[#6C757D] sm:group-hover:text-white"
-            >
-              {{ item.title }}
-            </h3>
-            <div class="mt-2 flex gap-3 xl:block">
-              <div class="flex gap-3 text-[#DEE2E6]/50">
-                <i
-                  v-for="score in Math.round(item.averageRating)"
-                  :key="score"
-                  class="icon-star text-[22px] text-yellow"
-                ></i>
-                <i
-                  v-for="score in 5 - Math.round(item.averageRating)"
-                  :key="score"
-                  class="icon-star text-[22px]"
-                ></i>
-              </div>
-              <p class="mt-2">{{ item.scoreCount }} 則評價</p>
-            </div>
-            <div class="mt-6 flex items-center">
-              <div class="flex-shrink-0">
-                <i class="icon-category text-black sm:text-white"></i>
-              </div>
-              <div class="flex-1 pl-4">
-                <span>章節數量</span>
-                <span class="ml-3">{{ formatNumber(item.chapter) }}</span>
-                <span>章</span>
-                <span>{{ formatNumber(item.course) }}</span>
-                <span>節</span>
-              </div>
-            </div>
-            <div class="mt-4 flex items-center">
-              <div class="flex-shrink-0">
-                <i class="icon-people text-black sm:text-white"></i>
-              </div>
-              <div class="flex-1 pl-4">
-                <span>{{ formatNumber(item.purchasedCount) }}</span>
-                <span class="ml-3">人已經加入</span>
-              </div>
-            </div>
-            <div class="mt-6 flex flex-col gap-4">
-              <div class="flex items-center gap-3">
+          <in-card
+            v-for="item in normalCourses"
+            :key="item._id"
+            glow
+            class="group flex cursor-pointer flex-col font-bold text-[#6C757D]"
+          >
+            <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
+              <nuxt-link
+                :to="`/courses/${item._id}?courseType=${category}`"
+                class="hidden cursor-pointer items-center text-white opacity-90 sm:flex"
+              >
                 <img
-                  class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full object-cover"
-                  src="/images/avatar-fallback.svg"
-                  alt=""
+                  :src="item.thumbnail"
+                  :alt="item.title"
+                  class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
                 />
-                <p class="font-bold leading-normal">
-                  <nuxt-link
-                    :to="`/partner/courses/${item._id}`"
-                    class="hidden cursor-pointer items-center text-white sm:flex"
-                  >
-                    {{ item.teacherName }}
-                  </nuxt-link>
+              </nuxt-link>
+              <div
+                class="absolute left-0 top-0 h-full w-full bg-black/20 transition group-hover:opacity-0"
+              ></div>
+              <div
+                class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-purple-600 group-hover:translate-y-0 group-hover:opacity-100"
+                @click="handleCollectCourse(item._id)"
+              >
+                <i
+                  v-if="isInCollection(item._id)"
+                  class="icon-bookmark -mt-px text-[32px] text-purple-600"
+                ></i>
+                <i v-else class="icon-bookmark-outline -mt-px text-[32px]"></i>
+              </div>
+            </div>
+            <div class="flex-1 p-8 xl:px-6 xl:py-4">
+              <h3
+                class="transition-base line-clamp-1 text-[28px] text-blue sm:text-[#6C757D] sm:group-hover:text-white"
+              >
+                {{ item.title }}
+              </h3>
+              <div class="mt-2 flex gap-3 xl:block">
+                <div class="flex gap-3 text-[#DEE2E6]/50">
+                  <i
+                    v-for="score in Math.round(item.averageRating)"
+                    :key="score"
+                    class="icon-star text-[22px] text-yellow"
+                  ></i>
+                  <i
+                    v-for="score in 5 - Math.round(item.averageRating)"
+                    :key="score"
+                    class="icon-star text-[22px]"
+                  ></i>
+                </div>
+                <p class="mt-2">{{ item.scoreCount }} 則評價</p>
+              </div>
+              <div class="mt-6 flex items-center">
+                <div class="flex-shrink-0">
+                  <i class="icon-category text-black sm:text-white"></i>
+                </div>
+                <div class="flex-1 pl-4">
+                  <span>章節數量</span>
+                  <span class="ml-3">{{ formatNumber(item.chapter) }}</span>
+                  <span>章</span>
+                  <span>{{ formatNumber(item.course) }}</span>
+                  <span>節</span>
+                </div>
+              </div>
+              <div class="mt-4 flex items-center">
+                <div class="flex-shrink-0">
+                  <i class="icon-people text-black sm:text-white"></i>
+                </div>
+                <div class="flex-1 pl-4">
+                  <span>{{ formatNumber(item.purchasedCount) }}</span>
+                  <span class="ml-3">人已經加入</span>
+                </div>
+              </div>
+              <div class="mt-6 flex flex-col gap-4">
+                <div class="flex items-center gap-3">
+                  <img
+                    class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full object-cover"
+                    src="/images/avatar-fallback.svg"
+                    alt=""
+                  />
+                  <p class="font-bold leading-normal">
+                    <nuxt-link
+                      :to="`/partner/courses/${item._id}`"
+                      class="hidden cursor-pointer items-center text-white sm:flex"
+                    >
+                      {{ item.teacherName }}
+                    </nuxt-link>
+                  </p>
+                </div>
+                <p class="flex items-center gap-5 text-2xl">
+                  <span>NT$</span>
+                  <span class="text-black sm:text-white">{{ formatNumber(item.price) }}</span>
                 </p>
               </div>
-              <p class="flex items-center gap-5 text-2xl">
-                <span>NT$</span>
-                <span class="text-black sm:text-white">{{ formatNumber(item.price) }}</span>
-              </p>
             </div>
-          </div>
-        </in-card>
-      </div>
-      <div
-        v-else-if="category === 'stream' && streamCourses.length"
-        class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4"
-      >
-        <in-card
-          v-for="item in streamCourses"
-          :key="item._id"
-          class="group flex cursor-pointer flex-col font-bold text-[#6C757D]"
+          </in-card>
+        </div>
+        <div
+          v-else-if="category === 'stream' && streamCourses.length"
+          class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4"
         >
-          <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
-            <nuxt-link
-              :to="`/courses/${item._id}?courseType=${category}`"
-              class="hidden cursor-pointer items-center text-white sm:flex"
-            >
-              <img
-                :src="item.thumbnail"
-                :alt="item.title"
-                class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
-              />
-            </nuxt-link>
-            <div
-              class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-[#FFC107] group-hover:translate-y-0 group-hover:opacity-100"
-              @click="handleCollectCourse(item._id)"
-            >
-              <i
-                v-if="isInCollection(item._id)"
-                class="icon-bookmark -mt-px text-[32px] text-yellow"
-              ></i>
-              <i v-else class="icon-bookmark-outline -mt-px text-[32px]"></i>
-            </div>
-          </div>
-          <div class="flex-1 p-8 xl:px-6 xl:py-4">
-            <h3
-              class="transition-base text-[28px] text-blue line-clamp-1 sm:text-[#6C757D] sm:group-hover:text-white"
-            >
-              {{ item.title }}
-            </h3>
-            <div class="mt-6 flex items-center">
-              <div class="flex-shrink-0">
-                <i class="icon-time text-black sm:text-inherit"></i>
-              </div>
-              <p class="pl-4">{{ item.startTime }}</p>
-            </div>
-            <div class="mt-4 flex items-center">
-              <div class="flex-shrink-0">
-                <i class="icon-people text-black sm:text-white"></i>
-              </div>
-              <div class="flex-1 pl-4">
-                <span>{{ formatNumber(item.purchasedCount) }}</span>
-                <span class="ml-3">人已經加入</span>
-              </div>
-            </div>
-            <div class="mt-6 flex flex-col gap-4">
-              <div class="flex items-center gap-3">
+          <in-card
+            v-for="item in streamCourses"
+            :key="item._id"
+            glow
+            class="group flex cursor-pointer flex-col font-bold text-[#6C757D]"
+          >
+            <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
+              <nuxt-link
+                :to="`/courses/${item._id}?courseType=${category}`"
+                class="hidden cursor-pointer items-center text-white sm:flex"
+              >
                 <img
-                  class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full object-cover"
-                  src="/images/avatar-fallback.svg"
-                  alt=""
+                  :src="item.thumbnail"
+                  :alt="item.title"
+                  class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
                 />
-                <p class="font-bold leading-normal">
-                  <nuxt-link
-                    :to="`/partner/live/${item._id}`"
-                    class="hidden cursor-pointer items-center text-white sm:flex"
-                  >
-                    {{ item.teacherName }}
-                  </nuxt-link>
+              </nuxt-link>
+              <div
+                class="absolute left-0 top-0 h-full w-full bg-black/20 transition group-hover:opacity-0"
+              ></div>
+              <div
+                class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-purple-600 group-hover:translate-y-0 group-hover:opacity-100"
+                @click="handleCollectCourse(item._id)"
+              >
+                <i
+                  v-if="isInCollection(item._id)"
+                  class="icon-bookmark -mt-px text-[32px] text-purple-600"
+                ></i>
+                <i v-else class="icon-bookmark-outline -mt-px text-[32px]"></i>
+              </div>
+            </div>
+            <div class="flex-1 p-8 xl:px-6 xl:py-4">
+              <h3
+                class="transition-base line-clamp-1 text-[28px] text-blue sm:text-[#6C757D] sm:group-hover:text-white"
+              >
+                {{ item.title }}
+              </h3>
+              <div class="mt-6 flex items-center">
+                <div class="flex-shrink-0">
+                  <i class="icon-time text-black sm:text-inherit"></i>
+                </div>
+                <p class="pl-4">{{ item.startTime }}</p>
+              </div>
+              <div class="mt-4 flex items-center">
+                <div class="flex-shrink-0">
+                  <i class="icon-people text-black sm:text-white"></i>
+                </div>
+                <div class="flex-1 pl-4">
+                  <span>{{ formatNumber(item.purchasedCount) }}</span>
+                  <span class="ml-3">人已經加入</span>
+                </div>
+              </div>
+              <div class="mt-6 flex flex-col gap-4">
+                <div class="flex items-center gap-3">
+                  <img
+                    class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full object-cover"
+                    src="/images/avatar-fallback.svg"
+                    alt=""
+                  />
+                  <p class="font-bold leading-normal">
+                    <nuxt-link
+                      :to="`/partner/live/${item._id}`"
+                      class="hidden cursor-pointer items-center text-white sm:flex"
+                    >
+                      {{ item.teacherName }}
+                    </nuxt-link>
+                  </p>
+                </div>
+                <p class="flex items-center gap-5 text-2xl">
+                  <span>NT$</span>
+                  <span class="text-black sm:text-white">{{ formatNumber(item.price) }}</span>
                 </p>
               </div>
-              <p class="flex items-center gap-5 text-2xl">
-                <span>NT$</span>
-                <span class="text-black sm:text-white">{{ formatNumber(item.price) }}</span>
-              </p>
             </div>
-          </div>
-        </in-card>
-      </div>
-      <div v-else>
-        <h2 class="text-center text-h2 font-bold text-white">沒有相關課程</h2>
-      </div>
+          </in-card>
+        </div>
+        <div v-else>
+          <h2 class="text-center text-h2 font-bold text-white">沒有相關課程</h2>
+        </div>
+      </transition>
     </section>
   </in-container>
 </template>
@@ -266,6 +278,7 @@ const userStore = useUser()
 const { userProfile: profile } = storeToRefs(userStore)
 const { notification } = useNotification()
 
+let loadingTimer: NodeJS.Timeout | number | undefined
 const isLoading = ref(false)
 const normalCourses = ref<NormalCourse[]>([])
 const streamCourses = ref<StreamCourse[]>([])
@@ -278,6 +291,7 @@ await searchCourseByRouteQuery()
 watch([category, sortBy], ([category, sortBy]) => {
   router.push(`/search?q=${q.value}&category=${category}&sortBy=${sortBy}`)
 })
+
 watch(
   () => route.query,
   async (query) => {
@@ -287,7 +301,9 @@ watch(
 )
 
 async function searchCourse() {
-  isLoading.value = true
+  loadingTimer = setTimeout(() => {
+    isLoading.value = true
+  }, 200)
   try {
     const res = await app.$api.course.searchCourse({
       q: q.value,
@@ -301,6 +317,7 @@ async function searchCourse() {
   } catch (error) {
     notification.error((error as Error).message)
   } finally {
+    clearTimeout(loadingTimer)
     isLoading.value = false
   }
 }
@@ -350,4 +367,15 @@ async function handleCollectCourse(courseId: string) {
   }
 }
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.slide-up-enter-from,
+.slide-up-leave-to {
+  transform: translateY(50px);
+  opacity: 0;
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: 0.2s ease-out;
+}
+</style>

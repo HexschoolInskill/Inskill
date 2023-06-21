@@ -74,13 +74,15 @@ const inputValue = computed({
 .in-input {
   &__input {
     font-family: inherit;
-    @apply block w-full rounded-4 bg-gray-l px-5 py-2 placeholder:text-gray;
+    @apply transition-base block w-full rounded-1 border-2 border-solid border-gray-l bg-gray-l px-5 py-2 outline-none placeholder:text-gray hover:border-purple-600 focus-visible:border-purple-600;
     &[disabled] {
       opacity: 0.5;
       pointer-events: none;
     }
+
     &--error {
       @apply border-2 border-solid border-red-500;
+
       &:focus-visible {
         outline: none;
       }

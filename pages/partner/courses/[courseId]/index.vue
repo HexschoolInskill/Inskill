@@ -1,4 +1,5 @@
 <template>
+  <Title>課程資訊 - Inskill</Title>
   <div class="flex items-start">
     <div class="w-7/12 pr-10">
       <in-card border :border-radius="4" class="flex flex-col bg-gray-900 p-10 text-white">

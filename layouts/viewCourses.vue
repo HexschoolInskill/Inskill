@@ -86,7 +86,10 @@
     </div>
 
     <!-- 如果尚未購買直播課程的遮擋Modal -->
-    <in-course-blocker v-if="liveCoursePurchased" :current-course="currentCourse"></in-course-blocker>
+    <in-course-blocker
+      v-if="liveCoursePurchased"
+      :current-course="currentCourse"
+    ></in-course-blocker>
 
     <!-- 評價modal -->
     <in-course-review-modal
@@ -96,7 +99,10 @@
     >
     </in-course-review-modal>
 
-    <div class="flex text-white" :class="{ 'mt-[15vh]': deepDive, hidden: open || liveCoursePurchased }">
+    <div
+      class="flex text-white"
+      :class="{ 'mt-[15vh]': deepDive, hidden: open || liveCoursePurchased }"
+    >
       <!-- 左邊課程切換列表 -->
       <in-course-chapter-selector
         :deep-dive="deepDive"
@@ -109,7 +115,10 @@
       </in-course-chapter-selector>
 
       <!-- 中間課程內容 -->
-      <main class="w-10/12 p-4 transition-all duration-200" :class="{ 'w-full': deepDive, 'hidden': open || liveCoursePurchased }">
+      <main
+        class="w-10/12 p-4 transition-all duration-200"
+        :class="{ 'w-full': deepDive, hidden: open || liveCoursePurchased }"
+      >
         <slot />
       </main>
 

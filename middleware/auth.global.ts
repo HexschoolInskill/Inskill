@@ -2,24 +2,31 @@ import useUser from '~/stores/useUser'
 import useCourses from '~/stores/useCourses'
 
 export default defineNuxtRouteMiddleware(async (to) => {
+  const app = useNuxtApp()
+  const store = useUser()
+
   if (process.server) {
-    const app = useNuxtApp()
     await app.$api.user.fetchProfile()
+  }
+  // 有切換頁面的情況
+  if(to.fullPath){
+    // 有登入的情況
+    if (store.userProfile._id) {
+      // 取購物車資料
+      try {
+        const data: any = await app.$api.course.getCart()
+        console.log('cart :>>>', data.cart[0].courses)
 
-    try {
-      const data: any = await app.$api.course.getCart()
-      // console.log('cart :>>>', data.cart[0].courses)
-
-      if (data.success) {
-        const courseStore = useCourses()
-        courseStore.setCart(data.cart[0].courses)
-      }
-    } catch (error: any) {
-      console.log('error: >>>', error.message)
+        if (data.success) {
+          const courseStore = useCourses()
+          courseStore.setCart(data.cart[0].courses)
+        }
+      } catch (error: any) {
+        console.log('error: >>>', error.message)
+      }      
     }
   }
   if (to.meta.auth) {
-    const store = useUser()
     if (!store.userProfile._id) {
       const path = to.path
       const query = Object.entries(to.query)

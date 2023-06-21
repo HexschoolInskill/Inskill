@@ -14,12 +14,12 @@
   </div> -->
 
   <div>
-    <div class="mb-4 mt-2 h-[60vh] rounded-lg bg-white p-3 text-black">
+    <div class="mb-4 mt-2 h-[60vh] rounded-lg bg-white p-3 text-black overflow-y-scroll">
       <ul v-for="msg in props.chatroomMessage" :key="msg">
         <li class="flex">
           <span
             class="mr-1 text-black"
-            :class="{ 'rounded bg-black px-1 text-white': msg.isTeacher }"
+            :class="{ 'rounded bg-black px-1 text-white': msg.userId === currentCourse.teacherId }"
             >{{ msg.username }}</span
           >
           :
@@ -40,6 +40,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import useCourses from '~/stores/useCourses'
 
 const props = defineProps({
   chatroomMessage: {
@@ -51,6 +53,7 @@ const props = defineProps({
 const emit = defineEmits(['update:chatroomMessage'])
 
 // const showChatRoom = ref(false)
+const { currentCourse } = storeToRefs(useCourses())
 const newChatMessage = ref('')
 
 const submitComment = () => {

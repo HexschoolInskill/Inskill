@@ -45,9 +45,7 @@
           />
           <p class="mb-4 text-2xl">毫無反應，是空的購物車</p>
           <NuxtLink to="/search?q=&sortBy=time&category=normal">
-            <in-btn>
-              尋找課程
-            </in-btn>
+            <in-btn> 尋找課程 </in-btn>
           </NuxtLink>
         </div>
       </main>
@@ -65,17 +63,14 @@
           <div class="mt-4 text-right text-3xl font-bold">NT$ {{ getTotal() }}</div>
         </div>
 
-
         <button
-            :class="[cart.length ? 'bg-black' : 'bg-slate-200']"
-            class="transition-base mt-4 w-full rounded border p-1 text-xl text-white hover:bg-[#262b2f]"
-            type="button"
-            :disabled="cart.length"
-          >
-            <NuxtLink to="/checkout">
-              前往結帳
-            </NuxtLink>
-          </button>
+          :class="[cart.length ? 'bg-black' : 'bg-slate-200']"
+          class="transition-base mt-4 w-full rounded border p-1 text-xl text-white hover:bg-[#262b2f]"
+          type="button"
+          :disabled="cart.length"
+        >
+          <NuxtLink to="/checkout"> 前往結帳 </NuxtLink>
+        </button>
       </aside>
     </div>
   </in-container>

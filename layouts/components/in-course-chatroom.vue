@@ -14,7 +14,7 @@
   </div> -->
 
   <div>
-    <div class="mb-4 mt-2 h-[60vh] rounded-lg bg-white p-3 text-black overflow-y-scroll">
+    <div class="mb-4 mt-2 h-[60vh] overflow-y-scroll rounded-lg bg-white p-3 text-black">
       <ul v-for="msg in props.chatroomMessage" :key="msg">
         <li class="flex">
           <span

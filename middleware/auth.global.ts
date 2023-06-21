@@ -9,7 +9,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     await app.$api.user.fetchProfile()
   }
   // 有切換頁面的情況
-  if(to.fullPath){
+  if (to.fullPath) {
     // 有登入的情況
     if (store.userProfile._id) {
       // 取購物車資料
@@ -23,7 +23,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
         }
       } catch (error: any) {
         console.log('error: >>>', error.message)
-      }      
+      }
     }
   }
   if (to.meta.auth) {

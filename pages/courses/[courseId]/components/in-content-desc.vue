@@ -46,7 +46,7 @@
       </button> -->
     </span>
 
-    <div class="py-4" v-html="currentCourse.description "></div>
+    <div class="py-4" v-html="currentCourse.description"></div>
   </div>
 </template>
 

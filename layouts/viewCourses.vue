@@ -1,6 +1,7 @@
 <template>
   <slot name="header"></slot>
   <in-container class="relative">
+    <!-- 上方課程標題、加入購物車、收藏與平價按鈕 -->
     <div
       class="border-bottom mb-4 mt-[12vh] flex items-center pb-4 pt-8 text-white max-[1536px]:mt-[15vh]"
       :class="{ hidden: deepDive }"
@@ -40,34 +41,6 @@
 
         <span>加入購物車</span>
       </button>
-
-      <div v-else class="course-header-action">
-        <svg
-          class="w-[25px]"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          x="0px"
-          y="0px"
-          viewBox="0 0 512 512"
-          enable-background="new 0 0 512 512"
-          xml:space="preserve"
-        >
-          <g>
-            <path
-              d="M169.6,377.6c-22.882,0-41.6,18.718-41.6,41.601c0,22.882,18.718,41.6,41.6,41.6s41.601-18.718,41.601-41.6
-		C211.2,396.317,192.481,377.6,169.6,377.6z M48,51.2v41.6h41.6l74.883,151.682l-31.308,50.954c-3.118,5.2-5.2,12.482-5.2,19.765
-		c0,27.85,19.025,41.6,44.825,41.6H416v-40H177.893c-3.118,0-5.2-2.082-5.2-5.2c0-1.036,2.207-5.2,2.207-5.2l20.782-32.8h154.954
-		c15.601,0,29.128-8.317,36.4-21.836l74.882-128.8c1.237-2.461,2.082-6.246,2.082-10.399c0-11.446-9.364-19.765-20.8-19.765H135.364
-		L115.6,51.2H48z M374.399,377.6c-22.882,0-41.6,18.718-41.6,41.601c0,22.882,18.718,41.6,41.6,41.6S416,442.082,416,419.2
-		C416,396.317,397.281,377.6,374.399,377.6z"
-              fill="#ffc107"
-            ></path>
-          </g>
-        </svg>
-
-        <span>已{{ purchased ? '購買' : '加入購物車' }}</span>
-      </div>
 
       <button class="course-header-action" type="button" @click="collector">
         <svg
@@ -112,6 +85,9 @@
       </button>
     </div>
 
+    <!-- 如果尚未購買直播課程的遮擋Modal -->
+    <in-course-blocker v-if="liveCoursePurchased" :current-course="currentCourse"></in-course-blocker>
+
     <!-- 評價modal -->
     <in-course-review-modal
       :open="open"
@@ -120,7 +96,7 @@
     >
     </in-course-review-modal>
 
-    <div class="flex text-white" :class="{ 'mt-[15vh]': deepDive, hidden: open }">
+    <div class="flex text-white" :class="{ 'mt-[15vh]': deepDive, hidden: open || liveCoursePurchased }">
       <!-- 左邊課程切換列表 -->
       <in-course-chapter-selector
         :deep-dive="deepDive"
@@ -133,7 +109,7 @@
       </in-course-chapter-selector>
 
       <!-- 中間課程內容 -->
-      <main class="w-10/12 p-4 transition-all duration-200" :class="{ 'w-full': deepDive }">
+      <main class="w-10/12 p-4 transition-all duration-200" :class="{ 'w-full': deepDive, 'hidden': open || liveCoursePurchased }">
         <slot />
       </main>
 
@@ -157,7 +133,7 @@
       </in-course-chat-room>
     </div>
   </in-container>
-  <slot v-if="$route.fullPath.includes('course')" name="footer"></slot>
+  <slot v-if="route.fullPath.includes('course')" name="footer"></slot>
 </template>
 
 <script lang="ts" setup>
@@ -169,6 +145,7 @@ import InCourseChapterSelector from './components/in-course-chapter-selector.vue
 import InCourseFloatButton from './components/in-course-float-button.vue'
 import InCourseChatRoom from './components/in-course-chatroom.vue'
 import InCourseReviewModal from './components/in-course-review-modal.vue'
+import inCourseBlocker from './components/in-course-blocker.vue'
 
 import useCourses from '~/stores/useCourses'
 import useUser from '~/stores/useUser'
@@ -181,9 +158,13 @@ const { setChapter, setContent, setCollected, createReview } = useCourses()
 
 const { $api } = useNuxtApp()
 
+const route = useRoute()
 const router = useRouter()
 const courseType = computed(() => {
   return currentCourse.value.chapters ? 'Course' : 'LiveCourse'
+})
+const liveCoursePurchased = computed(() => {
+  return route.query.courseType === 'stream' && !purchased.value
 })
 
 const chatroomMessage: any = ref([])

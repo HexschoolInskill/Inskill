@@ -18,7 +18,7 @@
             fill="currentColor"
           ></path>
         </svg>
-        <span class="">{{ currentCourse.purchasedCount }}人已加入</span>
+        <span class="" @click="sendMessage('hellojs')">{{ currentCourse.purchasedCount }}人已加入</span>
         <!-- <span v-if="!purchased" class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span> -->
       </span>
     </div>
@@ -273,7 +273,7 @@
         </div>
       </div>
       <!-- item -->
-      <div class="item">
+      <div class="item" v-show="false">
         <div class="btnNormal">
           <div class="img">
             <svg
@@ -294,7 +294,7 @@
         </div>
       </div>
       <!-- item -->
-      <div class="item">
+      <div class="item" v-show="false">
         <div class="btnNormal">
           <div class="img">
             <svg
@@ -323,7 +323,7 @@
                   </div>
               </div> -->
       <!-- item -->
-      <div class="item">
+      <div class="item" v-show="false">
         <div class="btnNormal" @click="showToolPopup = !showToolPopup">
           <div class="img">
             <svg
@@ -585,6 +585,8 @@ const cameraOn = ref(true)
 const screenOn = ref(false)
 const micOn = ref(true)
 
+let socketNode : any = null
+
 const broadcast = async () => {
   await getStreamId()
   goLive.value = !goLive.value
@@ -603,6 +605,7 @@ onMounted(async () => {
   videoDevices.value = devices.filter((device) => device.kind === 'videoinput')
   audioDevices.value = devices.filter((device) => device.kind === 'audioinput')
   await initWebRTC()
+  await getListenKey()
 })
 
 const getStreamId = async () => {
@@ -718,6 +721,49 @@ const checkStreamNode = () => {
 //   // 如果是學生身分的話就把這個url 帶進iframe 即可
 //   return `https://inskillmedia.demoto.me:5443/WebRTCApp/play.html?name=${streamId.value}&autoplay=true`
 // })
+const getListenKey = async () => {
+  try {
+    const response = await $fetch(`/api/user/listenkey`, {
+      method: 'POST',
+      body: JSON.stringify({
+        courseId: currentCourse.value._id
+      })
+    })
+    console.log(`response`, response)
+    if(response.success) {
+      await initSocket(response.data.listenkey)
+    }
+  } catch (error: any) {
+    console.log(error)
+    notification.error(error.message)
+  }
+}
+
+const initSocket = (listenkey : string) => {
+  try {
+    socketNode = new WebSocket(`ws://localhost:931/${listenkey}`)
+    socketNode.onopen = () => {
+      console.log('socket open')
+    }
+
+    socketNode.onmessage = (event : any) => {
+      console.log(`message`, event.data)
+    }
+
+    socketNode.onclose = () => {
+      console.log('socket close')
+      // getListenKey()
+    }
+  } catch(err) {
+    console.log(err)
+  }
+}
+
+const sendMessage = (msg : any) => {
+  socketNode.send(JSON.stringify({
+    text: msg
+  }))
+}
 </script>
 
 <style lang="scss" scoped>

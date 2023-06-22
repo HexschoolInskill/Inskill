@@ -19,7 +19,7 @@
               fill="currentColor"
             ></path>
           </svg>
-          <span class="">{{ currentCourse.purchasedCount }}人已加入</span>
+          <span class="" @click="sendMessage('hey')">{{ currentCourse.purchasedCount }}人已加入</span>
           <!-- <span v-if="!purchased" class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span> -->
         </span>
 
@@ -80,6 +80,8 @@ const { createQuestion, createReply } = useCourses()
 
 const { chapter, lesson } = content.value
 
+let socketNode : any = null
+
 definePageMeta({
   layout: 'view-courses'
 })
@@ -94,4 +96,52 @@ const studentPlayUrl = computed(() => {
   // 如果是學生身分的話就把這個url 帶進iframe 即可
   return `https://inskillmedia.demoto.me:5443/WebRTCApp/play.html?name=${currentCourse.value.videoUrl}&autoplay=true`
 })
+
+onMounted(async () => {
+  await getListenKey()
+})
+
+const getListenKey = async () => {
+  try {
+    const response = await $fetch(`/api/user/listenkey`, {
+      method: 'POST',
+      body: JSON.stringify({
+        courseId: currentCourse.value._id
+      })
+    })
+    console.log(`response`, response)
+    if(response.success) {
+      await initSocket(response.data.listenkey)
+    }
+  } catch (error: any) {
+    console.log(error)
+    notification.error(error.message)
+  }
+}
+
+const initSocket = (listenkey : string) => {
+  try {
+    socketNode = new WebSocket(`ws://localhost:931/${listenkey}`)
+    socketNode.onopen = () => {
+      console.log('socket open')
+    }
+
+    socketNode.onmessage = (event : any) => {
+      console.log(`message`, event.data)
+    }
+
+    socketNode.onclose = () => {
+      console.log('socket close')
+      // getListenKey()
+    }
+  } catch(err) {
+    console.log(err)
+  }
+}
+
+const sendMessage = (msg : any) => {
+  socketNode.send(JSON.stringify({
+    text: msg
+  }))
+}
 </script>

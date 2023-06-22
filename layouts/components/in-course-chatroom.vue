@@ -14,9 +14,9 @@
   </div> -->
 
   <div>
-    <div class="mb-4 mt-2 h-[60vh] overflow-y-scroll rounded-lg bg-white p-3 text-black">
-      <ul v-for="msg in props.chatroomMessage" :key="msg">
-        <li class="flex">
+    <div class="mb-4 mt-2 h-[60vh] max-[1536px]:h-[55vh] overflow-y-scroll rounded-lg bg-white p-3 text-black">
+      <ul class="fixed bottom-[23%]">
+        <li v-for="msg in props.chatroomMessage" :key="msg" class="flex mt-auto">
           <span
             class="mr-1 text-black"
             :class="{ 'rounded bg-black px-1 text-white': msg.userId === currentCourse.teacherId }"

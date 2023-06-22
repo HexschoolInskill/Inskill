@@ -135,7 +135,7 @@
       <!-- 直播課程聊天室 -->
       <in-course-chat-room
         v-else
-        class="w-3/12"
+        class="w-3/12 max-[1536px]:mt-[4vh]"
         :chatroom-message="chatroomMessage"
         @update:chatroom-message="addChatroomMessage"
       >

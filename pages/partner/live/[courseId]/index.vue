@@ -1,6 +1,6 @@
 // @ts-nocheck
 <template>
-  <div class="main gradient rounded-lg p-4 px-6">
+  <div class="main gradient rounded-lg p-4 px-6 max-[1536px]:mt-[4vh]">
     <div class="courseTitle">
       <span class="flex items-center py-1">
         <h1 class="mb-1 mr-auto text-3xl font-bold" @click="checkStreamNode">
@@ -27,7 +27,7 @@
       <div class="inline-block w-full rounded-lg">
         <video
           id="partnerScreen"
-          class="h-[55vh] w-full rounded-lg border"
+          class="h-[55vh] w-full bg-black max-[1536px]:h-[50vh]"
           :class="{ 'h-[35vh]': goLive }"
           autoplay
           playsinline
@@ -273,7 +273,7 @@
         </div>
       </div>
       <!-- item -->
-      <div class="item">
+      <div class="item hidden">
         <div class="btnNormal">
           <div class="img">
             <svg
@@ -294,7 +294,7 @@
         </div>
       </div>
       <!-- item -->
-      <div class="item">
+      <div class="item hidden">
         <div class="btnNormal">
           <div class="img">
             <svg
@@ -323,7 +323,7 @@
                   </div>
               </div> -->
       <!-- item -->
-      <div class="item">
+      <div class="item hidden">
         <div class="btnNormal" @click="showToolPopup = !showToolPopup">
           <div class="img">
             <svg
@@ -766,7 +766,7 @@ const checkStreamNode = () => {
 }
 
 .webBottomTool {
-  @apply absolute bottom-[-100px] left-[0px] mx-auto flex w-[65vw] items-center justify-around rounded-lg bg-black;
+  @apply absolute bottom-[-100px] left-[0px] mx-auto flex w-[100%] items-center justify-around rounded-lg bg-black max-[1536px]:bottom-[-50px];
 
   .item {
     @apply w-[100px] cursor-pointer text-center;

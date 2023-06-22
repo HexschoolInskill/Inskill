@@ -1,6 +1,6 @@
 // @ts-nocheck
 <template>
-  <div class="main gradient rounded-lg p-4 px-6 max-[1536px]:mt-[4vh]">
+  <div class="main gradient rounded-lg p-4 px-6 max-[1536px]:mt-[1vh]">
     <div class="courseTitle">
       <span class="flex items-center py-1">
         <h1 class="mb-1 mr-auto text-3xl font-bold" @click="checkStreamNode">
@@ -766,7 +766,7 @@ const checkStreamNode = () => {
 }
 
 .webBottomTool {
-  @apply absolute bottom-[-100px] left-[0px] mx-auto flex w-[100%] items-center justify-around rounded-lg bg-black max-[1536px]:bottom-[-50px];
+  @apply absolute bottom-[-100px] left-[0px] mx-auto flex w-[100%] items-center justify-around rounded-lg bg-black max-[1536px]:bottom-[-50px] max-[1536px]:mb-[-3%];
 
   .item {
     @apply w-[100px] cursor-pointer text-center;
@@ -781,7 +781,7 @@ const checkStreamNode = () => {
   }
 
   .broadcastBtn {
-    @apply mt-[15px] w-[100px] rounded-lg pb-[10px] pt-2 text-center text-white transition-all;
+    @apply mt-[15px] max-[1536px]:mt-0 w-[100px] rounded-lg pb-[10px] pt-2 text-center text-white transition-all;
 
     .img {
       @apply my-2;

@@ -10,7 +10,11 @@ module.exports = {
           DEFAULT: '#6C757D'
         }
       },
+      zIndex: {
+        '-1': '-1'
+      },
       spacing: {
+        '2px': '2px',
         13: '3.25rem',
         15: '3.75rem',
         18: '4.5rem',
@@ -117,6 +121,5 @@ module.exports = {
         ]
       }
     }
-  },
-  plugins: [require('@tailwindcss/line-clamp')]
+  }
 }

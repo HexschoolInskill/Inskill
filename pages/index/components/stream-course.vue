@@ -7,11 +7,11 @@
           <div class="swiper-wrapper">
             <div v-for="item in courses" :key="item._id" class="swiper-slide">
               <div class="group">
-                <in-card xs-white>
+                <in-card xs-white glow>
                   <div class="relative pt-7/10 sm:pt-5/10">
                     <nuxt-link
                       :to="`/courses/${item._id}?courseType=stream`"
-                      class="hidden cursor-pointer items-center text-white sm:flex"
+                      class="cursor-pointer items-center text-white sm:flex"
                     >
                       <img
                         :src="item.thumbnail"
@@ -21,7 +21,7 @@
                     </nuxt-link>
                   </div>
                   <div class="p-6 font-bold text-gray sm:p-12 sm:text-white">
-                    <h3 class="text-[28px] text-blue line-clamp-1 sm:text-white">
+                    <h3 class="line-clamp-1 text-[28px] text-blue sm:text-white">
                       {{ item.title }}
                     </h3>
                     <div class="mt-4 flex flex-col justify-between sm:flex-row">

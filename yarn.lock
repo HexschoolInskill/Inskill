@@ -915,10 +915,17 @@
   resolved "https://registry.npmjs.org/@nuxt/devalue/-/devalue-2.0.0.tgz"
   integrity sha512-YBI/6o2EBz02tdEJRBK8xkt3zvOFOWlLBf7WKYGBsSYSRtjjgrqPe2skp6VLLmKx5WbHHDNcW+6oACaurxGzeA==
 
+<<<<<<< HEAD
 "@nuxt/kit@3.4.3", "@nuxt/kit@^3.0.0", "@nuxt/kit@^3.2.0", "@nuxt/kit@^3.3.3":
   version "3.4.3"
   resolved "https://registry.npmjs.org/@nuxt/kit/-/kit-3.4.3.tgz"
   integrity sha512-aQyzplYFCL292UsVZzlOZOC51ZKYFL0PBihbcPzxTzXQvAfMF8/DQ539kqzqXzxTCcmnUB9ROhIaNUrAeUkFYA==
+=======
+"@nuxt/kit@3.5.1", "@nuxt/kit@^3.3.3", "@nuxt/kit@^3.5.0":
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/@nuxt/kit/-/kit-3.5.1.tgz#b51cb3f24e9067140b77eefa842c77b0c92b7e8a"
+  integrity sha512-hC0apW02dSujoBuGQCxd8rvUyKIyfcPueIlYbO4d1SMQUifd/Tz+pYsbmpXX+kD/yXJ2yUaChbJ1IBLl6kep5A==
+>>>>>>> bbadb4f84100839a9c2529789843ef61bb90ca06
   dependencies:
     "@nuxt/schema" "3.4.3"
     c12 "^1.4.1"
@@ -937,6 +944,29 @@
     semver "^7.5.0"
     unctx "^2.3.0"
     unimport "^3.0.6"
+    untyped "^1.3.2"
+
+"@nuxt/kit@^3.5.3":
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/@nuxt/kit/-/kit-3.5.3.tgz#879d556142febcc8250aff857e75bb8d87daedbb"
+  integrity sha512-QzoOGqa1zjKQfg7Y50TrrFAL9DhtIpYYs10gihcM1ISPrn9ROht+VEjqsaMvT+L8JuQbNf8wDYl8qzsdWGU29Q==
+  dependencies:
+    "@nuxt/schema" "3.5.3"
+    c12 "^1.4.1"
+    consola "^3.1.0"
+    defu "^6.1.2"
+    globby "^13.1.4"
+    hash-sum "^2.0.0"
+    ignore "^5.2.4"
+    jiti "^1.18.2"
+    knitwork "^1.0.0"
+    mlly "^1.3.0"
+    pathe "^1.1.1"
+    pkg-types "^1.0.3"
+    scule "^1.0.0"
+    semver "^7.5.1"
+    unctx "^2.3.1"
+    unimport "^3.0.7"
     untyped "^1.3.2"
 
 "@nuxt/postcss8@^1.1.3":
@@ -966,6 +996,21 @@
     std-env "^3.3.2"
     ufo "^1.1.1"
     unimport "^3.0.6"
+    untyped "^1.3.2"
+
+"@nuxt/schema@3.5.3":
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/@nuxt/schema/-/schema-3.5.3.tgz#acea27a12fbcc24112abea84d0dddf899ce0343d"
+  integrity sha512-Tnon4mYfJZmsCtx4NZ9A+qjwo4DcZ6tERpEhYBY81PX7AiJ+hFPBFR1qR32Tff66/qJjZg5UXj6H9AdzwEYr2w==
+  dependencies:
+    defu "^6.1.2"
+    hookable "^5.5.3"
+    pathe "^1.1.1"
+    pkg-types "^1.0.3"
+    postcss-import-resolver "^2.0.0"
+    std-env "^3.3.3"
+    ufo "^1.1.2"
+    unimport "^3.0.7"
     untyped "^1.3.2"
 
 "@nuxt/telemetry@^2.2.0":
@@ -1065,12 +1110,21 @@
     eslint-plugin-vue "^9.7.0"
     local-pkg "^0.4.2"
 
+<<<<<<< HEAD
 "@nuxtjs/tailwindcss@^6.4.1":
   version "6.4.1"
   resolved "https://registry.npmjs.org/@nuxtjs/tailwindcss/-/tailwindcss-6.4.1.tgz"
   integrity sha512-b8c6h+iiHJJ/rw/IirmYlF0RaIGVIVFmZXdHYPuDW/Mf6WAEz8IkAicyO5gRL3jYKp98kld067XPGsumDhaVVg==
   dependencies:
     "@nuxt/kit" "^3.2.0"
+=======
+"@nuxtjs/tailwindcss@^6.7.2":
+  version "6.7.2"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/tailwindcss/-/tailwindcss-6.7.2.tgz#88f06589c9247ed4ba3d2baec9304da145065d38"
+  integrity sha512-Zd4fm+o8bXcu+kc4JtegWAHXVms8pud8fhkJDZjKUa9CpawaWdnIf0fSzYyXdm2dWpDlH4YUdjN0HDaFRFQMDw==
+  dependencies:
+    "@nuxt/kit" "^3.5.3"
+>>>>>>> bbadb4f84100839a9c2529789843ef61bb90ca06
     "@nuxt/postcss8" "^1.1.3"
     autoprefixer "^10.4.13"
     chalk "^5.2.0"
@@ -1078,6 +1132,7 @@
     clear-module "^4.1.2"
     consola "^2.15.3"
     defu "^6.1.2"
+<<<<<<< HEAD
     pathe "^1.1.0"
     postcss "^8.4.21"
     postcss-custom-properties "^13.1.3"
@@ -1085,6 +1140,21 @@
     tailwind-config-viewer "^1.7.2"
     tailwindcss "^3.2.7"
     ufo "^1.1.0"
+=======
+    destr "^2.0.0"
+    h3 "^1.6.6"
+    iron-webcrypto "^0.7.0"
+    micromatch "^4.0.5"
+    pathe "^1.1.1"
+    postcss "^8.4.24"
+    postcss-custom-properties "^13.2.0"
+    postcss-nesting "^11.2.2"
+    radix3 "^1.0.1"
+    tailwind-config-viewer "^1.7.2"
+    tailwindcss "~3.3.2"
+    ufo "^1.1.2"
+    uncrypto "^0.1.3"
+>>>>>>> bbadb4f84100839a9c2529789843ef61bb90ca06
 
 "@pinia/nuxt@^0.4.7":
   version "0.4.7"
@@ -3128,6 +3198,11 @@ destr@^1.2.2:
   version "1.2.2"
   resolved "https://registry.npmjs.org/destr/-/destr-1.2.2.tgz"
   integrity sha512-lrbCJwD9saUQrqUfXvl6qoM+QN3W7tLV5pAOs+OqOmopCCz/JkE05MHedJR1xfk4IAnZuJXPVuN5+7jNA2ZCiA==
+
+destr@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/destr/-/destr-2.0.0.tgz#60847d02b211de6e252fc72806f4ec39ec257e7b"
+  integrity sha512-FJ9RDpf3GicEBvzI3jxc2XhHzbqD8p4ANw/1kPsFBfTvP1b7Gn/Lg1vO7R9J4IVgoMbyUmFrFGZafJ1hPZpvlg==
 
 destroy@1.2.0, destroy@^1.0.4:
   version "1.2.0"
@@ -5930,10 +6005,17 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-1.0.4.tgz"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
+<<<<<<< HEAD
 mlly@^1.0.0, mlly@^1.1.1, mlly@^1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/mlly/-/mlly-1.2.0.tgz"
   integrity sha512-+c7A3CV0KGdKcylsI6khWyts/CYrGTrRVo4R/I7u/cUsy0Conxa6LUhiEzVKIw14lc2L5aiO4+SeVe4TeGRKww==
+=======
+mlly@^1.0.0, mlly@^1.2.0, mlly@^1.2.1, mlly@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/mlly/-/mlly-1.3.0.tgz#3184cb80c6437bda861a9f452ae74e3434ed9cd1"
+  integrity sha512-HT5mcgIQKkOrZecOjOX3DJorTikWXwsBfpcr/MGBkhfWcjiqvnaL/9ppxvIUXfjT6xt4DVIAsN9fMUz1ev4bIw==
+>>>>>>> bbadb4f84100839a9c2529789843ef61bb90ca06
   dependencies:
     acorn "^8.8.2"
     pathe "^1.1.0"
@@ -6602,6 +6684,11 @@ pathe@^1.0.0, pathe@^1.1.0:
   resolved "https://registry.npmjs.org/pathe/-/pathe-1.1.0.tgz"
   integrity sha512-ODbEPR0KKHqECXW1GoxdDb+AZvULmXjVPy4rt+pGo2+TnjJTIPJQSVS6N63n8T2Ip+syHhbn52OewKicV0373w==
 
+pathe@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/pathe/-/pathe-1.1.1.tgz#1dd31d382b974ba69809adc9a7a347e65d84829a"
+  integrity sha512-d+RQGp0MAYTIaDBIMmOfMwz3E+LOZnxx1HZd5R18mmCZY0QBlK0LDZfPc8FW8Ed2DlvsuE6PRjroDY+wg4+j/Q==
+
 perfect-debounce@^0.1.3:
   version "0.1.3"
   resolved "https://registry.npmjs.org/perfect-debounce/-/perfect-debounce-0.1.3.tgz"
@@ -6683,6 +6770,16 @@ postcss-custom-properties@^13.1.3, postcss-custom-properties@^13.1.5:
   version "13.1.5"
   resolved "https://registry.npmjs.org/postcss-custom-properties/-/postcss-custom-properties-13.1.5.tgz"
   integrity sha512-98DXk81zTGqMVkGANysMHbGIg3voH383DYo3/+c+Abzay3nao+vM/f4Jgzsakk9S7BDsEw5DiW7sFy5G4W2wLA==
+  dependencies:
+    "@csstools/cascade-layer-name-parser" "^1.0.2"
+    "@csstools/css-parser-algorithms" "^2.1.1"
+    "@csstools/css-tokenizer" "^2.1.1"
+    postcss-value-parser "^4.2.0"
+
+postcss-custom-properties@^13.2.0:
+  version "13.2.0"
+  resolved "https://registry.yarnpkg.com/postcss-custom-properties/-/postcss-custom-properties-13.2.0.tgz#5afac4f38bcfe4cedb834fd6daf65e302940cb81"
+  integrity sha512-UYiPqbqmVayyv56y0mtGhvUKZClflwE9cTTmPaqEX8fOVjVwsotqKGYtJXSLxrJLwf9tt7ka+Luyh1ZAOhGHWA==
   dependencies:
     "@csstools/cascade-layer-name-parser" "^1.0.2"
     "@csstools/css-parser-algorithms" "^2.1.1"
@@ -6989,6 +7086,15 @@ postcss@^8.0.9, postcss@^8.1.10, postcss@^8.2.15, postcss@^8.4.21, postcss@^8.4.
   version "8.4.23"
   resolved "https://registry.npmjs.org/postcss/-/postcss-8.4.23.tgz"
   integrity sha512-bQ3qMcpF6A/YjR55xtoTr0jGOlnPOKAIMdOWiv0EIT6HVPEaJiJB4NLljSbiHoC2RX7DN5Uvjtpbg1NPdwv1oA==
+  dependencies:
+    nanoid "^3.3.6"
+    picocolors "^1.0.0"
+    source-map-js "^1.0.2"
+
+postcss@^8.4.24:
+  version "8.4.24"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.24.tgz#f714dba9b2284be3cc07dbd2fc57ee4dc972d2df"
+  integrity sha512-M0RzbcI0sO/XJNucsGjvWU9ERWxb/ytp1w6dKtxTKgixdtQDq4rmx/g8W1hnaheq9jgwL/oyEdH5Bc4WwJKMqg==
   dependencies:
     nanoid "^3.3.6"
     picocolors "^1.0.0"
@@ -8292,10 +8398,22 @@ uncrypto@^0.1.2:
   resolved "https://registry.npmjs.org/uncrypto/-/uncrypto-0.1.2.tgz"
   integrity sha512-kuZwRKV615lEw/Xx3Iz56FKk3nOeOVGaVmw0eg+x4Mne28lCotNFbBhDW7dEBCBKyKbRQiCadEZeNAFPVC5cgw==
 
+<<<<<<< HEAD
 unctx@^2.3.0:
   version "2.3.0"
   resolved "https://registry.npmjs.org/unctx/-/unctx-2.3.0.tgz"
   integrity sha512-xs79V1T5JEQ/5aQ3j4ipbQEaReMosMz/ktOdsZMEtKv1PfbdRrKY/PaU0CxdspkX3zEink2keQU4nRzAXgui1A==
+=======
+uncrypto@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/uncrypto/-/uncrypto-0.1.3.tgz#e1288d609226f2d02d8d69ee861fa20d8348ef2b"
+  integrity sha512-Ql87qFHB3s/De2ClA9e0gsnS6zXG27SkTiSJwjCc9MebbfapQfuPzumMIUMi38ezPZVNFcHI9sUIepeQfw8J8Q==
+
+unctx@^2.3.0, unctx@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/unctx/-/unctx-2.3.1.tgz#5eb4aa9f96fb5fdac18b88fe5ba8e122fe671a62"
+  integrity sha512-PhKke8ZYauiqh3FEMVNm7ljvzQiph0Mt3GBRve03IJm7ukfaON2OBK795tLwhbyfzknuRRkW0+Ze+CQUmzOZ+A==
+>>>>>>> bbadb4f84100839a9c2529789843ef61bb90ca06
   dependencies:
     acorn "^8.8.2"
     estree-walker "^3.0.3"

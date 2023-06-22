@@ -7,6 +7,6 @@
     transition: 0.2s ease-in-out;
   }
   .transition-base {
-    transition: 0.3s ease-in-out;
+    transition: 0.85s cubic-bezier(0.19, 1, 0.22, 1);
   }
 }

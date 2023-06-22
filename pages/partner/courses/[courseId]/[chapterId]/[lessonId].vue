@@ -1,9 +1,10 @@
 <template>
+  <Title>{{ lesson?.title ?? '課堂內容' }} - Inskill</Title>
   <div class="flex items-start gap-10">
     <div class="flex-1">
       <in-card border :border-radius="4">
         <div
-          class="flex items-center justify-between gap-10 border border-b border-solid border-white/50 p-6"
+          class="flex items-center justify-between gap-10 border border-solid border-white/50 p-6"
         >
           <h3 class="text-h3 font-bold">{{ lesson?.title }}</h3>
           <div class="flex items-center gap-5">

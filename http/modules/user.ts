@@ -50,9 +50,6 @@ class UserModule extends HttpFactory {
     const { data } = await useAsyncData<IProfileResponse>(() =>
       this.call(`${this.RESOURCE}/profile`, 'GET')
     )
-
-    console.log('user :>>>', data.value?.user?.purchasedCourses)
-
     if (data?.value?.user) {
       store.userProfile = data.value.user
     }

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="gradient absolute left-[50%] z-10 flex w-screen h-screen translate-x-[-50%] rounded-lg p-10 text-white"
+    class="gradient absolute left-[50%] z-10 flex h-screen w-screen translate-x-[-50%] rounded-lg p-10 text-white"
   >
     <div class="w-8/12">
       <img :src="props.currentCourse.thumbnail" alt="thumbnail" />
@@ -28,8 +28,10 @@
         <p>NT${{ props.currentCourse.price }}</p>
       </div>
 
-      <div class="flex fixed bottom-[40px]">
-        <button class="rounded bg-black px-4 py-1 text-white mr-4" type="button" @click="goBack">返回</button>
+      <div class="fixed bottom-[40px] flex">
+        <button class="mr-4 rounded bg-black px-4 py-1 text-white" type="button" @click="goBack">
+          返回
+        </button>
 
         <button class="flex rounded bg-black px-4 py-1 text-white" type="button">
           <svg

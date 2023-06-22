@@ -781,7 +781,7 @@ const checkStreamNode = () => {
   }
 
   .broadcastBtn {
-    @apply mt-[15px] max-[1536px]:mt-0 w-[100px] rounded-lg pb-[10px] pt-2 text-center text-white transition-all;
+    @apply mt-[15px] w-[100px] rounded-lg pb-[10px] pt-2 text-center text-white transition-all max-[1536px]:mt-0;
 
     .img {
       @apply my-2;

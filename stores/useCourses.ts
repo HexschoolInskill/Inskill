@@ -117,7 +117,10 @@ export default defineStore('courses', () => {
   const purchased = ref(false)
   const expandChapter = ref(0) // 預設在課程第一章
   const content = ref({ chapter: expandChapter, lesson: 0 }) // 當前查看的課程內容
-
+  const chatRoom = ref({
+    message: <any>[],
+    viewer: 0
+  })
   const cart = ref<any>([])
 
   const getTotal = () => {
@@ -126,6 +129,17 @@ export default defineStore('courses', () => {
       0
     )
     return total
+  }
+
+  const updateChatRoom = (payload: any) => {
+    console.log(payload)
+    const { username, comment, isTeacher, viewerCount } = payload
+    chatRoom.value.message.push({
+      username,
+      comment,
+      isTeacher
+    })
+    chatRoom.value.viewer = viewerCount
   }
 
   const setCourse = (type: string, coursesFromBackend: courseArray) => {
@@ -207,6 +221,7 @@ export default defineStore('courses', () => {
     collected,
     content,
     cart,
+    chatRoom,
     setCourse,
     setCart,
     getTotal,
@@ -218,6 +233,7 @@ export default defineStore('courses', () => {
     setContent,
     createReview,
     createQuestion,
-    createReply
+    createReply,
+    updateChatRoom
   }
 })

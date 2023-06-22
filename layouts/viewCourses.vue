@@ -131,15 +131,6 @@
         @move-to-lesson="goToLesson"
       >
       </in-course-float-button>
-
-      <!-- 直播課程聊天室 -->
-      <in-course-chat-room
-        v-else
-        class="w-3/12 max-[1536px]:mt-[4vh]"
-        :chatroom-message="chatroomMessage"
-        @update:chatroom-message="addChatroomMessage"
-      >
-      </in-course-chat-room>
     </div>
   </in-container>
   <slot v-if="route.fullPath.includes('course')" name="footer"></slot>
@@ -152,7 +143,6 @@ import { storeToRefs } from 'pinia'
 // components
 import InCourseChapterSelector from './components/in-course-chapter-selector.vue'
 import InCourseFloatButton from './components/in-course-float-button.vue'
-import InCourseChatRoom from './components/in-course-chatroom.vue'
 import InCourseReviewModal from './components/in-course-review-modal.vue'
 import inCourseBlocker from './components/in-course-blocker.vue'
 

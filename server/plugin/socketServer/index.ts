@@ -11,54 +11,60 @@ import models from '../../model/schema'
  * Command :
  * npm i -s @types/ws ws
  */
-const subscriberList : any = []
+const subscriberList: any = []
 const WSS = new WebSocketServer({ port: 931 })
 export default (_nitroApp: Nitro) => {
   console.log(`---------- initSocket start @ ${new Date().toLocaleDateString()}--------\n\n`)
   try {
-    WSS.on('connection', async function connection(ws: any, req : any) {
-      let subscriberIndex : number = -1
-      let connectionInterval : any = null
+    WSS.on('connection', async function connection(ws: any, req: any) {
+      let subscriberIndex: number = -1
+      let connectionInterval: any = null
       console.log(`Connected to socket @${new Date().toLocaleDateString()}`)
 
       // check whether listenkey is valid
-      console.log(`Connected from : `,req.url)
+      console.log(`Connected from : `, req.url)
       const listenkey = req.url.slice(1)
-      console.log(`listenkey : `,listenkey)
-      const {timestamp, expire, courseId, userId} = await decryptListenKey(listenkey)
-      if(!timestamp || !expire || !courseId || !userId) {
+      console.log(`listenkey : `, listenkey)
+      const { timestamp, expire, courseId, userId } = await decryptListenKey(listenkey)
+      if (!timestamp || !expire || !courseId || !userId) {
         // send error listenkey message
-        ws.send(JSON.stringify({
-          success : false,
-          error : 'listenkey is not valid'
-        }))
+        ws.send(
+          JSON.stringify({
+            success: false,
+            error: 'listenkey is not valid'
+          })
+        )
         ws.close()
         return
       }
-      
+
       // fetch user name
       const userInfo = await models.User.findById(userId)
-      if(!userInfo) {
+      if (!userInfo) {
         // send error listenkey message
-        ws.send(JSON.stringify({
-          success : false,
-          error : 'user does not exist'
-        }))
+        ws.send(
+          JSON.stringify({
+            success: false,
+            error: 'user does not exist'
+          })
+        )
         ws.close()
         return
       }
-      const {username, purchasedCourses} = userInfo
-      const purchasedCourse = purchasedCourses.find((e : any)=> e.courseId == courseId)
+      const { username, purchasedCourses } = userInfo
+      const purchasedCourse = purchasedCourses.find((e: any) => e.courseId == courseId)
       const isTeacher = await models.LiveCourse.findOne({
-        _id : courseId,
-        teacherId : userId
+        _id: courseId,
+        teacherId: userId
       })
-      if(!purchasedCourse && !isTeacher) {
+      if (!purchasedCourse && !isTeacher) {
         // send error listenkey message
-        ws.send(JSON.stringify({
-          success : false,
-          error : 'course does not exist'
-        }))
+        ws.send(
+          JSON.stringify({
+            success: false,
+            error: 'course does not exist'
+          })
+        )
         ws.close()
         return
       }
@@ -66,22 +72,27 @@ export default (_nitroApp: Nitro) => {
       const socketKey = req.headers['sec-websocket-key']
       const ip = req.socket.remoteAddress || req.headers.host
       console.log({
-          listenkey, socketKey, ip
+        listenkey,
+        socketKey,
+        ip
       })
 
       // if(!subscriberList.find((e : any)=> e.listenkey === listenkey )) { // production : && e.socketKey === socketKey && e.ip === ip
-      if(!subscriberList.find((e : any)=> e.listenkey === listenkey && e.socketKey === socketKey)) { // dev && e.ip === ip
-          subscriberList.push({
-              socketKey, 
-              ip,
-              listenkey,
-              connectedAt : Date.now(),
-              socket : ws,
-              lastestUpdate : 0,
-              expired : 0, //60 * 60 * 1000
-              ping : 0 //用來 測試是否還有連線狀態, 記錄ping回去的時間
-          }) 
-          subscriberIndex = subscriberList.length - 1
+      if (
+        !subscriberList.find((e: any) => e.listenkey === listenkey && e.socketKey === socketKey)
+      ) {
+        // dev && e.ip === ip
+        subscriberList.push({
+          socketKey,
+          ip,
+          listenkey,
+          connectedAt: Date.now(),
+          socket: ws,
+          lastestUpdate: 0,
+          expired: 0, //60 * 60 * 1000
+          ping: 0 //用來 測試是否還有連線狀態, 記錄ping回去的時間
+        })
+        subscriberIndex = subscriberList.length - 1
       }
 
       // check connection every 5 minutes
@@ -102,7 +113,7 @@ export default (_nitroApp: Nitro) => {
       //             ws.send(JSON.stringify(ping))
       //             subscriberList[subscriberIndex].ping = ts
       //         }
-      //     }                
+      //     }
       // }, 5 * 60 * 1000)
 
       ws.on('message', function incoming(message: string) {
@@ -111,31 +122,33 @@ export default (_nitroApp: Nitro) => {
 
         // checkout send message structure
         const parametersSchema = Joi.object({
-            "pong" : Joi.date().timestamp('javascript').empty(),
-            "text" : Joi.string()
-        }).without("pong", ["text"])
-        const {error, value} = parametersSchema.validate(updates, {abortEarly : true})
-        if(error) {
+          pong: Joi.date().timestamp('javascript').empty(),
+          text: Joi.string()
+        }).without('pong', ['text'])
+        const { error, value } = parametersSchema.validate(updates, { abortEarly: true })
+        if (error) {
           console.log(`Params error : `, error)
           ws.send(`Params error`)
           ws.close()
         }
-        const {text, pong} = value
-        console.log({text, pong})
-        if(pong) {
-            subscriberList[subscriberIndex].ping = Date.now()
-            console.log(subscriberList[subscriberIndex])
+        const { text, pong } = value
+        console.log({ text, pong })
+        if (pong) {
+          subscriberList[subscriberIndex].ping = Date.now()
+          console.log(subscriberList[subscriberIndex])
         }
 
         // if text is not empty, send to all other subscribers
-        if(text) {
-          subscriberList.forEach((e : any, i : number)=> {
-            if(i !== subscriberIndex) {
-              e.socket.send(JSON.stringify({
-                username,
-                text,
-                viewerCount : subscriberList.length
-              }))
+        if (text) {
+          subscriberList.forEach((e: any, i: number) => {
+            if (i !== subscriberIndex) {
+              e.socket.send(
+                JSON.stringify({
+                  username,
+                  text,
+                  viewerCount: subscriberList.length
+                })
+              )
             }
           })
         }
@@ -143,8 +156,8 @@ export default (_nitroApp: Nitro) => {
 
       ws.on('close', function close() {
         console.log(`Disconnected from socket @${new Date().toLocaleDateString()}`)
-        const unsubscriberIndex = subscriberList.findIndex((e : any)=> e.listenkey === listenkey)
-        if(unsubscriberIndex > -1) subscriberList.splice(unsubscriberIndex, 1)
+        const unsubscriberIndex = subscriberList.findIndex((e: any) => e.listenkey === listenkey)
+        if (unsubscriberIndex > -1) subscriberList.splice(unsubscriberIndex, 1)
         // clear interval
         // clearInterval(connectionInterval)
         // console.log({
@@ -161,29 +174,30 @@ export default (_nitroApp: Nitro) => {
   }
 }
 
-async function decryptListenKey(encrypt : string) {
+async function decryptListenKey(encrypt: string) {
   try {
-    const decryptListenkey = CryptoJS.AES.decrypt(encrypt, "socketKey", {
-        mode: CryptoJS.mode.ECB,
-        padding: CryptoJS.pad.Pkcs7
+    const decryptListenkey = CryptoJS.AES.decrypt(encrypt, 'socketKey', {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7
     }).toString(CryptoJS.enc.Utf8)
-    console.log({decryptListenkey})
-    return !decryptListenkey ? {
-        timestamp : 0,
-        expire : 0,
-        courseId : "",
-        userId : "",      
-    } : JSON.parse(decryptListenkey)
-  } catch(error) {
+    console.log({ decryptListenkey })
+    return !decryptListenkey
+      ? {
+          timestamp: 0,
+          expire: 0,
+          courseId: '',
+          userId: ''
+        }
+      : JSON.parse(decryptListenkey)
+  } catch (error) {
     console.log(`--------------------------------`)
     console.log(`decryptListenKey error :`, error)
     console.log(`--------------------------------`)
     return {
-        timestamp : 0,
-        expire : 0,
-        courseId : "",
-        userId : "",      
+      timestamp: 0,
+      expire: 0,
+      courseId: '',
+      userId: ''
     }
   }
 }
- 

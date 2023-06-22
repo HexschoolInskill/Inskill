@@ -18,7 +18,9 @@
             fill="currentColor"
           ></path>
         </svg>
-        <span class="" @click="sendMessage('hellojs')">{{ currentCourse.purchasedCount }}人已加入</span>
+        <span class="" @click="sendMessage('hellojs')"
+          >{{ currentCourse.purchasedCount }}人已加入</span
+        >
         <!-- <span v-if="!purchased" class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span> -->
       </span>
     </div>
@@ -585,7 +587,7 @@ const cameraOn = ref(true)
 const screenOn = ref(false)
 const micOn = ref(true)
 
-let socketNode : any = null
+let socketNode: any = null
 
 const broadcast = async () => {
   await getStreamId()
@@ -730,7 +732,7 @@ const getListenKey = async () => {
       })
     })
     console.log(`response`, response)
-    if(response.success) {
+    if (response.success) {
       await initSocket(response.data.listenkey)
     }
   } catch (error: any) {
@@ -739,14 +741,14 @@ const getListenKey = async () => {
   }
 }
 
-const initSocket = (listenkey : string) => {
+const initSocket = (listenkey: string) => {
   try {
     socketNode = new WebSocket(`ws://localhost:931/${listenkey}`)
     socketNode.onopen = () => {
       console.log('socket open')
     }
 
-    socketNode.onmessage = (event : any) => {
+    socketNode.onmessage = (event: any) => {
       console.log(`message`, event.data)
     }
 
@@ -754,15 +756,17 @@ const initSocket = (listenkey : string) => {
       console.log('socket close')
       // getListenKey()
     }
-  } catch(err) {
+  } catch (err) {
     console.log(err)
   }
 }
 
-const sendMessage = (msg : any) => {
-  socketNode.send(JSON.stringify({
-    text: msg
-  }))
+const sendMessage = (msg: any) => {
+  socketNode.send(
+    JSON.stringify({
+      text: msg
+    })
+  )
 }
 </script>
 

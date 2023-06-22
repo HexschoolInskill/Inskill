@@ -25,21 +25,14 @@
       <input class="hidden" type="email" name="Email" :value="order.order.Email" />
 
       <main
-        class="relative mr-4 w-full rounded-lg bg-[#262b2f] text-white p-5 sm:w-9/12"
+        class="relative mr-4 w-full rounded-lg bg-[#262b2f] p-5 text-white sm:w-9/12"
         :class="{ 'overflow-y-scroll': cart.length > 3 }"
       >
-        <h2
-          class="cart_header mb-4 border-bottom text-white pb-1 text-3xl"
-        >
-          確認訂單
-        </h2>
+        <h2 class="cart_header border-bottom mb-4 pb-1 text-3xl text-white">確認訂單</h2>
 
-        <div
-          v-if="cart.length"
-          class="cart_content border-bottom text-white"
-        >
+        <div v-if="cart.length" class="cart_content border-bottom text-white">
           <div v-for="item in cart" :key="item.id" class="cart_item mb-4 flex items-center">
-            <img class="mr-2  w-[100px]" :src="item.thumbnail" alt="img" />
+            <img class="mr-2 w-[100px]" :src="item.thumbnail" alt="img" />
             <div class="w-4/12">
               <p class="text-center">{{ item.title }}</p>
             </div>
@@ -58,12 +51,10 @@
           <div class="mt-4 text-right text-3xl font-bold">NT$ {{ getTotal() }}</div>
         </div>
       </main>
-      <aside class="ml-1 mt-4 flex w-full flex-col rounded-lg bg-[#262b2f] text-white p-5 sm:mt-0 sm:w-3/12">
-        <h2
-          class="cart_header mb-4 border-bottom text-white pb-1 text-3xl"
-        >
-          購買人資訊
-        </h2>
+      <aside
+        class="ml-1 mt-4 flex w-full flex-col rounded-lg bg-[#262b2f] p-5 text-white sm:mt-0 sm:w-3/12"
+      >
+        <h2 class="cart_header border-bottom mb-4 pb-1 text-3xl text-white">購買人資訊</h2>
 
         <p>名稱: {{ store.userProfile.username }}</p>
 
@@ -72,7 +63,7 @@
         <!-- 接後端去藍新金流 -->
         <button
           :class="[cart.length ? 'bg-black' : 'bg-slate-200']"
-          class="mb-2 mt-4 w-full rounded border p-1 text-xl transition-base text-white hover:bg-[#262b2f]"
+          class="transition-base mb-2 mt-4 w-full rounded border p-1 text-xl text-white hover:bg-[#262b2f]"
           type="submit"
           :disabled="!cart.length"
         >
@@ -83,7 +74,7 @@
         <NuxtLink to="/cart">
           <button
             :class="[cart.length ? 'bg-slate-400' : 'bg-slate-200']"
-            class="w-full rounded border p-1 text-xl transition-base text-white hover:bg-slate-500"
+            class="transition-base w-full rounded border p-1 text-xl text-white hover:bg-slate-500"
             type="button"
             :disabled="!cart.length"
           >

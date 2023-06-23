@@ -15,19 +15,16 @@
 
   <div>
     <div
-      class="relative mb-4 mt-2 h-[60vh] overflow-hidden rounded-lg bg-white p-3 text-black max-[1536px]:h-[55vh]"
+      class="relative mb-4 mt-2 h-[60vh] overflow-hidden rounded-lg bg-white px-3 text-black max-[1536px]:h-[55vh]"
     >
-      <p class="border-bottom relative z-10 text-center">聊天室</p>
+      <p class="border-bottom relative z-10 py-2 text-center">聊天室</p>
       <!-- TODO: 開始限制長度後，新增訊息時滾動到底端 -->
       <ul
-        class="absolute bottom-0 w-full overflow-y-scroll"
-        :class="{ 'top-[5vh] h-[55vh] max-[1536px]:h-[50vh]': props.chatroomMessage.length > 10 }"
+        id="chatroom-box"
+        class="absolute bottom-0 max-h-[540px] w-full overflow-y-auto max-[1536px]:max-h-[370px]"
       >
-        <li v-for="msg in props.chatroomMessage" :key="msg" class="my-1 mt-auto flex">
-          <span
-            class="mr-1 flex items-center p-1 text-black"
-            :class="{ 'rounded bg-black px-1 text-white': msg.isTeacher }"
-          >
+        <li v-for="msg in props.chatroomMessage" :key="msg" class="my-1 flex items-center">
+          <span class="mr-1 flex items-center p-1 text-black" :style="{ color: `#${randomColor}` }">
             {{ msg.username }}
             <svg
               v-if="msg.isTeacher"
@@ -58,6 +55,7 @@
                   d="M384.9,256C384.9,256,384.9,256,384.9,256c0-43.5-16.6-84.3-46.8-114.9c-4.7-4.7-12.3-4.8-17-0.1c-4.7,4.7-4.8,12.3-0.1,17
     c25.7,26.1,39.9,60.9,39.9,98.1c0,0,0,0,0,0s0,0,0,0c0,37.2-14.2,72-39.9,98.1c-4.7,4.7-4.6,12.3,0.1,17c2.3,2.3,5.4,3.5,8.4,3.5
     c3.1,0,6.2-1.2,8.5-3.6C368.2,340.3,384.9,299.5,384.9,256C384.9,256,384.9,256,384.9,256z"
+                  fill="currentColor"
                 ></path>
                 <path
                   d="M287.5,182.5c-4.7-4.7-12.3-4.8-17-0.1c-4.7,4.7-4.8,12.3-0.1,17c14.8,15,23,35.1,23,56.6c0,0,0,0,0,0s0,0,0,0
@@ -67,8 +65,8 @@
                 ></path>
               </g>
             </svg>
-            :
           </span>
+          :
           <span class="ml-1">{{ msg.comment }}</span>
         </li>
       </ul>
@@ -85,10 +83,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import useCourses from '~/stores/useCourses'
-import useUser from '~/stores/useUser'
+import { ref, watch, computed } from 'vue'
 
 const props = defineProps({
   chatroomMessage: {
@@ -98,17 +93,29 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:chatroomMessage'])
-const { currentCourse } = storeToRefs(useCourses())
-const { userProfile } = storeToRefs(useUser())
 const newChatMessage = ref('')
+
+watch(
+  () => props.chatroomMessage,
+  (newMessage: any) => {
+    // console.log(newMessage)
+    if (newMessage) {
+      console.log()
+      const chatroomBox: any = document.getElementById('chatroom-box')
+      // console.log(chatroomBox.scrollHeight)
+      chatroomBox.scroll({ top: chatroomBox.scrollHeight, behavior: 'smooth' })
+    }
+  },
+  { deep: true }
+)
+
+const randomColor = computed(() => {
+  return Math.floor(Math.random() * 16777215).toString(16)
+})
 
 const submitComment = () => {
   if (newChatMessage.value.length) {
-    emit('update:chatroomMessage', {
-      username: userProfile.value.username,
-      comment: newChatMessage.value,
-      isTeacher: userProfile.value._id === currentCourse.value.teacherId
-    })
+    emit('update:chatroomMessage', newChatMessage.value)
     newChatMessage.value = ''
   }
 }

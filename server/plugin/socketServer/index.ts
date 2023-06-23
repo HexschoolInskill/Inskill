@@ -144,6 +144,7 @@ export default (_nitroApp: Nitro) => {
             if (i !== subscriberIndex) {
               e.socket.send(
                 JSON.stringify({
+                  userId,
                   username,
                   text,
                   viewerCount: subscriberList.length

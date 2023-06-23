@@ -106,6 +106,7 @@
       <!-- 左邊課程切換列表 -->
       <in-course-chapter-selector
         :deep-dive="deepDive"
+        :purchased="purchased"
         :expand-chapter="expandChapter"
         :current-course="currentCourse"
         :content="content"
@@ -165,8 +166,6 @@ const courseType = computed(() => {
 const liveCoursePurchased = computed(() => {
   return route.query.courseType === 'stream' && !purchased.value
 })
-
-const chatroomMessage: any = ref([])
 
 // 課程是否加入購物車
 const isInCart = ref(-1)
@@ -270,17 +269,6 @@ const goToLesson = (index: number) => {
       notification.error(`沒有${index < 0 ? '上個' : '下個'}課程`)
     }
   }
-}
-
-const addChatroomMessage = ($value: any) => {
-  console.log($value)
-
-  chatroomMessage.value.push({
-    userId: userProfile.value._id,
-    username: userProfile.value.username,
-    isTeacher: userProfile.value.isTeacher,
-    comment: $value
-  })
 }
 </script>
 

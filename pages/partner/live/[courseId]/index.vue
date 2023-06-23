@@ -766,12 +766,12 @@ const initSocket = (listenkey: string) => {
     socketNode.onmessage = (event: any) => {
       console.log(`message`, event.data)
 
-      const { username, text, viewerCount } = JSON.parse(event.data)
+      const { userId, username, text, viewerCount } = JSON.parse(event.data)
 
       updateChatRoom({
         username,
         comment: text,
-        isTeacher: userProfile.value._id === currentCourse.value.teacherId,
+        isTeacher: userId === currentCourse.value.teacherId,
         viewerCount
       })
     }
@@ -794,8 +794,13 @@ const sendMessage = (msg: any) => {
 }
 
 const addChatroomMessage = ($value: any) => {
-  updateChatRoom({ ...$value })
-  sendMessage($value.comment)
+  updateChatRoom({
+    username: userProfile.value.username,
+    comment: $value,
+    isTeacher: userProfile.value._id === currentCourse.value.teacherId,
+    viewerCount: chatRoom.value.viewer
+  })
+  sendMessage($value)
 }
 </script>
 

@@ -29,7 +29,10 @@
           >
             <div class="flex items-center p-1">
               <span class="mr-auto">{{ lesson.title }}</span>
-              <span v-if="lesson.freePreview" class="w-[100px] rounded-md border py-1 text-center"
+              <span
+                v-if="lesson.freePreview"
+                class="w-[100px] rounded-md border py-1 text-center"
+                :class="{ hidden: purchased }"
                 >試看
               </span>
 
@@ -39,6 +42,7 @@
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 viewBox="0 0 32 32"
                 class="w-[25px]"
+                :class="{ hidden: purchased }"
               >
                 <g fill="none">
                   <path
@@ -58,6 +62,10 @@
 <script lang="ts" setup>
 const props = defineProps({
   deepDive: {
+    type: Boolean,
+    default: false
+  },
+  purchased: {
     type: Boolean,
     default: false
   },

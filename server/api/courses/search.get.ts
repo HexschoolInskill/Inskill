@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
     if (Object.keys(queryResult).length === 0) {
       // 若沒有帶 query，則各別回傳影音與直播課程資料 for 首頁
       const courseData = await models.Course.aggregate([
+        { $match: { isPublic: true } },
         { $unwind: '$reviews' },
         {
           $lookup: {
@@ -60,6 +61,7 @@ export default defineEventHandler(async (event) => {
         }
       ])
       const streamCourse = await models.LiveCourse.aggregate([
+        { $match: { isPublic: true } },
         { $unwind: '$reviews' },
         {
           $lookup: {
@@ -173,10 +175,10 @@ export default defineEventHandler(async (event) => {
       }
 
       let searchCourses = []
-      // TODO: 用 API 新增的課程沒有 reviews 內容，會抓不出資料
       if (category === 'normal') {
         searchCourses = await models.Course.aggregate([
-          { $unwind: '$reviews' },
+          { $match: { isPublic: true } },
+          { $unwind: { path: '$reviews', preserveNullAndEmptyArrays: true } },
           {
             $lookup: {
               from: 'users',
@@ -194,7 +196,7 @@ export default defineEventHandler(async (event) => {
               thumbnail: { $first: '$thumbnail' },
               teacherId: { $first: '$teacherId' },
               teacherName: { $first: '$teacher.username' },
-              scoreCount: { $sum: 1 },
+              scoreCount: { $sum: { $cond: [{ $ifNull: ['$reviews', false] }, 1, 0] } },
               averageRating: { $avg: '$reviews.rating' },
               purchasedCount: { $first: '$purchasedCount' },
               chapters: { $first: '$chapters' },
@@ -211,7 +213,9 @@ export default defineEventHandler(async (event) => {
               teacherId: 1,
               teacherName: { $arrayElemAt: ['$teacherName', 0] },
               scoreCount: 1,
-              averageRating: { $round: ['$averageRating', 1] },
+              averageRating: {
+                $cond: [{ $eq: ['$scoreCount', 0] }, null, { $round: ['$averageRating', 1] }]
+              },
               purchasedCount: 1,
               chapter: {
                 $cond: { if: { $isArray: '$chapters' }, then: { $size: '$chapters' }, else: 0 }
@@ -243,7 +247,8 @@ export default defineEventHandler(async (event) => {
         ])
       } else if (category === 'stream') {
         searchCourses = await models.LiveCourse.aggregate([
-          { $unwind: '$reviews' },
+          { $match: { isPublic: true } },
+          { $unwind: { path: '$reviews', preserveNullAndEmptyArrays: true } },
           {
             $lookup: {
               from: 'users',
@@ -263,6 +268,7 @@ export default defineEventHandler(async (event) => {
               teacherName: { $first: '$teacher.username' },
               startTime: { $first: '$startTime' },
               endTime: { $first: '$endTime' },
+              scoreCount: { $sum: { $cond: [{ $ifNull: ['$reviews', false] }, 1, 0] } },
               averageRating: { $avg: '$reviews.rating' },
               purchasedCount: { $first: '$purchasedCount' }
             }
@@ -320,7 +326,10 @@ export default defineEventHandler(async (event) => {
                 ]
               },
               endTime: 1,
-              averageRating: { $round: ['$averageRating', 1] },
+              scoreCount: 1,
+              averageRating: {
+                $cond: [{ $eq: ['$scoreCount', 0] }, null, { $round: ['$averageRating', 1] }]
+              },
               purchasedCount: 1
             }
           },

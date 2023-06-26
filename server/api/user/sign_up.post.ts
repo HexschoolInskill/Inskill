@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
       success: true,
       statusCode: 200,
       message: '帳號建立成功',
-      username: newUser.username
+      user: newUser
     }
   } catch (error: any) {
     return createError({

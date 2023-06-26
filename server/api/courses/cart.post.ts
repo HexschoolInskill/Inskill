@@ -9,11 +9,23 @@ export default defineEventHandler(async (event) => {
   })
   try {
     const { userInfo } = event.context.auth
-
+    const userID = event.context.auth.userID
     const body = await readBody(event)
     const { error, value } = await schema.validate(body, { abortEarly: true })
     if (error) throw new Error(error.details.map((e: any) => e.message).join(', '))
     const { courseId, courseType, isCart } = value
+
+    const isPurchased = await models.User.findOne({
+      _id: userID,
+      'purchasedCourses.courseId': courseId
+    })
+    if (isPurchased) {
+      return createError({
+        statusCode: 409,
+        message: '該課程已購買，不可加入購物車！'
+      })
+    }
+
     let course: object | null = null
     if (courseType === 'Course') {
       course = await models.Course.findById(courseId)
@@ -21,16 +33,18 @@ export default defineEventHandler(async (event) => {
       course = await models.LiveCourse.findById(courseId)
     }
     if (!course) throw new Error('course not found')
-    const collectIndex = userInfo.cartCourses.findIndex(
+
+    const cartIndex = userInfo.cartCourses.findIndex(
       (item: { courseId: string }) => item.courseId.toString() === courseId
     )
-    if (isCart && collectIndex === -1) {
+    if (isCart && cartIndex === -1) {
       userInfo.cartCourses.push({ courseId, courseType })
     }
     // checkout courseId whether exist in userInfo's cartCourses
-    if (!isCart && collectIndex !== -1) {
-      userInfo.cartCourses.splice(collectIndex, 1)
+    if (!isCart && cartIndex !== -1) {
+      userInfo.cartCourses.splice(cartIndex, 1)
     }
+
     await userInfo.save()
     return {
       success: true,

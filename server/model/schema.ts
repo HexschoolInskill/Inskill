@@ -188,7 +188,7 @@ const courseSchema = new Schema<Course>(
   {
     title: { type: String, required: true },
     description: { type: String },
-    price: { type: Number, required: true },
+    price: { type: Number, default: 0 },
     purchasedCount: { type: Number, default: 0 },
     thumbnail: { type: String, default: '' },
     teacherId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
@@ -207,6 +207,7 @@ export interface LiveCourse extends Document {
   thumbnail: string
   teacherId: Object
   videoUrl: string
+  isPublic: boolean
   startTime: Date
   endTime: Date
   reviews: Review[]
@@ -214,14 +215,15 @@ export interface LiveCourse extends Document {
 const liveCourseSchema = new Schema<LiveCourse>(
   {
     title: { type: String, required: true },
-    description: { type: String, required: true },
-    price: { type: Number },
+    description: { type: String },
+    price: { type: Number, default: 0 },
     purchasedCount: { type: Number, default: 0 },
     thumbnail: { type: String, default: '' },
     teacherId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     videoUrl: { type: String, default: '' },
-    startTime: { type: Date, required: true },
-    endTime: { type: Date, required: true },
+    startTime: { type: Date },
+    endTime: { type: Date },
+    isPublic: { type: Boolean, default: false },
     reviews: [reviewSchema]
   },
   { timestamps: true }

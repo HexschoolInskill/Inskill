@@ -161,6 +161,10 @@ class CoursesModule extends HttpFactory {
     return await this.call(`/discuss/${courseId}/${lessonIndex}`, 'POST')
   }
 
+  async fetchPurchasedCourses() {
+    return await this.call(`${this.RESOURCE}/myCourses`, 'GET')
+  }
+
   async fetchCourse(courseId: string) {
     return await this.call<{ success: boolean; course: NormalCourse[] }>(
       `${this.RESOURCE}/${courseId}`,

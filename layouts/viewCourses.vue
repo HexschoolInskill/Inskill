@@ -51,7 +51,7 @@
         >
           <path
             d="M400 480a16 16 0 0 1-10.63-4L256 357.41L122.63 476A16 16 0 0 1 96 464V96a64.07 64.07 0 0 1 64-64h192a64.07 64.07 0 0 1 64 64v368a16 16 0 0 1-16 16z"
-            :fill="collected ? '#FFC107' : 'currentColor'"
+            :fill="collected ? 'rgb(147 51 234)' : 'currentColor'"
           ></path>
         </svg>
 
@@ -77,7 +77,7 @@
           <g fill="none">
             <path
               d="M7.194 2.101a.9.9 0 0 1 1.614 0l1.521 3.082l3.401.495a.9.9 0 0 1 .5 1.535l-2.462 2.399l.581 3.387a.9.9 0 0 1-1.306.949l-3.042-1.6l-3.042 1.6a.9.9 0 0 1-1.306-.949l.58-3.387l-2.46-2.4a.9.9 0 0 1 .499-1.534l3.4-.495l1.522-3.082z"
-              fill="currentColor"
+              fill="rgb(147 51 234)"
             ></path>
           </g>
         </svg>
@@ -274,16 +274,20 @@ const goToLesson = (index: number) => {
 
 <style lang="scss" scoped>
 .course-header-action {
-  @apply transition-base mx-2 flex items-center rounded bg-white px-3 py-2 text-black hover:bg-gray-l;
-}
+  @apply transition-base mx-2 flex items-center rounded bg-white px-3 py-2 text-black border hover:border-[rgb(147,51,234)];
+  
+  svg{
+    path{
+      @apply transition-base;
+    }
+  }
 
-.course-header-action .tempStar {
   &:hover {
     svg {
       path {
-        fill: #ffc107;
+        fill: rgb(147,51,234)
       }
-    }
+    }    
   }
 }
 </style>

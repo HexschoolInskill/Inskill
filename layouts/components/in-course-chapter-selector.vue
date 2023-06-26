@@ -7,7 +7,7 @@
         v-for="(chapter, index) in props.currentCourse.chapters"
         :key="chapter.title"
         class="my-2 cursor-pointer rounded-md"
-        :class="[props.expandChapter === index ? 'bg-white text-black' : 'border']"
+        :class="[props.expandChapter === index ? 'bg-white text-black' : 'border hover:bg-[rgba(147,51,234,0.5)]']"
         @click="emit('update:expandChapter', index)"
       >
         <div class="flex items-center px-4 py-2">
@@ -19,16 +19,21 @@
           <li
             v-for="(lesson, lessonIndex) in chapter.lessons"
             :key="lesson.title"
-            class="px-4 py-2"
+            class="px-4 py-2 hover:bg-[rgba(147,51,234,0.5)]"
             :class="{
-              'bg-yellow':
-                lesson._id === currentCourse.chapters[content.chapter].lessons[content.lesson]._id,
-              'border-bottom': lessonIndex + 1 !== chapter.lessons.length
+              'border-bottom': lessonIndex + 1 !== chapter.lessons.length,
+              'bg-[rgba(147,51,234,0.5)]': lesson._id === currentCourse.chapters[content.chapter].lessons[content.lesson]._id
             }"
             @click.stop="emit('update:content', lessonIndex)"
           >
             <div class="flex items-center p-1">
-              <span class="mr-auto">{{ lesson.title }}</span>
+              <span 
+                class="mr-auto"
+                :class="{
+                  // 'drop-shadow-[0_1px_1px_rgb(147,51,234)]': lesson._id === currentCourse.chapters[content.chapter].lessons[content.lesson]._id
+                }">
+                  {{ lesson.title }}
+              </span>
               <span
                 v-if="lesson.freePreview"
                 class="w-[100px] rounded-md border py-1 text-center"

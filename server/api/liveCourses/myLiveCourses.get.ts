@@ -34,8 +34,10 @@ export default defineEventHandler(async (event) => {
               _id: '$purchasedCourses.courseId',
               title: '$course.title',
               description: '$course.description',
+              thumbnail: '$course.thumbnail',
               teacherId: '$course.teacherId',
-              teacherName: '$teacher.username'
+              teacherName: '$teacher.username',
+              teacherAvatar: '$teacher.avatar'
             }
           }
         }
@@ -53,13 +55,13 @@ export default defineEventHandler(async (event) => {
       return {
         success: true,
         statusCode: 200,
-        message: '取得 user 購買課程資料成功',
+        message: '取得 user 購買直播課程資料成功',
         purchasedCourses
       }
     } else {
       return createError({
         statusCode: 404,
-        message: '取得 user 購買課程資料失敗'
+        message: '取得 user 購買直播課程資料失敗'
       })
     }
   } catch (error: any) {

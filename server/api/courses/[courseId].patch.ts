@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
     if (teacherId !== userInfo.id) {
       return createError({
         statusCode: 400,
-        message: 'Permission deined, Only teacher can add lesson'
+        message: 'Permission deined, Only teacher can modify course'
       })
     }
     if (contenType === 'application/json') {

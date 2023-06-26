@@ -1,4 +1,4 @@
-// 創建影音課程
+// 創建直播課程
 import Joi from 'joi'
 import models from '../../model/schema'
 
@@ -13,13 +13,13 @@ export default defineEventHandler(async (event) => {
     if (error) throw new Error(error.details.map((e: any) => e.message).join(', '))
     const userID = event.context.auth.userID
     const { title } = value
-    const course = await models.Course.create({
+    const liveCourse = await models.LiveCourse.create({
       title,
       teacherId: userID
     })
     return {
       success: true,
-      course
+      liveCourse
     }
   } catch (error: any) {
     return createError({

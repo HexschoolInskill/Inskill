@@ -36,6 +36,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    let updatedLessonContent: never[] = []
     const courseId = findCourse._id
     const chapterId = findCourse.chapters[0]._id
     await models.Course.findOneAndUpdate(
@@ -44,10 +45,27 @@ export default defineEventHandler(async (event) => {
         $pull: { 'chapters.$[chapter].lessons.$[lesson].lessonContent': { _id: lessonContentId } }
       },
       { new: true, arrayFilters: [{ 'chapter._id': chapterId }, { 'lesson._id': lessonId }] }
-    )
+    ).then((updatedCourse: any) => {
+      const updatedChapter = updatedCourse.chapters.find(
+        (chapter: any) => chapter._id.toString() === chapterId.toString()
+      )
+      if (updatedChapter) {
+        const updatedLesson = updatedChapter.lessons.find(
+          (lesson: any) => lesson._id.toString() === lessonId.toString()
+        )
+        if (updatedLesson) {
+          updatedLesson.lessonContent.forEach((content: any, index: number) => {
+            content.sort = index + 1
+          })
+          updatedLessonContent = updatedLesson.lessonContent
+        }
+      }
+      return updatedCourse.save()
+    })
 
     return {
-      success: true
+      success: true,
+      updatedLessonContent
     }
   } catch (error: any) {
     return createError({

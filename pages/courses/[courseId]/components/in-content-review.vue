@@ -40,7 +40,7 @@
 
     <div v-if="review.length > showReviews" class="mb-8 mt-8 text-center">
       <button
-        class="w-[150px] rounded bg-white py-1 text-black transition-base hover:bg-[rgb(147,51,234)]"
+        class="transition-base w-[150px] rounded bg-white py-1 text-black hover:bg-[rgb(147,51,234)]"
         type="button"
         @click="getMoreReviews"
       >

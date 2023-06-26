@@ -274,10 +274,10 @@ const goToLesson = (index: number) => {
 
 <style lang="scss" scoped>
 .course-header-action {
-  @apply transition-base mx-2 flex items-center rounded bg-white px-3 py-2 text-black border hover:border-[rgb(147,51,234)];
-  
-  svg{
-    path{
+  @apply transition-base mx-2 flex items-center rounded border bg-white px-3 py-2 text-black hover:border-[rgb(147,51,234)];
+
+  svg {
+    path {
       @apply transition-base;
     }
   }
@@ -285,9 +285,9 @@ const goToLesson = (index: number) => {
   &:hover {
     svg {
       path {
-        fill: rgb(147,51,234)
+        fill: rgb(147, 51, 234);
       }
-    }    
+    }
   }
 }
 </style>

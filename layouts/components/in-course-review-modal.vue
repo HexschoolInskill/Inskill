@@ -82,3 +82,15 @@ const setStar = (i: number) => {
   newReview.value.star = i
 }
 </script>
+
+<style lang="scss" scoped>
+.tempStar {
+  &:hover {
+    svg {
+      path {
+        fill: #ffc107;
+      }
+    }
+  }
+}
+</style>

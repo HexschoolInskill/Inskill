@@ -26,15 +26,3 @@ const props = defineProps({
   }
 })
 </script>
-
-<style lang="scss" scope>
-.tempStar {
-  &:hover {
-    svg {
-      path {
-        fill: #ffc107;
-      }
-    }
-  }
-}
-</style>

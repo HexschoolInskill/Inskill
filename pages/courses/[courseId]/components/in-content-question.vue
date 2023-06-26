@@ -17,7 +17,7 @@
       </textarea>
 
       <button
-        class="my-2 ml-auto p-2 w-[150px] rounded border bg-white text-black transition-base hover:bg-[rgb(147,51,234)]"
+        class="transition-base my-2 ml-auto w-[150px] rounded border bg-white p-2 text-black hover:bg-[rgb(147,51,234)]"
         :class="{ 'bg-gray': !newQuestion.length }"
         type="button"
         :disabled="!newQuestion.length"
@@ -110,14 +110,14 @@
 
         <div class="my-2 flex">
           <button
-            class="my-2 ml-auto w-[150px] rounded border p-2 transition-base hover:bg-[rgb(147,51,234)]"
+            class="transition-base my-2 ml-auto w-[150px] rounded border p-2 hover:bg-[rgb(147,51,234)]"
             type="button"
             @click="closeReply"
           >
             取消
           </button>
           <button
-            class="my-2 ml-6 w-[150px] rounded border bg-white p-2 text-black transition-base hover:bg-[rgb(147,51,234)]"
+            class="transition-base my-2 ml-6 w-[150px] rounded border bg-white p-2 text-black hover:bg-[rgb(147,51,234)]"
             :class="{ 'bg-gray': !newReply.length }"
             type="button"
             :disabled="!newReply.length"
@@ -158,7 +158,7 @@
 
     <button
       v-if="questions.length > showQuestion"
-      class="mx-auto rounded bg-white p-1 text-black transition-base hover:bg-[rgb(147,51,234)]"
+      class="transition-base mx-auto rounded bg-white p-1 text-black hover:bg-[rgb(147,51,234)]"
       type="button"
       @click="getMoreQuestion"
     >

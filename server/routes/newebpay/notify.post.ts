@@ -1,4 +1,5 @@
 import { spgatewayNotify } from '../../services/newebpay'
+import models from '../../model/schema'
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
@@ -13,20 +14,38 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    // TODO: 取得交易內容，並查詢本地端資料庫是否有相符的訂單
-    // if (!orders[data?.Result?.MerchantOrderNo]) {
-    //   console.log('找不到訂單');
-    //   return {
-    //     success : false,
-    //   }
-    // }
+    // 取得交易內容，並查詢本地端資料庫是否有相符的訂單
+    const responsetOrderNo = responseData?.Result?.MerchantOrderNo
+    // const responsetOrderNo = '1687861301345'
+    const existingOrder = await models.Order.findOne({ orderNo: responsetOrderNo })
+    if (!existingOrder) {
+      return {
+        success: false,
+        statusCode: 400,
+        message: 'check Order error'
+      }
+    }
 
-    // TODO: 交易完成，將訂單內容新增至 user.purchasedCourse、課程人數+1、訂單 isConfirm = true
+    await models.User.findOneAndUpdate(
+      { _id: existingOrder.userId },
+      { $addToSet: { purchasedCourses: existingOrder.orderCourses } },
+      { new: true }
+    )
 
+    await models.User.findOneAndUpdate(
+      { _id: existingOrder.userId },
+      { $set: { cartCourses: [] } },
+      { new: true }
+    )
+
+    existingOrder.isConfirm = true
+    await existingOrder.save()
+
+    // TODO: 交易完成，將訂單內容的課程人數皆+1
     return {
       success: true,
       statusCode: 200,
-      responseData
+      message: `訂單 ${responsetOrderNo} 購買課程成功`
     }
   } catch (error: any) {
     console.log(`notify.post error : `, error)

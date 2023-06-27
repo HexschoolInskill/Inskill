@@ -17,8 +17,8 @@ export default (_nitroApp: Nitro) => {
   console.log(`---------- initSocket start @ ${new Date().toLocaleDateString()}--------\n\n`)
   try {
     WSS.on('connection', async function connection(ws: any, req: any) {
-      let subscriberIndex: number = -1
-      let connectionInterval: any = null
+      let subscriberIndex = -1
+      // let connectionInterval: any = null
       console.log(`Connected to socket @${new Date().toLocaleDateString()}`)
 
       // check whether listenkey is valid
@@ -52,7 +52,7 @@ export default (_nitroApp: Nitro) => {
         return
       }
       const { username, purchasedCourses } = userInfo
-      const purchasedCourse = purchasedCourses.find((e: any) => e.courseId == courseId)
+      const purchasedCourse = purchasedCourses.find((e: any) => e.courseId === courseId)
       const isTeacher = await models.LiveCourse.findOne({
         _id: courseId,
         teacherId: userId
@@ -89,8 +89,8 @@ export default (_nitroApp: Nitro) => {
           connectedAt: Date.now(),
           socket: ws,
           lastestUpdate: 0,
-          expired: 0, //60 * 60 * 1000
-          ping: 0 //用來 測試是否還有連線狀態, 記錄ping回去的時間
+          expired: 0, // 60 * 60 * 1000
+          ping: 0 // 用來 測試是否還有連線狀態, 記錄ping回去的時間
         })
         subscriberIndex = subscriberList.length - 1
       }
@@ -175,7 +175,7 @@ export default (_nitroApp: Nitro) => {
   }
 }
 
-async function decryptListenKey(encrypt: string) {
+function decryptListenKey(encrypt: string) {
   try {
     const decryptListenkey = CryptoJS.AES.decrypt(encrypt, 'socketKey', {
       mode: CryptoJS.mode.ECB,

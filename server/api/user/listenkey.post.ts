@@ -1,6 +1,6 @@
 import Joi from 'joi'
-import models from '../../model/schema'
 import CryptoJS from 'crypto-js'
+import models from '../../model/schema'
 export default defineEventHandler(async (event) => {
   const profileSchema = Joi.object({
     courseId: Joi.string().required()
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     const { purchasedCourses } = userInfo
     // checkout courseId and courseType == LiveCourse
     const purchasedCourse = purchasedCourses.find((course: any) => {
-      return course.courseId == courseId && course.courseType == 'LiveCourse'
+      return course.courseId === courseId && course.courseType === 'LiveCourse'
     })
     // LiveCourse db check whether userId is teacher and courseId is valid
     const isTeacher = await models.LiveCourse.findOne({

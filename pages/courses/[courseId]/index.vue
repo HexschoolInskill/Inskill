@@ -73,11 +73,11 @@ import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
 // components
+import InCourseChatRoom from '../../../layouts/components/in-course-chatroom.vue'
 import inContentDesc from './components/in-content-desc.vue'
 import inContentTeacher from './components/in-content-teacher.vue'
 import inContentReview from './components/in-content-review.vue'
 import inContentQuestion from './components/in-content-question.vue'
-import InCourseChatRoom from '../../../layouts/components/in-course-chatroom.vue'
 
 import useNotification from '~~/stores/useNotification'
 import useCourses from '~/stores/useCourses'

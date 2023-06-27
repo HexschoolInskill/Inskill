@@ -16,14 +16,45 @@
           <img src="/images/logo.svg" alt="Inskill" />
         </div>
         <div class="mx-5 hidden flex-1 items-center gap-5 lg:flex xl:ml-14 xl:mr-0 xl:gap-14">
-          <div class="relative">
-            <div
-              class="flex cursor-pointer select-none items-center"
-              @click="togglePopup('explore')"
-            >
-              <p class="whitespace-nowrap">探索</p>
-              <i class="icon-arrow text-[24px]"></i>
+          <div ref="explorePopupRef">
+            <div class="relative">
+              <div
+                class="flex cursor-pointer select-none items-center"
+                @click="togglePopup('explore')"
+              >
+                <p class="whitespace-nowrap">探索</p>
+                <i class="icon-arrow text-[24px]"></i>
+              </div>
             </div>
+            <transition name="menu">
+              <ul
+                v-if="currentPopup === 'explore'"
+                class="absolute left-0 top-18 grid w-[calc(100vw-24px)] gap-2 rounded-6 bg-white p-4 shadow sm:w-[375px] lg:left-20 lg:top-28"
+              >
+                <li class="in-header__popup-link">
+                  <nuxt-link
+                    class="transition-base block whitespace-nowrap px-3 py-2 hover:text-blue"
+                    to="/search"
+                    >所有類別課程</nuxt-link
+                  >
+                </li>
+                <li class="in-header__popup-link">
+                  <nuxt-link
+                    class="transition-base block whitespace-nowrap px-3 py-2 hover:text-blue"
+                    to="/search?q=AI"
+                    >AI</nuxt-link
+                  >
+                </li>
+                <li class="in-header__popup-link">
+                  <nuxt-link
+                    class="transition-base block whitespace-nowrap px-3 py-2 hover:text-blue"
+                    to="/search?q=程式設計"
+                  >
+                    程式設計
+                  </nuxt-link>
+                </li>
+              </ul>
+            </transition>
           </div>
           <nuxt-link class="whitespace-nowrap">直播</nuxt-link>
           <form
@@ -81,120 +112,104 @@
             </g>
           </svg>
         </nuxt-link>
-        <div
-          class="relative flex flex-shrink-0 items-center lg:ml-5 2xl:ml-2"
-          @click="togglePopup('user')"
-        >
+        <div ref="userPopupRef">
           <div
-            class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full"
-            :class="{ 'lg:hidden': !store.userProfile.username }"
+            class="relative flex flex-shrink-0 items-center lg:ml-5 2xl:ml-8"
+            @click="togglePopup('user')"
           >
-            <img
-              :src="
-                store.userProfile.avatar ? store.userProfile.avatar : '/images/avatar-fallback.svg'
-              "
-              alt=""
-            />
-          </div>
-          <p
-            v-if="store.userProfile.username"
-            class="hidden cursor-pointer select-none text-base font-bold text-black lg:ml-3 lg:block"
-          >
-            Hi, {{ store.userProfile.username }}
-          </p>
-          <div v-else class="hidden items-center gap-5 lg:flex 2xl:gap-6">
-            <nuxt-link v-slot="{ navigate }" to="/login">
-              <button
-                class="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-1 bg-black px-6 text-base leading-6 text-white"
-                @click="navigate"
-              >
-                登入
-              </button>
-            </nuxt-link>
-            <nuxt-link v-slot="{ navigate }" to="/register">
-              <button
-                class="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-1 border border-solid border-black px-6 text-base leading-6 text-black"
-                @click="navigate"
-              >
-                註冊
-              </button>
-            </nuxt-link>
-          </div>
-        </div>
-        <transition name="menu">
-          <ul
-            v-if="currentPopup === 'user'"
-            class="absolute right-0 top-18 grid w-[calc(100vw-24px)] gap-2 rounded-6 bg-white p-4 shadow sm:w-52 lg:top-28"
-            :class="{ 'lg:hidden': !store.userProfile.username }"
-          >
-            <template v-if="!store.userProfile.username">
-              <li class="in-header__popup-link">
-                <nuxt-link
-                  to="/login"
-                  class="block whitespace-nowrap px-3 py-2 text-center"
-                  @click="currentPopup = null"
+            <div
+              class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full"
+              :class="{ 'lg:hidden': !store.userProfile.username }"
+            >
+              <img
+                :src="
+                  store.userProfile.avatar
+                    ? store.userProfile.avatar
+                    : '/images/avatar-fallback.svg'
+                "
+                alt=""
+              />
+            </div>
+            <p
+              v-if="store.userProfile.username"
+              class="hidden cursor-pointer select-none text-base font-bold text-black lg:ml-3 lg:block"
+            >
+              Hi, {{ store.userProfile.username }}
+            </p>
+            <div v-else class="hidden items-center gap-5 lg:flex 2xl:gap-6">
+              <nuxt-link v-slot="{ navigate }" to="/login">
+                <button
+                  class="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-1 bg-black px-6 text-base leading-6 text-white"
+                  @click="navigate"
                 >
                   登入
-                </nuxt-link>
-              </li>
-              <li class="in-header__popup-link">
-                <nuxt-link
-                  to="/register"
-                  class="block whitespace-nowrap px-3 py-2 text-center"
-                  @click="currentPopup = null"
+                </button>
+              </nuxt-link>
+              <nuxt-link v-slot="{ navigate }" to="/register">
+                <button
+                  class="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-1 border border-solid border-black px-6 text-base leading-6 text-black"
+                  @click="navigate"
                 >
                   註冊
-                </nuxt-link>
-              </li>
-            </template>
-            <template v-else>
-              <li class="in-header__popup-link">
-                <nuxt-link
-                  to="/user/profile"
-                  class="transition-base block whitespace-nowrap px-3 py-2 text-center hover:text-blue"
-                  @click="currentPopup = null"
-                >
-                  會員資料
-                </nuxt-link>
-              </li>
-              <li class="in-header__popup-link">
-                <nuxt-link
-                  class="transition-base block whitespace-nowrap px-3 py-2 text-center hover:text-blue"
-                  @click="currentPopup = null"
-                >
-                  我的課程
-                </nuxt-link>
-              </li>
-              <li class="in-header__popup-link" @click="app.$api.user.logout">
-                <div
-                  class="transition-base block whitespace-nowrap px-3 py-2 text-center hover:text-blue"
-                >
-                  登出
-                </div>
-              </li>
-            </template>
-          </ul>
-        </transition>
-        <transition name="menu">
-          <ul
-            v-if="currentPopup === 'explore'"
-            class="absolute left-0 top-18 grid w-[calc(100vw-24px)] gap-2 rounded-6 bg-white p-4 shadow sm:w-[375px] lg:left-20 lg:top-28"
-          >
-            <li class="in-header__popup-link">
-              <nuxt-link class="block whitespace-nowrap px-3 py-2" to="/search"
-                >所有類別課程</nuxt-link
-              >
-            </li>
-            <li class="in-header__popup-link">
-              <nuxt-link class="block whitespace-nowrap px-3 py-2" to="/search?q=AI">AI</nuxt-link>
-            </li>
-            <li class="in-header__popup-link">
-              <nuxt-link class="block whitespace-nowrap px-3 py-2" to="/search?q=程式設計">
-                程式設計
+                </button>
               </nuxt-link>
-            </li>
-          </ul>
-        </transition>
+            </div>
+          </div>
+          <transition name="menu">
+            <ul
+              v-if="currentPopup === 'user'"
+              class="in-header__popup absolute right-0 top-18 grid w-[calc(100vw-24px)] gap-2 rounded-6 bg-white p-4 shadow sm:w-52 lg:top-28"
+              :class="{ 'lg:hidden': !store.userProfile.username }"
+            >
+              <template v-if="!store.userProfile.username">
+                <li class="in-header__popup-link">
+                  <nuxt-link
+                    to="/login"
+                    class="block whitespace-nowrap px-3 py-2 text-center"
+                    @click="currentPopup = ''"
+                  >
+                    登入
+                  </nuxt-link>
+                </li>
+                <li class="in-header__popup-link">
+                  <nuxt-link
+                    to="/register"
+                    class="block whitespace-nowrap px-3 py-2 text-center"
+                    @click="currentPopup = ''"
+                  >
+                    註冊
+                  </nuxt-link>
+                </li>
+              </template>
+              <template v-else>
+                <li class="in-header__popup-link">
+                  <nuxt-link
+                    to="/user/profile"
+                    class="transition-base block whitespace-nowrap px-3 py-2 text-center hover:text-blue"
+                    @click="currentPopup = ''"
+                  >
+                    會員資料
+                  </nuxt-link>
+                </li>
+                <li class="in-header__popup-link">
+                  <nuxt-link
+                    class="transition-base block whitespace-nowrap px-3 py-2 text-center hover:text-blue"
+                    @click="currentPopup = ''"
+                  >
+                    我的課程
+                  </nuxt-link>
+                </li>
+                <li class="in-header__popup-link" @click="app.$api.user.logout">
+                  <div
+                    class="transition-base block whitespace-nowrap px-3 py-2 text-center hover:text-blue"
+                  >
+                    登出
+                  </div>
+                </li>
+              </template>
+            </ul>
+          </transition>
+        </div>
       </div>
     </in-container>
   </header>
@@ -206,35 +221,46 @@ const app = useNuxtApp()
 const store = userUser()
 
 const searchInput = ref('')
+const currentPopup = ref<string>('')
+const isScrolled = ref(false)
+const userPopupRef = ref<null | HTMLElement>(null)
+const explorePopupRef = ref<null | HTMLElement>(null)
+let prevScrollTop = 0
 
+function handleScroll() {
+  currentPopup.value = ''
+  const currentScrollTop = document.documentElement.scrollTop
+  isScrolled.value = currentScrollTop > prevScrollTop && currentScrollTop >= 1
+  prevScrollTop = currentScrollTop
+}
 function handleSearch() {
   const value = encodeURIComponent(searchInput.value.trim())
   navigateTo(`/search?q=${value}&sortBy=time&category=normal`)
 }
-
-const currentPopup = ref<null | string>(null)
-
 function togglePopup(name: string) {
   if (currentPopup.value === name) {
-    currentPopup.value = null
+    currentPopup.value = ''
   } else {
     currentPopup.value = name
   }
 }
-
-const isScrolled = ref(false)
-
-let prevScrollTop = 0
-function handleScroll() {
-  const currentScrollTop = document.documentElement.scrollTop
-  isScrolled.value = currentScrollTop > prevScrollTop
-  prevScrollTop = currentScrollTop
+function handleClickOutside(event: Event) {
+  if (!currentPopup.value) return
+  const target = event.target as HTMLElement
+  if (currentPopup.value === 'user' && userPopupRef.value) {
+    if (!userPopupRef.value.contains(target)) currentPopup.value = ''
+  }
+  if (currentPopup.value === 'explore' && explorePopupRef.value) {
+    if (!explorePopupRef.value.contains(target)) currentPopup.value = ''
+  }
 }
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  window.addEventListener('click', handleClickOutside)
 })
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('click', handleClickOutside)
 })
 </script>
 <style lang="scss">

@@ -29,8 +29,9 @@
             class="mt-10 overflow-x-auto overflow-y-hidden whitespace-nowrap border-b border-solid border-[#6C757D]"
           >
             <nuxt-link
+              v-if="user.isTeacher"
               v-slot="{ isActive }"
-              to="/user/courses/myCourses"
+              to="/user/courses/partnerCourses"
               class="text-fs-[20px] group relative mr-10 inline-block cursor-pointer pb-4 font-bold text-white last:mr-0"
             >
               <p :class="{ 'text-purple-600': isActive }">開設的課程</p>

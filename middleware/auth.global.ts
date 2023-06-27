@@ -2,12 +2,12 @@ import useUser from '~/stores/useUser'
 import useCourses from '~/stores/useCourses'
 
 export default defineNuxtRouteMiddleware(async (to) => {
+  const store = useUser()
   if (process.server) {
     const app = useNuxtApp()
     await app.$api.user.fetchProfile()
   }
   if (to.meta.auth) {
-    const store = useUser()
     if (!store.userProfile._id) {
       const path = to.path
       const query = Object.entries(to.query)
@@ -15,6 +15,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
         .join('&')
       return `/login?redirect=${path}&${query}`
     }
+  }
+  if (to.meta.partner) {
+    if (!store.userProfile.isTeacher) return '/'
   }
   if (to.params.courseId) {
     console.log(to)

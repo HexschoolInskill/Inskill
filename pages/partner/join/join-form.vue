@@ -257,7 +257,7 @@
             <in-input
               v-model="params.description"
               class="mt-2"
-              label="請用一句話形容您自己"
+              label="請用一句話形容您自己*"
               placeholder="請簡單描述(背景/職稱)"
               :error="v$.description.required.$invalid"
             />
@@ -271,7 +271,7 @@
               v-model="params.longDescription"
               class="mt-2"
               type="textarea"
-              label="自我介紹"
+              label="自我介紹*"
               placeholder="請告訴我們關於您的學經歷"
               :error="v$.longDescription.required.$invalid"
             />

@@ -81,182 +81,172 @@
           v-else-if="category === 'normal' && normalCourses.length"
           class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4"
         >
-          <in-card
+          <nuxt-link
             v-for="item in normalCourses"
             :key="item._id"
-            glow
-            class="group flex cursor-pointer flex-col font-bold text-[#6C757D]"
+            :to="`/courses/${item._id}?courseType=normal`"
           >
-            <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
-              <nuxt-link
-                :to="`/courses/${item._id}?courseType=${category}`"
-                class="hidden cursor-pointer items-center text-white opacity-90 sm:flex"
-              >
+            <in-card glow class="group flex cursor-pointer flex-col font-bold text-[#6C757D]">
+              <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
                 <img
+                  v-if="item.thumbnail"
                   :src="item.thumbnail"
                   :alt="item.title"
                   class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
                 />
-              </nuxt-link>
-              <div
-                class="absolute left-0 top-0 h-full w-full bg-black/20 transition group-hover:opacity-0"
-              ></div>
-              <div
-                class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-purple-600 group-hover:translate-y-0 group-hover:opacity-100"
-                @click="handleCollectCourse(item._id)"
-              >
-                <i
-                  v-if="isInCollection(item._id)"
-                  class="icon-bookmark -mt-px text-[32px] text-purple-600"
-                ></i>
-                <i v-else class="icon-bookmark-outline -mt-px text-[32px]"></i>
-              </div>
-            </div>
-            <div class="flex-1 p-8 xl:px-6 xl:py-4">
-              <h3
-                class="transition-base line-clamp-1 text-[28px] text-blue sm:text-[#6C757D] sm:group-hover:text-white"
-              >
-                {{ item.title }}
-              </h3>
-              <div class="mt-2 flex gap-3 xl:block">
-                <div class="flex gap-3 text-[#DEE2E6]/50">
+                <img v-else class="ml-auto mr-0" src="/images/logo-white.svg" :alt="item.title" />
+                <div
+                  class="absolute left-0 top-0 h-full w-full bg-black/20 transition group-hover:opacity-0"
+                ></div>
+                <div
+                  class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-purple-600 group-hover:translate-y-0 group-hover:opacity-100"
+                  @click.stop.prevent="handleCollectCourse(item._id)"
+                >
                   <i
-                    v-for="score in Math.round(item.averageRating)"
-                    :key="score"
-                    class="icon-star text-[22px] text-yellow"
+                    v-if="isInCollection(item._id)"
+                    class="icon-bookmark -mt-px text-[32px] text-purple-600"
                   ></i>
-                  <i
-                    v-for="score in 5 - Math.round(item.averageRating)"
-                    :key="score"
-                    class="icon-star text-[22px]"
-                  ></i>
-                </div>
-                <p class="mt-2">{{ item.scoreCount }} 則評價</p>
-              </div>
-              <div class="mt-6 flex items-center">
-                <div class="flex-shrink-0">
-                  <i class="icon-category text-black sm:text-white"></i>
-                </div>
-                <div class="flex-1 pl-4">
-                  <span>章節數量</span>
-                  <span class="ml-3">{{ formatNumber(item.chapter) }}</span>
-                  <span>章</span>
-                  <span>{{ formatNumber(item.course) }}</span>
-                  <span>節</span>
+                  <i v-else class="icon-bookmark-outline -mt-px text-[32px]"></i>
                 </div>
               </div>
-              <div class="mt-4 flex items-center">
-                <div class="flex-shrink-0">
-                  <i class="icon-people text-black sm:text-white"></i>
+              <div class="flex-1 p-8 xl:px-6 xl:py-4">
+                <h3
+                  class="transition-base line-clamp-1 text-[28px] text-blue sm:text-[#6C757D] sm:group-hover:text-white"
+                >
+                  {{ item.title }}
+                </h3>
+                <div class="mt-2 flex gap-3 xl:block">
+                  <div class="flex gap-3 text-[#DEE2E6]/50">
+                    <i
+                      v-for="score in Math.round(item.averageRating)"
+                      :key="score"
+                      class="icon-star text-[22px] text-yellow"
+                    ></i>
+                    <i
+                      v-for="score in 5 - Math.round(item.averageRating)"
+                      :key="score"
+                      class="icon-star text-[22px]"
+                    ></i>
+                  </div>
+                  <p class="mt-2">{{ item.scoreCount }} 則評價</p>
                 </div>
-                <div class="flex-1 pl-4">
-                  <span>{{ formatNumber(item.purchasedCount) }}</span>
-                  <span class="ml-3">人已經加入</span>
+                <div class="mt-6 flex items-center">
+                  <div class="flex-shrink-0">
+                    <i class="icon-category text-black sm:text-white"></i>
+                  </div>
+                  <div class="flex-1 pl-4">
+                    <span>章節數量</span>
+                    <span class="ml-3">{{ formatNumber(item.chapter) }}</span>
+                    <span>章</span>
+                    <span>{{ formatNumber(item.course) }}</span>
+                    <span>節</span>
+                  </div>
                 </div>
-              </div>
-              <div class="mt-6 flex flex-col gap-4">
-                <div class="flex items-center gap-3">
-                  <img
-                    class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full object-cover"
-                    src="/images/avatar-fallback.svg"
-                    alt=""
-                  />
-                  <p class="font-bold leading-normal">
-                    <nuxt-link
-                      :to="`/partner/courses/${item._id}`"
-                      class="hidden cursor-pointer items-center text-white sm:flex"
-                    >
+                <div class="mt-4 flex items-center">
+                  <div class="flex-shrink-0">
+                    <i class="icon-people text-black sm:text-white"></i>
+                  </div>
+                  <div class="flex-1 pl-4">
+                    <span>{{ formatNumber(item.purchasedCount) }}</span>
+                    <span class="ml-3">人已經加入</span>
+                  </div>
+                </div>
+                <div class="mt-6 flex flex-col gap-4">
+                  <div class="flex items-center gap-3">
+                    <img
+                      class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full object-cover"
+                      src="/images/avatar-fallback.svg"
+                      alt=""
+                    />
+                    <p class="font-bold leading-normal">
                       {{ item.teacherName }}
-                    </nuxt-link>
+                    </p>
+                  </div>
+                  <p class="flex items-center gap-5 text-2xl">
+                    <span>NT$</span>
+                    <span class="text-black sm:text-white">{{
+                      item.price ? formatNumber(item.price) : '免費'
+                    }}</span>
                   </p>
                 </div>
-                <p class="flex items-center gap-5 text-2xl">
-                  <span>NT$</span>
-                  <span class="text-black sm:text-white">{{ formatNumber(item.price) }}</span>
-                </p>
               </div>
-            </div>
-          </in-card>
+            </in-card>
+          </nuxt-link>
         </div>
         <div
           v-else-if="category === 'stream' && streamCourses.length"
           class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4"
         >
-          <in-card
+          <nuxt-link
             v-for="item in streamCourses"
             :key="item._id"
-            glow
-            class="group flex cursor-pointer flex-col font-bold text-[#6C757D]"
+            :to="`/courses/${item._id}?courseType=stream`"
           >
-            <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
-              <nuxt-link
-                :to="`/courses/${item._id}?courseType=${category}`"
-                class="hidden cursor-pointer items-center text-white sm:flex"
-              >
+            <in-card glow class="group flex cursor-pointer flex-col font-bold text-[#6C757D]">
+              <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
                 <img
+                  v-if="item.thumbnail"
                   :src="item.thumbnail"
                   :alt="item.title"
                   class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
                 />
-              </nuxt-link>
-              <div
-                class="absolute left-0 top-0 h-full w-full bg-black/20 transition group-hover:opacity-0"
-              ></div>
-              <div
-                class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-purple-600 group-hover:translate-y-0 group-hover:opacity-100"
-                @click="handleCollectCourse(item._id)"
-              >
-                <i
-                  v-if="isInCollection(item._id)"
-                  class="icon-bookmark -mt-px text-[32px] text-purple-600"
-                ></i>
-                <i v-else class="icon-bookmark-outline -mt-px text-[32px]"></i>
-              </div>
-            </div>
-            <div class="flex-1 p-8 xl:px-6 xl:py-4">
-              <h3
-                class="transition-base line-clamp-1 text-[28px] text-blue sm:text-[#6C757D] sm:group-hover:text-white"
-              >
-                {{ item.title }}
-              </h3>
-              <div class="mt-6 flex items-center">
-                <div class="flex-shrink-0">
-                  <i class="icon-time text-black sm:text-inherit"></i>
-                </div>
-                <p class="pl-4">{{ item.startTime }}</p>
-              </div>
-              <div class="mt-4 flex items-center">
-                <div class="flex-shrink-0">
-                  <i class="icon-people text-black sm:text-white"></i>
-                </div>
-                <div class="flex-1 pl-4">
-                  <span>{{ formatNumber(item.purchasedCount) }}</span>
-                  <span class="ml-3">人已經加入</span>
+                <img v-else class="ml-auto mr-0" src="/images/logo-white.svg" :alt="item.title" />
+                <div
+                  class="absolute left-0 top-0 h-full w-full bg-black/20 transition group-hover:opacity-0"
+                ></div>
+                <div
+                  class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-purple-600 group-hover:translate-y-0 group-hover:opacity-100"
+                  @click.stop.prevent="handleCollectCourse(item._id)"
+                >
+                  <i
+                    v-if="isInCollection(item._id)"
+                    class="icon-bookmark -mt-px text-[32px] text-purple-600"
+                  ></i>
+                  <i v-else class="icon-bookmark-outline -mt-px text-[32px]"></i>
                 </div>
               </div>
-              <div class="mt-6 flex flex-col gap-4">
-                <div class="flex items-center gap-3">
-                  <img
-                    class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full object-cover"
-                    src="/images/avatar-fallback.svg"
-                    alt=""
-                  />
-                  <p class="font-bold leading-normal">
-                    <nuxt-link
-                      :to="`/partner/live/${item._id}`"
-                      class="hidden cursor-pointer items-center text-white sm:flex"
-                    >
+              <div class="flex-1 p-8 xl:px-6 xl:py-4">
+                <h3
+                  class="transition-base line-clamp-1 text-[28px] text-blue sm:text-[#6C757D] sm:group-hover:text-white"
+                >
+                  {{ item.title }}
+                </h3>
+                <div class="mt-6 flex items-center">
+                  <div class="flex-shrink-0">
+                    <i class="icon-time text-black sm:text-inherit"></i>
+                  </div>
+                  <p class="pl-4">{{ item.startTime }}</p>
+                </div>
+                <div class="mt-4 flex items-center">
+                  <div class="flex-shrink-0">
+                    <i class="icon-people text-black sm:text-white"></i>
+                  </div>
+                  <div class="flex-1 pl-4">
+                    <span>{{ formatNumber(item.purchasedCount) }}</span>
+                    <span class="ml-3">人已經加入</span>
+                  </div>
+                </div>
+                <div class="mt-6 flex flex-col gap-4">
+                  <div class="flex items-center gap-3">
+                    <img
+                      class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full object-cover"
+                      src="/images/avatar-fallback.svg"
+                      alt=""
+                    />
+                    <p class="font-bold leading-normal">
                       {{ item.teacherName }}
-                    </nuxt-link>
+                    </p>
+                  </div>
+                  <p class="flex items-center gap-5 text-2xl">
+                    <span>NT$</span>
+                    <span class="text-black sm:text-white">{{
+                      item.price ? formatNumber(item.price) : '免費'
+                    }}</span>
                   </p>
                 </div>
-                <p class="flex items-center gap-5 text-2xl">
-                  <span>NT$</span>
-                  <span class="text-black sm:text-white">{{ formatNumber(item.price) }}</span>
-                </p>
               </div>
-            </div>
-          </in-card>
+            </in-card>
+          </nuxt-link>
         </div>
         <div v-else>
           <h2 class="text-center text-h2 font-bold text-white">沒有相關課程</h2>

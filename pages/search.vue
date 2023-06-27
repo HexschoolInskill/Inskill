@@ -90,12 +90,12 @@
             <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
               <nuxt-link
                 :to="`/courses/${item._id}?courseType=${category}`"
-                class="hidden cursor-pointer items-center text-white opacity-90 sm:flex"
+                class="absolute left-0 top-0 z-10 hidden h-full cursor-pointer items-center text-white opacity-90 sm:flex"
               >
                 <img
                   :src="item.thumbnail"
                   :alt="item.title"
-                  class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
+                  class="transition-base h-full w-full object-cover group-hover:scale-105"
                 />
               </nuxt-link>
               <div

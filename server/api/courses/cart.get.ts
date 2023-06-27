@@ -33,6 +33,7 @@ export default defineEventHandler(async (event) => {
             $push: {
               _id: '$cartCourses.courseId',
               title: '$course.title',
+              courseType: '$cartCourses.courseType',
               description: '$course.description',
               price: '$course.price',
               thumbnail: '$course.thumbnail',
@@ -81,6 +82,7 @@ export default defineEventHandler(async (event) => {
             $push: {
               _id: '$cartCourses.courseId',
               title: '$course.title',
+              courseType: '$cartCourses.courseType',
               description: '$course.description',
               price: '$course.price',
               thumbnail: '$course.thumbnail',
@@ -99,7 +101,7 @@ export default defineEventHandler(async (event) => {
         }
       }
     ])
-    const cart = cartCourses.concat(cartLiveCourses)
+    const cart = cartCourses[0].courses.concat(cartLiveCourses[0].courses)
     return {
       success: true,
       cart

@@ -45,7 +45,7 @@ function createMpgAesDecrypt(TradeInfo: any): Record<string, any> {
   return JSON.parse(result)
 }
 
-export async function createPayment(order: Record<string, unknown>, isProd: boolean) {
+export async function createPayment(order: Record<string, unknown>, _isProd: boolean) {
   const config = useRuntimeConfig()
   const { NEWEBPAY_MERCHANT_ID } = config
   const orderData = {
@@ -70,7 +70,7 @@ export async function createPayment(order: Record<string, unknown>, isProd: bool
     // 'BARCODE' : 1,
   }
 
-  console.log(isProd)
+  // console.log(isProd)
 
   // 用來產出字串
   // const paramString = genDataChain(order)
@@ -92,35 +92,20 @@ export async function createPayment(order: Record<string, unknown>, isProd: bool
   }
 }
 
-export async function spgatewayNotify(order: Record<string, unknown>, isProd: boolean) {
-  const thisShaEncrypt = await createMpgShaEncrypt(order.TradeInfo as string)
-  // 使用 HASH 再次 SHA 加密字串，確保比對一致（確保不正確的請求觸發交易成功）
-  if (!thisShaEncrypt === order.TradeSha) {
-    return createError({
-      statusCode: 402,
-      message: '付款失敗：TradeSha 不一致'
-    })
-  }
+export async function spgatewayNotify(order: Record<string, unknown>, _isProd: boolean) {
+  try {
+    const thisShaEncrypt = await createMpgShaEncrypt(order.TradeInfo as string)
+    // // 使用 HASH 再次 SHA 加密字串，確保比對一致（確保不正確的請求觸發交易成功）
+    if (!thisShaEncrypt === order.TradeSha) {
+      throw new Error(`付款失敗：TradeSha 不一致`)
+    }
+    // 解密交易內容
+    const data = createMpgAesDecrypt(order.TradeInfo)
+    console.log('decode original order data:', data)
 
-  // 解密交易內容
-  const data = createMpgAesDecrypt(order.TradeInfo)
-  console.log('decode original order data:', data)
-
-  console.log(isProd)
-
-  // TODO : 取得交易內容，並查詢本地端資料庫是否有相符的訂單
-  // if (!orders[data?.Result?.MerchantOrderNo]) {
-  //   console.log('找不到訂單');
-  //   return {
-  //     success : false,
-  //   }
-  // }
-
-  // 交易完成，將成功資訊儲存於資料庫
-  console.log()
-
-  return {
-    success: true,
-    message: `付款完成，訂單： id`
+    return data
+  } catch (err) {
+    console.log(`spgatewayNotify function error: `, err)
+    return null
   }
 }

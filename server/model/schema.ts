@@ -65,14 +65,18 @@ const userSchema = new Schema<User>(
 
 export interface Order extends Document {
   userId: Object
+  orderNo: string
   orderCourses: CourseContent[]
   price: number
+  isConfirm: boolean
 }
 const orderSchema = new Schema<Order>(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    orderNo: { type: String, required: true },
     orderCourses: [courseContent],
-    price: { type: Number, required: true }
+    price: { type: Number, required: true },
+    isConfirm: { type: Boolean, default: false }
   },
   { timestamps: true }
 )

@@ -15,11 +15,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
       // 取購物車資料
       try {
         const data: any = await app.$api.course.getCart()
-        console.log('cart :>>>', data.cart[0].courses)
+        // console.log('cart :>>>', data.cart)
 
         if (data.success) {
           const courseStore = useCourses()
-          courseStore.setCart(data.cart[0].courses)
+          courseStore.setCart(data.cart)
         }
       } catch (error: any) {
         console.log('error: >>>', error.message)

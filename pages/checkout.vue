@@ -126,7 +126,7 @@ const randomOrderId = Date.now()
 
 try {
   const newebpay: any = await useAsyncData('orderFetch', () =>
-    $fetch(`/newebpay/${randomOrderId}?total=${getTotal}`)
+    $fetch(`/newebpay/${randomOrderId}?total=${getTotal()}`)
   )
   console.log(`data : `, newebpay)
 

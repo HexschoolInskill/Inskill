@@ -28,9 +28,7 @@ export default defineEventHandler(async (event) => {
           teacherAvatar: '$user.avatar'
         }
       },
-      {
-        $unwind: '$reviews'
-      },
+      { $unwind: { path: '$reviews', preserveNullAndEmptyArrays: true } },
       {
         $lookup: {
           from: 'users',

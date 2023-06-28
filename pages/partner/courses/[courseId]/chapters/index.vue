@@ -2,6 +2,7 @@
   <Title>章節管理 - Inskill</Title>
   <div class="relative">
     <draggable
+      v-if="course.chapters.length"
       v-model="course.chapters"
       item-key="_id"
       handle=".chapter-handler"
@@ -50,6 +51,7 @@
         </div>
       </template>
     </draggable>
+    <p class="mt-[30vh] text-center text-h3 font-bold opacity-50">尚未創建章節</p>
     <div class="mt-5 text-center">
       <in-btn @click="showCreatePopup('chapter')">新增章節</in-btn>
     </div>

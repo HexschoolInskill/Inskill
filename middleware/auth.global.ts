@@ -35,6 +35,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
       return `/login?redirect=${path}&${query}`
     }
   }
+  if (to.meta.partner) {
+    if (!store.userProfile.isTeacher) return '/'
+  }
   if (to.params.courseId) {
     console.log(to)
     const courseStore = useCourses()

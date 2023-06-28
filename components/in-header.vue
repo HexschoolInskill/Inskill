@@ -34,21 +34,21 @@
                 <li class="in-header__popup-link">
                   <nuxt-link
                     class="transition-base block whitespace-nowrap px-3 py-2 hover:text-blue"
-                    to="/search"
+                    to="/search?q="
                     >所有類別課程</nuxt-link
                   >
                 </li>
                 <li class="in-header__popup-link">
                   <nuxt-link
                     class="transition-base block whitespace-nowrap px-3 py-2 hover:text-blue"
-                    to="/search?q=AI"
+                    to="/search?q=AI&category=normal"
                     >AI</nuxt-link
                   >
                 </li>
                 <li class="in-header__popup-link">
                   <nuxt-link
                     class="transition-base block whitespace-nowrap px-3 py-2 hover:text-blue"
-                    to="/search?q=程式設計"
+                    to="/search?q=程式設計&category=normal"
                   >
                     程式設計
                   </nuxt-link>
@@ -56,7 +56,7 @@
               </ul>
             </transition>
           </div>
-          <nuxt-link class="whitespace-nowrap">直播</nuxt-link>
+          <nuxt-link to="/search?q=&category=stream" class="whitespace-nowrap">直播</nuxt-link>
           <form
             class="in-header__search transition-base flex h-11 flex-1 rounded-1 border-2 border-solid border-gray-l bg-white py-2 focus-within:border-purple-600 hover:border-purple-600"
             @submit.prevent="handleSearch"
@@ -193,6 +193,11 @@
                 </li>
                 <li class="in-header__popup-link">
                   <nuxt-link
+                    :to="
+                      store.userProfile.isTeacher
+                        ? '/user/courses/partnerCourses'
+                        : '/user/courses/purchasedCourses'
+                    "
                     class="transition-base block whitespace-nowrap px-3 py-2 text-center hover:text-blue"
                     @click="currentPopup = ''"
                   >

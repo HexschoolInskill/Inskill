@@ -30,8 +30,8 @@
                   <in-btn ghost size="small" class="pointer-events-none mt-5">重新選擇圖片</in-btn>
                 </div>
               </div>
-              <div v-else>
-                <p class="text-fs-6 text-white">課程圖片建議尺寸 1200 * 2000</p>
+              <div v-else class="text-center">
+                <p class="text-fs-6 text-white">課程圖片建議尺寸 2000 * 1200</p>
                 <in-btn size="small" ghost class="pointer-events-none mt-5">上傳課程圖片</in-btn>
               </div>
             </div>

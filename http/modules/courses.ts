@@ -1,5 +1,6 @@
 import HttpFactory from '../factory'
 import type { LessonContent } from './lessonContent'
+import { PartnerCourse } from './partner'
 
 export type CourseSortBy = 'popular' | 'praise' | 'time'
 export type CourseCategory = 'normal' | 'stream'
@@ -57,8 +58,9 @@ export interface Course {
   price: number
   thumbnail?: string
   teacherId: string
-  purchasedCount: number
   teacherName: string
+  teacherAvatar: string
+  purchasedCount: number
   averageRating: number
   reviews: CourseReview[]
 }
@@ -161,11 +163,42 @@ class CoursesModule extends HttpFactory {
     return await this.call(`/discuss/${courseId}/${lessonIndex}`, 'POST')
   }
 
+  async fetchCollectCourses() {
+    return await this.call<{
+      success: boolean
+      statusCode: number
+      collect: {
+        courseType: CollectCourseType
+        courses: NormalCourse[] | StreamCourse[]
+      }[]
+    }>(`${this.RESOURCE}/collect`, 'GET')
+  }
+
+  async fetchPurchasedCourses() {
+    return await this.call<{
+      success: boolean
+      statusCode: number
+      purchasedCourses: {
+        courseType: CollectCourseType
+        courses: NormalCourse[] | StreamCourse[]
+      }[]
+    }>(`${this.RESOURCE}/myCourses`, 'GET')
+  }
+
   async fetchCourse(courseId: string) {
     return await this.call<{ success: boolean; course: NormalCourse[] }>(
       `${this.RESOURCE}/${courseId}`,
       'GET'
     )
+  }
+
+  async createCourse(title: string) {
+    return await this.call<{
+      success: boolean
+      course: PartnerCourse
+    }>(this.RESOURCE, 'POST', {
+      title
+    })
   }
 
   async updateCourse({
@@ -183,6 +216,10 @@ class CoursesModule extends HttpFactory {
       'PATCH',
       payload
     )
+  }
+
+  async deleteCourse(courseId: string) {
+    return await this.call(`${this.RESOURCE}/${courseId}`, 'DELETE')
   }
 
   async updateThumbnail(courseId: string, image: File) {

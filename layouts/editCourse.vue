@@ -20,7 +20,7 @@
         </li>
         <li>
           <nuxt-link
-            to="/"
+            to="/user/courses/partnerCourses"
             class="transition-base text-fs-6 flex h-13 items-center rounded-1 border border-solid border-white px-7 hover:bg-white hover:text-black"
             >回到我的課程
           </nuxt-link>

@@ -20,7 +20,7 @@
           <template #item="{ element: item }">
             <content-item
               :data="item"
-              @edit="editContent(item.content)"
+              @edit="editContent(item)"
               @delete="deleteContent(item._id)"
             />
           </template>
@@ -42,7 +42,12 @@
     <in-popup :show="!!modalType" :size="720" @click="closeModal">
       <in-card class="px-4 py-8" @click.stop>
         <in-container>
-          <h3 class="text-h3 font-bold text-white">文字編輯器</h3>
+          <h3 class="text-h3 font-bold text-white">
+            <span v-if="modalType === 'text'">文字編輯器</span>
+            <span v-if="modalType === 'code'">程式碼範例</span>
+            <span v-if="modalType === 'video'">影片</span>
+            <span v-if="modalType === 'pdf'">PDF預覽</span>
+          </h3>
           <div class="mt-5">
             <in-editor
               v-if="modalType === 'text'"
@@ -55,7 +60,11 @@
               v-if="modalType === 'pdf' || modalType === 'video'"
               class="flex h-[240px] flex-col items-center justify-center rounded-4 border border-solid border-white"
             >
-              <input type="file" class="hidden" @change="addContent" />
+              <input
+                type="file"
+                class="hidden"
+                @change="!currentContentObj ? addContent($event) : updateContent($event)"
+              />
               <template v-if="isLoading">
                 <p class="text-whit text-fs-5">檔案上傳中...</p>
               </template>
@@ -70,7 +79,7 @@
             class="mt-5 flex items-center justify-end gap-5"
           >
             <in-btn ghost size="small" @click="closeModal">取消</in-btn>
-            <in-btn v-if="currentContentId" size="small" @click="updateContent">儲存</in-btn>
+            <in-btn v-if="currentContentObj" @click="updateContent">儲存</in-btn>
             <in-btn v-else size="small" @click="addContent">儲存</in-btn>
           </div>
         </in-container>
@@ -87,14 +96,8 @@ import ContentItem from './components/content-item.vue'
 import useNotification from '~/stores/useNotification'
 import useConfirm from '~/stores/useConfirm'
 import useEditCourse from '~/stores/useEditCourse'
-import { LessonContentType } from '@/http/modules/lessonContent'
+import { LessonContentType, LessonContent } from '@/http/modules/lessonContent'
 
-interface IContent {
-  id: string
-  type: string
-  value: string
-  sort: number
-}
 const app = useNuxtApp()
 const route = useRoute()
 const courseId = route.params.courseId as string
@@ -116,7 +119,7 @@ lesson.value =
 contents.value = lesson.value?.lessonContent ?? []
 
 const modalType = ref<LessonContentType | ''>('')
-const currentContentId = ref('')
+const currentContentObj = ref<LessonContent | null>(null)
 const currentEditingContent = ref('')
 
 const isComponentListShow = ref(false)
@@ -145,14 +148,11 @@ function showModal(type: LessonContentType) {
   currentEditingContent.value = ''
   modalType.value = type
 }
-function editContent(content: IContent) {
-  switch (content.type) {
-    case 'editor':
-      currentEditingContent.value = content.value
-      currentContentId.value = content.id
-      modalType.value = 'text'
-      break
-    default:
+function editContent(content: LessonContent) {
+  modalType.value = content.contentType
+  currentContentObj.value = content
+  if (content.contentType === 'code' || content.contentType === 'text') {
+    currentEditingContent.value = content.content
   }
 }
 async function addContent(event?: Event) {
@@ -191,16 +191,40 @@ async function addContent(event?: Event) {
     isLoading.value = false
   }
 }
-function updateContent() {
-  // const targetContent = course.contents.find((content) => content.id === currentContentId.value)
-  // if (!targetContent) return
-  // targetContent.value = currentEditingContent.value
-  // notification.success('更新成功')
-  // modalType.value = ''
-  // currentContentId.value = ''
-  // currentEditingContent.value = ''
-}
+async function updateContent(event?: Event) {
+  if (!currentContentObj.value) return
+  const { _id, contentType } = currentContentObj.value
+  let content: string | File
 
+  if ((contentType === 'pdf' || contentType === 'video') && event) {
+    const target = event.target as HTMLInputElement
+    const file = target.files?.[0]
+    if (!file) return
+    if (file.size > 100 * 1024 * 1024) {
+      notification.error('檔案最大100MB')
+      return
+    }
+    content = file
+  } else {
+    content = currentEditingContent.value
+  }
+  isLoading.value = true
+  try {
+    const { updatedLessonContent } = await app.$api.lessonContent.updateContent({
+      lessonContentId: _id,
+      lessonId,
+      contentType,
+      content
+    })
+    contents.value = updatedLessonContent
+    notification.success('更新成功')
+    closeModal()
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    isLoading.value = false
+  }
+}
 async function handlePublish(publish: boolean) {
   const confirmTitle = lesson.value?.isPublish ? '取消發布' : '發布課堂'
   const confirmMessage = lesson.value?.isPublish
@@ -226,11 +250,28 @@ async function handlePublish(publish: boolean) {
   }
 }
 
-function sortContent() {
-  // course.contents.forEach((content, index) => {
-  //   content.sort = index + 1
-  // })
-  // notification.success('更新成功')
+async function sortContent(event: any) {
+  const targetId = event.item?.dataset?.id || ''
+  if (!targetId) return
+  contents.value.forEach((content, index) => {
+    content.sort = index + 1
+  })
+  const sort = contents.value.find((content) => content._id === targetId)?.sort || 0
+  if (!sort) return
+  isLoading.value = true
+  try {
+    await app.$api.lessonContent.updateContent({
+      lessonContentId: targetId,
+      lessonId,
+      contentType: 'sort',
+      content: sort
+    })
+    notification.success('更新成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    isLoading.value = false
+  }
 }
 
 async function deleteContent(contentId: string) {
@@ -250,7 +291,7 @@ async function deleteContent(contentId: string) {
 
 function closeModal() {
   modalType.value = ''
-  currentContentId.value = ''
+  currentContentObj.value = null
   currentEditingContent.value = ''
 }
 </script>

@@ -26,10 +26,9 @@ export default defineEventHandler(async (event) => {
       {
         $addFields: {
           teacherName: { $ifNull: [{ $first: '$user.username' }, 'anonymous'] },
-          teacherAvatar: '$user.avatar'
+          teacherAvatar: { $first: '$user.avatar' }
         }
       },
-      { $unwind: { path: '$reviews', preserveNullAndEmptyArrays: true } },
       {
         $lookup: {
           from: 'users',
@@ -86,7 +85,7 @@ export default defineEventHandler(async (event) => {
           teacherName: { $first: '$teacherName' },
           teacherAvatar: { $first: '$teacherAvatar' },
           chapters: { $first: '$chapters' },
-          reviews: { $push: '$reviews' }
+          reviews: { $first: '$reviews' }
         }
       },
       {

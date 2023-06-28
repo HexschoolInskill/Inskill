@@ -25,10 +25,9 @@ export default defineEventHandler(async (event) => {
       {
         $addFields: {
           teacherName: { $ifNull: [{ $first: '$user.username' }, 'anonymous'] },
-          teacherAvatar: '$user.avatar'
+          teacherAvatar: { $first: '$user.avatar' }
         }
       },
-      { $unwind: { path: '$reviews', preserveNullAndEmptyArrays: true } },
       {
         $lookup: {
           from: 'users',
@@ -56,7 +55,7 @@ export default defineEventHandler(async (event) => {
           videoUrl: { $first: '$videoUrl' },
           startTime: { $first: '$startTime' },
           endTime: { $first: '$endTime' },
-          reviews: { $push: '$reviews' }
+          reviews: { $first: '$reviews' }
         }
       },
       {

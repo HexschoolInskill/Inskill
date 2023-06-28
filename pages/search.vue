@@ -92,7 +92,7 @@
                   v-if="item.thumbnail"
                   :src="item.thumbnail"
                   :alt="item.title"
-                  class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
+                  class="transition-base h-full w-full object-cover group-hover:scale-105"
                 />
                 <img
                   v-else

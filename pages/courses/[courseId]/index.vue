@@ -20,7 +20,7 @@
                 fill="currentColor"
               ></path>
             </svg>
-            <span class="" @click="sendMessage('hey')">{{ chatRoom.viewer }}人已加入</span>
+            <span class="">{{ chatRoom.viewer }}人已加入</span>
             <!-- <span v-if="!purchased" class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span> -->
           </span>
 
@@ -46,7 +46,12 @@
         ></in-content-desc>
       </div>
 
-      <in-content-teacher :teacher="currentCourse.teacherName"></in-content-teacher>
+      <in-content-teacher
+        :teacher="{
+          name: currentCourse.teacherName,
+          thumbnail: currentCourse.thumbnail
+        }"
+      ></in-content-teacher>
 
       <in-content-review :review="currentCourse.reviews"></in-content-review>
 
@@ -60,6 +65,7 @@
 
     <!-- 直播課程聊天室 -->
     <in-course-chat-room
+      v-if="route.query.courseType === 'stream'"
       class="w-3/12 max-[1536px]:mt-[4vh]"
       :chatroom-message="chatRoom.message"
       @update:chatroom-message="addChatroomMessage"
@@ -82,6 +88,7 @@ import inContentQuestion from './components/in-content-question.vue'
 import useNotification from '~~/stores/useNotification'
 import useCourses from '~/stores/useCourses'
 import useUser from '~/stores/useUser'
+// import { Thumbs } from 'swiper'
 
 const { currentCourse, content, purchased, chatRoom } = storeToRefs(useCourses())
 const { userProfile } = storeToRefs(useUser())
@@ -110,7 +117,7 @@ const studentPlayUrl = computed(() => {
 })
 
 onMounted(async () => {
-  await getListenKey()
+  if (route.query.courseType === 'stream') await getListenKey()
 })
 
 const getListenKey = async () => {

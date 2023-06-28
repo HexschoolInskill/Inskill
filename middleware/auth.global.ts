@@ -2,7 +2,7 @@ import useUser from '~/stores/useUser'
 import useCourses from '~/stores/useCourses'
 
 export default defineNuxtRouteMiddleware(async (to) => {
-  const app = useNuxtApp()
+  const app: any = useNuxtApp()
   const store = useUser()
 
   if (process.server) {
@@ -17,7 +17,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
         const data: any = await app.$api.course.getCart()
         // console.log('cart :>>>', data.cart)
 
-        if (data.success) {
+        if (data.success && data.cart.length) {
           const courseStore = useCourses()
           courseStore.setCart(data.cart)
         }

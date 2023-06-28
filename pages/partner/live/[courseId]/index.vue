@@ -19,7 +19,7 @@
               fill="currentColor"
             ></path>
           </svg>
-          <span class="" @click="sendMessage('hellojs')">{{ chatRoom.viewer }}人已加入</span>
+          <span class="">{{ chatRoom.viewer }}人已加入</span>
           <!-- <span v-if="!purchased" class="text-2xl font-bold">NT$ {{ currentCourse.price }}</span> -->
         </span>
       </div>

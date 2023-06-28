@@ -94,12 +94,17 @@
                   :alt="item.title"
                   class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
                 />
-                <img v-else class="ml-auto mr-0" src="/images/logo-white.svg" :alt="item.title" />
+                <img
+                  v-else
+                  class="absolute bottom-0 right-0 w-[160px] object-contain"
+                  src="/images/logo-white.svg"
+                  :alt="item.title"
+                />
                 <div
-                  class="absolute left-0 top-0 h-full w-full bg-black/20 transition group-hover:opacity-0"
+                  class="absolute left-0 top-0 h-full w-full bg-black/20 opacity-0 transition group-hover:opacity-100"
                 ></div>
                 <div
-                  class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-purple-600 group-hover:translate-y-0 group-hover:opacity-100"
+                  class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 shadow hover:text-purple-600 group-hover:translate-y-0 group-hover:opacity-100"
                   @click.stop.prevent="handleCollectCourse(item._id)"
                 >
                   <i
@@ -190,12 +195,17 @@
                   :alt="item.title"
                   class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
                 />
-                <img v-else class="ml-auto mr-0" src="/images/logo-white.svg" :alt="item.title" />
+                <img
+                  v-else
+                  class="absolute bottom-0 right-0 w-[160px] object-contain"
+                  src="/images/logo-white.svg"
+                  :alt="item.title"
+                />
                 <div
-                  class="absolute left-0 top-0 h-full w-full bg-black/20 transition group-hover:opacity-0"
+                  class="absolute left-0 top-0 h-full w-full bg-black/20 opacity-0 transition group-hover:opacity-100"
                 ></div>
                 <div
-                  class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 hover:text-purple-600 group-hover:translate-y-0 group-hover:opacity-100"
+                  class="transition-base absolute right-5 top-5 flex h-12 w-12 -translate-y-1 items-center justify-center rounded-full bg-white text-black opacity-0 shadow hover:text-purple-600 group-hover:translate-y-0 group-hover:opacity-100"
                   @click.stop.prevent="handleCollectCourse(item._id)"
                 >
                   <i

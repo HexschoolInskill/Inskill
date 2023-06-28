@@ -15,49 +15,51 @@
       <in-skeleton class="h-[370px]" />
     </div>
     <div v-else-if="courses.length" class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-      <in-card
+      <nuxt-link
         v-for="item in courses"
         :key="item._id"
-        glow
-        class="group flex cursor-pointer flex-col font-bold text-[#6C757D]"
+        class="h-full"
+        :to="`/courses/${item._id}?courseType=${currentCategory}`"
       >
-        <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
-          <nuxt-link
-            :to="`/courses/${item._id}?courseType=${currentCategory}`"
-            class="hidden cursor-pointer items-center text-white opacity-90 sm:flex"
-          >
+        <in-card glow class="group flex h-full cursor-pointer flex-col font-bold text-[#6C757D]">
+          <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
             <img
+              v-if="item.thumbnail"
               :src="item.thumbnail"
               :alt="item.title"
               class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
             />
-          </nuxt-link>
-        </div>
-        <div class="flex-1 p-8 xl:px-6 xl:py-4">
-          <h4
-            class="transition-base line-clamp-2 text-h4 leading-[1.5] text-blue sm:text-[#6C757D] sm:group-hover:text-white"
-          >
-            {{ item.title }}
-          </h4>
-          <div class="mt-6 flex flex-col gap-4">
-            <div class="flex items-center gap-3">
-              <img
-                class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full object-cover"
-                src="/images/avatar-fallback.svg"
-                alt=""
-              />
-              <p class="font-bold leading-normal">
-                <nuxt-link
-                  :to="`/partner/courses/${item._id}`"
-                  class="hidden cursor-pointer items-center text-white sm:flex"
-                >
+            <img
+              v-else
+              class="absolute bottom-0 right-0 w-[160px] object-contain"
+              src="/images/logo-white.svg"
+              :alt="item.title"
+            />
+            <div
+              class="absolute left-0 top-0 h-full w-full bg-black/20 opacity-0 transition group-hover:opacity-100"
+            ></div>
+          </div>
+          <div class="flex flex-1 flex-col justify-between p-8 xl:px-6 xl:py-4">
+            <h4
+              class="transition-base line-clamp-2 text-h4 leading-[1.5] text-blue sm:text-[#6C757D] sm:group-hover:text-white"
+            >
+              {{ item.title }}
+            </h4>
+            <div class="mt-6 flex flex-col gap-4">
+              <div class="flex items-center gap-3">
+                <img
+                  class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full object-cover"
+                  src="/images/avatar-fallback.svg"
+                  alt=""
+                />
+                <p class="font-bold leading-normal">
                   {{ item.teacherName }}
-                </nuxt-link>
-              </p>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </in-card>
+        </in-card>
+      </nuxt-link>
     </div>
     <div v-else class="text-center">
       <p class="text-center text-fs-4 font-bold text-white opacity-80">沒有已經購買的課程</p>

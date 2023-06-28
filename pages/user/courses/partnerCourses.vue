@@ -53,7 +53,12 @@
             :alt="item.title"
             class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
           />
-          <img v-else class="ml-auto mr-0" src="/images/logo-white.svg" :alt="item.title" />
+          <img
+            v-else
+            class="absolute bottom-0 right-0 w-[160px] object-contain"
+            src="/images/logo-white.svg"
+            :alt="item.title"
+          />
           <div
             class="absolute left-0 top-0 h-full w-full bg-black/20 transition group-hover:opacity-0"
           ></div>
@@ -62,12 +67,12 @@
           <div class="flex items-center gap-2">
             <nuxt-link
               :to="`/courses/${item._id}?courseType=normal`"
-              class="transition-base line-clamp-1 flex-1 text-[28px] text-[#6C757D] sm:group-hover:text-white"
+              class="transition-base line-clamp-1 text-[28px] text-[#6C757D] sm:group-hover:text-white"
             >
               {{ item.title }}
             </nuxt-link>
             <div
-              class="inline-block rounded-1 border border-solid border-white px-3 py-1 text-sm font-normal text-white"
+              class="inline-block flex-shrink-0 whitespace-nowrap rounded-1 border border-solid border-white px-3 py-1 text-sm font-normal text-white"
             >
               {{ item.isPublic ? '已發布' : '未發布' }}
             </div>
@@ -144,7 +149,12 @@
             :alt="item.title"
             class="transition-base absolute left-0 top-0 h-full w-full object-cover group-hover:scale-105"
           />
-          <img v-else class="ml-auto mr-0" src="/images/logo-white.svg" :alt="item.title" />
+          <img
+            v-else
+            class="absolute bottom-0 right-0 w-[160px] object-contain"
+            src="/images/logo-white.svg"
+            :alt="item.title"
+          />
           <div
             class="absolute left-0 top-0 h-full w-full bg-black/20 transition group-hover:opacity-0"
           ></div>

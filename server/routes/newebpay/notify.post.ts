@@ -41,7 +41,25 @@ export default defineEventHandler(async (event) => {
     existingOrder.isConfirm = true
     await existingOrder.save()
 
-    // TODO: 交易完成，將訂單內容的課程人數皆+1
+    const { orderCourses } = existingOrder
+
+    const courseIds = orderCourses
+      .filter((course) => course.courseType === 'Course')
+      .map((course) => course.courseId)
+    if (courseIds.length > 0) {
+      await models.Course.updateMany({ _id: { $in: courseIds } }, { $inc: { purchasedCount: 1 } })
+    }
+
+    const liveCourseIds = orderCourses
+      .filter((course) => course.courseType === 'LiveCourse')
+      .map((course) => course.courseId)
+    if (liveCourseIds.length > 0) {
+      await models.LiveCourse.updateMany(
+        { _id: { $in: liveCourseIds } },
+        { $inc: { purchasedCount: 1 } }
+      )
+    }
+
     return {
       success: true,
       statusCode: 200,

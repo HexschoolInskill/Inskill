@@ -18,15 +18,18 @@
             <div class="w-4/12">
               <p class="text-center">{{ item.title }}</p>
             </div>
-            <div class="mr-auto">
+            <div class="w-2/5">
               <p class="">NT$ {{ item.price }}</p>
             </div>
-
+            <div class="mr-auto">
+              <p v-if="item.courseType === 'Course'" class="">影音</p>
+              <p v-else class="">直播</p>
+            </div>
             <div class="">
               <button
                 type="button"
                 class="transition-base mr-4 rounded border bg-black px-2 py-1 text-lg text-white hover:bg-[#262b2f]"
-                @click="removeCartItem(index)"
+                @click="removeFromCart(item, index)"
               >
                 移除
               </button>
@@ -64,6 +67,7 @@
         </div>
 
         <button
+          v-if="cart.length > 0"
           :class="[cart.length ? 'bg-black' : 'bg-slate-200']"
           class="transition-base mt-4 w-full rounded border p-1 text-xl text-white hover:bg-[#262b2f]"
           type="button"
@@ -80,8 +84,10 @@
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import useCourses from '~/stores/useCourses'
+import useNotification from '~~/stores/useNotification'
 
-// const { $api } = useNuxtApp()
+const { notification } = useNotification()
+const { $api } = useNuxtApp()
 const { cart } = storeToRefs(useCourses())
 
 const { getTotal, removeCartItem } = useCourses()
@@ -90,4 +96,24 @@ onMounted(async () => {
   // const cartData = await $api.course.getCart()
   // console.log('cartData :>>>', cartData)
 })
+
+// 移除購物車
+const removeFromCart = async (item: any, index: number) => {
+  try {
+    const alterCart: any = await $api.course.pushToCart({
+      courseId: item._id as string,
+      courseType: item.courseType,
+      isCart: false
+    })
+    console.log('alterCart:>>>', alterCart)
+
+    if (alterCart.success) {
+      notification.success('已移除購物車')
+      removeCartItem(index)
+    }
+  } catch (error: any) {
+    console.log('error :>>>', error)
+    notification.error(error.message)
+  }
+}
 </script>

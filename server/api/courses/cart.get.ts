@@ -101,7 +101,9 @@ export default defineEventHandler(async (event) => {
         }
       }
     ])
-    const cart = cartCourses[0].courses.concat(cartLiveCourses[0].courses)
+    const cart = (cartCourses.length > 0 ? cartCourses[0].courses : []).concat(
+      cartLiveCourses.length > 0 ? cartLiveCourses[0].courses : []
+    )
     return {
       success: true,
       cart

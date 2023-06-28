@@ -12,6 +12,7 @@ export default defineStore('editCourse', () => {
     teacherId: '',
     purchasedCount: 0,
     teacherName: '',
+    teacherAvatar: '',
     averageRating: 0,
     scoreCount: 0,
     isPublic: false,

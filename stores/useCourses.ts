@@ -15,6 +15,7 @@ export default defineStore('courses', () => {
     _id: '001',
     teacherId: '002',
     teacherName: '',
+    teacherAvatar: '',
     isPublic: false,
     title: 'test01',
     description:

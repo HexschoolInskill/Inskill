@@ -27,7 +27,7 @@
             :class="{
               'border-bottom': lessonIndex + 1 !== chapter.lessons.length,
               'bg-[rgba(147,51,234,0.5)]':
-                lesson._id === currentCourse.chapters[content.chapter].lessons[content.lesson]._id
+                lesson._id === currentCourse?.chapters[content.chapter]?.lessons[content.lesson]._id
             }"
             @click.stop="emit('update:content', lessonIndex)"
           >

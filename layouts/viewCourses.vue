@@ -228,9 +228,9 @@ const addToCart = async () => {
     })
     console.log('alterCart:>>>', alterCart)
 
-    if (alterCart.success){
+    if (alterCart.success) {
       notification.success('已加入購物車')
-      isInCart.value = alterCart.cart.length - 1  
+      isInCart.value = alterCart.cart.length - 1
     }
   } catch (error: any) {
     console.log('error :>>>', error)

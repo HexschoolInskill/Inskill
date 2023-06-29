@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
       // 若沒有帶 query，則各別回傳影音與直播課程資料 for 首頁
       const courseData = await models.Course.aggregate([
         { $match: { isPublic: true } },
-        { $unwind: '$reviews' },
+        { $unwind: { path: '$reviews', preserveNullAndEmptyArrays: true } },
         {
           $lookup: {
             from: 'users',
@@ -62,7 +62,7 @@ export default defineEventHandler(async (event) => {
       ])
       const streamCourse = await models.LiveCourse.aggregate([
         { $match: { isPublic: true } },
-        { $unwind: '$reviews' },
+        { $unwind: { path: '$reviews', preserveNullAndEmptyArrays: true } },
         {
           $lookup: {
             from: 'users',

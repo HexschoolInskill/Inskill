@@ -11,7 +11,7 @@
         name="new_question"
         cols="30"
         rows="5"
-        placeholder="喜歡這堂課嗎? 購買課程後可以和大家已起討論囉!"
+        placeholder="喜歡這堂課嗎? 購買課程後可以和大家一起討論囉!"
         :disabled="!purchased"
       >
       </textarea>
@@ -104,7 +104,7 @@
           name="new_question"
           cols="30"
           rows="5"
-          placeholder="喜歡這堂課嗎? 購買課程後可以和大家已起討論囉!"
+          placeholder="喜歡這堂課嗎? 購買課程後可以和大家一起討論囉!"
         >
         </textarea>
 

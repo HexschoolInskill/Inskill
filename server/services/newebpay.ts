@@ -57,7 +57,7 @@ export async function createPayment(order: Record<string, unknown>, _isProd: boo
     MerchantOrderNo: order.id,
     Amt: order.total,
     ItemDesc: order.description,
-    ReturnURL: 'https://inskill.demoto.me/user/courses/purchasedCourses',
+    ReturnURL: 'https://inskill.demoto.me/newebpay/return',
     NotifyURL: 'https://inskill.demoto.me/newebpay/notify',
     ClientBackURL: 'https://inskill.demoto.me/',
     Email: order.email,

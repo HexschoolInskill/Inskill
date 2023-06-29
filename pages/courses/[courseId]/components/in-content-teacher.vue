@@ -3,10 +3,10 @@
     <h2 class="text-2xl font-bold">授課講師</h2>
 
     <div class="flex pl-4 pt-4">
-      <div class="avatar w-1/6 overflow-hidden rounded-full">
+      <div class="avatar mr-4 overflow-hidden rounded-full" :class="{'w-1/6': $route.query.courseType === 'stream'}">
         <img
           v-if="teacher.thumbnail.length"
-          class="h-[100px] w-[150px] object-cover"
+          class="w-[150px] h-[150px] object-cover"
           :src="teacher.thumbnail"
           alt="avatar"
         />
@@ -28,7 +28,7 @@
         </svg>
       </div>
 
-      <div class="ml-4 w-full">
+      <div class="w-3/6">
         <h2 class="mb-2 text-xl font-bold">{{ props.teacher.name }}</h2>
         <!-- <p>
           冰而雲黃游抱哪奶校，雨手嗎回小鼻常禾草民「目雞停苦發訴人比」不現今美白寫即世汗根又麼兒候面奶新昌月：女兩後念，兌這條同給圓嗎喜出布。

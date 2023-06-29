@@ -90,7 +90,7 @@
             <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
               <nuxt-link
                 :to="`/courses/${item._id}?courseType=${category}`"
-                class="absolute left-0 top-0 z-10 hidden h-full cursor-pointer items-center text-white opacity-90 sm:flex"
+                class="absolute left-0 top-0 z-10 hidden h-full w-full cursor-pointer items-center text-white opacity-90 sm:flex"
               >
                 <img
                   :src="item.thumbnail"

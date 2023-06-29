@@ -176,7 +176,7 @@ isInCart.value = userProfile.value.cartCourses.findIndex(
 const open = ref(false) // 評價modal 開關
 
 const deepDive = ref(false) // 直播課程時進入沉浸模式
-deepDive.value = currentCourse.value.chapters === undefined
+deepDive.value = currentCourse?.value?.chapters === undefined
 
 // 加入/取消收藏
 const collector = async () => {

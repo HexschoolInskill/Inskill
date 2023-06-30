@@ -94,14 +94,14 @@ onMounted(() => {
   line-height: 24px;
   padding: 12px;
   tab-size: 4;
-  border: 1px solid white;
   white-space: pre;
+  background-color: black;
 }
 
 .content-item__editor {
   border-radius: 4px;
   padding: 12px;
-  border: 1px solid white;
+  background-color: black;
 
   h1 {
     @apply text-h2;

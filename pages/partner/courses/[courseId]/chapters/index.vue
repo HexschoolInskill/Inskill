@@ -36,6 +36,7 @@
                     :chapter-id="chapter._id"
                     :value="lesson.title"
                     :publish="lesson.isPublish"
+                    :free-preview="lesson.freePreview"
                     @loading-start="isLoading = true"
                     @loading-end="isLoading = false"
                   />
@@ -51,7 +52,7 @@
         </div>
       </template>
     </draggable>
-    <p class="mt-[30vh] text-center text-h3 font-bold opacity-50">尚未創建章節</p>
+    <p v-else class="mt-[30vh] text-center text-h3 font-bold opacity-50">尚未創建章節</p>
     <div class="mt-5 text-center">
       <in-btn @click="showCreatePopup('chapter')">新增章節</in-btn>
     </div>
@@ -66,6 +67,7 @@
             :disabled="isLoading"
             class="mt-5 text-black"
             :placeholder="currentPopupType === 'chapter' ? '請輸入章節標題' : '請輸入課堂標題'"
+            @keyup.enter="createItem(currentPopupType, currentItemTitle, currentChapterId)"
           />
           <div class="mt-6 flex items-center justify-end gap-5">
             <in-btn :disabled="isLoading" ghost size="small" @click="closeCreatePopup">取消</in-btn>

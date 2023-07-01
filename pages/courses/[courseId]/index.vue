@@ -98,7 +98,7 @@ const route = useRoute()
 const { createQuestion, createReply, updateChatRoom } = useCourses()
 
 const { chapter, lesson } = content.value
-
+const listenkey = ref('')
 let socketNode: any = null
 
 definePageMeta({
@@ -130,6 +130,7 @@ const getListenKey = async () => {
     })
     console.log(`response`, response)
     if (response.success) {
+      listenkey.value = response.data.listenkey
       await initSocket(response.data.listenkey)
     }
   } catch (error: any) {
@@ -138,7 +139,7 @@ const getListenKey = async () => {
   }
 }
 
-const initSocket = (listenkey: string) => {
+const initSocket = (listenkey: any) => {
   try {
     // socketNode = new WebSocket(`ws://localhost:931/${listenkey}`)
     socketNode = new WebSocket(`wss://inskill.demoto.me:8443/${listenkey}`)
@@ -162,6 +163,9 @@ const initSocket = (listenkey: string) => {
     socketNode.onclose = () => {
       console.log('socket close')
       // getListenKey()
+      setTimeout(() => {
+        initSocket(listenkey.value)
+      }, 2000)
     }
   } catch (err) {
     console.log(err)

@@ -52,7 +52,7 @@ export default (_nitroApp: Nitro) => {
         return
       }
       const { username, purchasedCourses } = userInfo
-      const purchasedCourse = purchasedCourses.find((e: any) => e.courseId === courseId)
+      const purchasedCourse = purchasedCourses.find((e: any) => e.courseId.toString() === courseId)
       const isTeacher = await models.LiveCourse.findOne({
         _id: courseId,
         teacherId: userId

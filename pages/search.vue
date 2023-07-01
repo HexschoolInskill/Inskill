@@ -87,12 +87,12 @@
             :to="`/courses/${item._id}?courseType=normal`"
           >
             <in-card glow class="group flex cursor-pointer flex-col font-bold text-[#6C757D]">
-              <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
+              <div class="flex-shrink-0 overflow-hidden">
                 <img
                   v-if="item.thumbnail"
                   :src="item.thumbnail"
                   :alt="item.title"
-                  class="transition-base h-full w-full object-cover group-hover:scale-105"
+                  class="transition-base h-[200px] w-[300px] object-cover group-hover:scale-105"
                 />
                 <img
                   v-else

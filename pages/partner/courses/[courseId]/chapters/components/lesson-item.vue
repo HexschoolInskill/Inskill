@@ -189,6 +189,7 @@ function handleOptionSelect(option: Option) {
 }
 
 async function handlePublish(isPublish: boolean) {
+  if (props.publish === isPublish) return
   const confirmTitle = props.publish ? '取消發布' : '發布課堂'
   const confirmMessage = props.publish ? '所有學生都將看不到該課堂' : '將會把該課堂向所有學生公開'
   const isConfirm = await confirm(confirmTitle, confirmMessage)
@@ -211,6 +212,7 @@ async function handlePublish(isPublish: boolean) {
   }
 }
 async function handleFreePreview(isFreePreview: boolean) {
+  if (props.freePreview === isFreePreview) return
   const confirmTitle = props.freePreview ? '關閉試看' : '開放試看'
   const confirmMessage = props.freePreview
     ? '沒有購買的學生都將看不到該課堂'

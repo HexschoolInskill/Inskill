@@ -1,7 +1,7 @@
 <template>
   <div :data-id="data._id" class="content-item flex border-b border-solid border-white/50">
     <div class="flex-shrink-0 border-r border-solid border-white/50 px-6 pt-6">
-      <i class="content-handler icon-reorder text-white"></i>
+      <i class="content-handler icon-reorder cursor-grab text-white"></i>
     </div>
     <div class="flex-1 px-6 pt-6">
       <div class="flex items-center justify-between">

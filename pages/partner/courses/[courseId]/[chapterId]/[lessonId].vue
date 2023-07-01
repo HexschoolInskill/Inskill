@@ -265,6 +265,7 @@ async function updateContent(
   }
 }
 async function handlePublish(publish: boolean) {
+  if (lesson.value?.isPublish === publish) return
   const confirmTitle = lesson.value?.isPublish ? '取消發布' : '發布課堂'
   const confirmMessage = lesson.value?.isPublish
     ? '所有學生都將看不到該課堂'
@@ -289,6 +290,7 @@ async function handlePublish(publish: boolean) {
   }
 }
 async function handleFreePreview(isFreePreview: boolean) {
+  if (lesson.value?.freePreview === isFreePreview) return
   const confirmTitle = lesson.value?.freePreview ? '關閉試看' : '開放試看'
   const confirmMessage = lesson.value?.freePreview
     ? '沒有購買的學生都將看不到該課堂'

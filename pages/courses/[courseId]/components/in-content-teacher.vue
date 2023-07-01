@@ -3,10 +3,13 @@
     <h2 class="text-2xl font-bold">授課講師</h2>
 
     <div class="flex pl-4 pt-4">
-      <div class="avatar mr-4 overflow-hidden rounded-full" :class="{'w-1/6': $route.query.courseType === 'stream'}">
+      <div
+        class="avatar mr-4 overflow-hidden rounded-full"
+        :class="{ 'w-1/6': $route.query.courseType === 'stream' }"
+      >
         <img
           v-if="teacher.thumbnail.length"
-          class="w-[150px] h-[150px] object-cover"
+          class="h-[150px] w-[150px] object-cover"
           :src="teacher.thumbnail"
           alt="avatar"
         />

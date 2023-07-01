@@ -95,10 +95,10 @@
             <in-btn
               v-if="currentContentObj"
               size="small"
-              @click="updateContent(currentContentObj._id, modalType, currentEditingContent)"
+              @click="updateContent(currentContentObj!._id, modalType!, currentEditingContent)"
               >更新</in-btn
             >
-            <in-btn v-else size="small" @click="addContent(modalType, currentEditingContent)"
+            <in-btn v-else size="small" @click="addContent(modalType!, currentEditingContent)"
               >儲存</in-btn
             >
           </div>
@@ -150,7 +150,7 @@ watch(
   { deep: true }
 )
 
-const modalType = ref<LessonContentType | ''>('')
+const modalType = ref<LessonContentType | null>(null)
 const currentContentObj = ref<LessonContent | null>(null)
 const currentEditingContent = ref('')
 const isComponentListShow = ref(false)
@@ -371,7 +371,7 @@ function handleUploaderDrop(event: DragEvent) {
 }
 
 function closeModal() {
-  modalType.value = ''
+  modalType.value = null
   currentContentObj.value = null
   currentEditingContent.value = ''
 }

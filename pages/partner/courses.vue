@@ -24,3 +24,5 @@ const { data } = await useAsyncData(() =>
 
 Object.assign(store.currentCourse, data.value?.course?.[0] ?? {})
 </script>
+
+<style lang="scss"></style>

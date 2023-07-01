@@ -38,6 +38,7 @@
         </button>
       </div>
       <div v-else class="flex flex-shrink-0 items-center gap-5 pl-6">
+        <in-select :value="freePreview" :options="freePreviewOptions" @select="handleFreePreview" />
         <in-select :value="publish" :options="publishOptions" @select="handlePublish" />
         <in-dropdown v-slot="{ show }" :options="options" @select="handleOptionSelect">
           <div
@@ -92,6 +93,10 @@ const props = defineProps({
   publish: {
     type: Boolean,
     required: true
+  },
+  freePreview: {
+    type: Boolean,
+    required: true
   }
 })
 
@@ -104,6 +109,16 @@ const publishOptions: Option[] = [
   },
   {
     label: '未發布',
+    value: false
+  }
+]
+const freePreviewOptions: Option[] = [
+  {
+    label: '開放試看',
+    value: true
+  },
+  {
+    label: '關閉試看',
     value: false
   }
 ]
@@ -174,6 +189,7 @@ function handleOptionSelect(option: Option) {
 }
 
 async function handlePublish(isPublish: boolean) {
+  if (props.publish === isPublish) return
   const confirmTitle = props.publish ? '取消發布' : '發布課堂'
   const confirmMessage = props.publish ? '所有學生都將看不到該課堂' : '將會把該課堂向所有學生公開'
   const isConfirm = await confirm(confirmTitle, confirmMessage)
@@ -186,6 +202,31 @@ async function handlePublish(isPublish: boolean) {
       lessonId: props.id,
       isPublish,
       field: 'isPublish'
+    })
+    course.value.chapters = updatedChapter
+    notification.success('更新成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    isLoading.value = false
+  }
+}
+async function handleFreePreview(isFreePreview: boolean) {
+  if (props.freePreview === isFreePreview) return
+  const confirmTitle = props.freePreview ? '關閉試看' : '開放試看'
+  const confirmMessage = props.freePreview
+    ? '沒有購買的學生都將看不到該課堂'
+    : '將會把該課堂向所有學生公開'
+  const isConfirm = await confirm(confirmTitle, confirmMessage)
+  if (!isConfirm) return
+  isLoading.value = true
+  try {
+    const { updatedChapter } = await app.$api.course.updateLesson({
+      courseId: route.params.courseId as string,
+      chapterId: props.chapterId,
+      lessonId: props.id,
+      freePreview: isFreePreview,
+      field: 'freePreview'
     })
     course.value.chapters = updatedChapter
     notification.success('更新成功')

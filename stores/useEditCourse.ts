@@ -20,7 +20,8 @@ export default defineStore('editCourse', () => {
     reviews: [],
     course: 0,
     chapter: 0,
-    createdAt: ''
+    createdAt: '',
+    teacherAvatar: ''
   })
   const currentLesson = ref<CourseLesson | null>(null)
   const currentContents = ref<LessonContent[]>([])

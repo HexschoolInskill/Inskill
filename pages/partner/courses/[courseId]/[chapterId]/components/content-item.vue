@@ -1,7 +1,7 @@
 <template>
   <div :data-id="data._id" class="content-item flex border-b border-solid border-white/50">
     <div class="flex-shrink-0 border-r border-solid border-white/50 px-6 pt-6">
-      <i class="content-handler icon-reorder text-white"></i>
+      <i class="content-handler icon-reorder cursor-grab text-white"></i>
     </div>
     <div class="flex-1 px-6 pt-6">
       <div class="flex items-center justify-between">
@@ -94,14 +94,14 @@ onMounted(() => {
   line-height: 24px;
   padding: 12px;
   tab-size: 4;
-  border: 1px solid white;
   white-space: pre;
+  background-color: black;
 }
 
 .content-item__editor {
   border-radius: 4px;
   padding: 12px;
-  border: 1px solid white;
+  background-color: black;
 
   h1 {
     @apply text-h2;

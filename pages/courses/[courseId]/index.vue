@@ -98,7 +98,6 @@ const route = useRoute()
 const { createQuestion, createReply, updateChatRoom } = useCourses()
 
 const { chapter, lesson } = content.value
-const listenkey = ref('')
 let socketNode: any = null
 
 definePageMeta({
@@ -130,7 +129,6 @@ const getListenKey = async () => {
     })
     console.log(`response`, response)
     if (response.success) {
-      listenkey.value = response.data.listenkey
       await initSocket(response.data.listenkey)
     }
   } catch (error: any) {
@@ -164,7 +162,7 @@ const initSocket = (listenkey: any) => {
       console.log('socket close')
       // getListenKey()
       setTimeout(() => {
-        initSocket(listenkey.value)
+        initSocket(listenkey)
       }, 2000)
     }
   } catch (err) {

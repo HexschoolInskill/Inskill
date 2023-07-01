@@ -1,5 +1,5 @@
 /* eslint-disable */
-const API_ENDPOINT = process.env.MEDIA_SERVER_ENDPOINT
+const API_ENDPOINT = "https://inskillmedia.demoto.me:5443/WebRTCApp/rest/v2"
 export async function getWebRTCAppList(): Promise<any> {
   // 獲取媒體伺服器的webRTCApp list
   try {

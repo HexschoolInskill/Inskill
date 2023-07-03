@@ -107,9 +107,9 @@ const scrollToQuestion = () => {
 
 <style lang="scss" scope>
 .right-controller {
-  @apply relative inline-block cursor-pointer py-2;
+  @apply relative inline-block cursor-pointer py-2 hover:text-[rgb(147,51,234)];
   .toolTip {
-    @apply invisible absolute left-[65px] top-[10px] ml-1 w-[100px] rounded bg-white px-[5px] text-center text-sm text-black;
+    @apply invisible absolute left-[65px] top-[10px] ml-1 w-[100px] rounded bg-[rgba(147,51,234,0.5)] px-[5px] text-center text-sm text-[rgba(255,255,255,0.9)];
   }
   &:hover {
     .toolTip {

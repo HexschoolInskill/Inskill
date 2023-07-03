@@ -1,7 +1,7 @@
 <template>
-  <div class="flex border-b border-solid border-white/50">
+  <div :data-id="data._id" class="content-item flex border-b border-solid border-white/50">
     <div class="flex-shrink-0 border-r border-solid border-white/50 px-6 pt-6">
-      <i class="content-handler icon-reorder text-white"></i>
+      <i class="content-handler icon-reorder cursor-grab text-white"></i>
     </div>
     <div class="flex-1 px-6 pt-6">
       <div class="flex items-center justify-between">
@@ -22,7 +22,11 @@
         </div>
       </div>
       <div class="py-4">
-        <div v-if="data.contentType === 'text'" v-html="data.content"></div>
+        <div
+          v-if="data.contentType === 'text'"
+          class="content-item__editor"
+          v-html="data.content"
+        ></div>
         <video v-if="data.contentType === 'video'" controls class="w-full max-w-[960px]">
           <source :src="data.content" />
         </video>
@@ -32,19 +36,25 @@
           frameborder="0"
           class="h-[480px] w-full max-w-[960px]"
         ></iframe>
-        <div v-if="data.contentType === 'code'">{{ data.content }}</div>
+        <div v-if="data.contentType === 'code'" ref="codeRef" class="content-item__code hljs">
+          {{ data.content }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
+import hljs from 'highlight.js'
 import { LessonContent } from '@/http/modules/lessonContent'
+import 'highlight.js/styles/github-dark.css'
+
 const props = defineProps({
   data: {
     type: Object as PropType<LessonContent>,
     required: true
   }
 })
+defineEmits(['edit', 'delete'])
 
 const title = computed(() => {
   const map = {
@@ -56,6 +66,68 @@ const title = computed(() => {
   return map[props.data.contentType]
 })
 
-defineEmits(['edit', 'delete'])
+const codeRef = ref<HTMLElement | null>(null)
+
+watch(
+  () => props.data.content,
+  async () => {
+    if (props.data.contentType === 'code' && codeRef.value) {
+      await nextTick()
+      codeRef.value.innerHTML = hljs.highlightAuto(props.data.content).value
+    }
+  }
+)
+
+onMounted(() => {
+  if (props.data.contentType === 'code' && codeRef.value) {
+    codeRef.value.innerHTML = hljs.highlightAuto(props.data.content).value
+  }
+})
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.hljs {
+  border-radius: 4px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 24px;
+  padding: 12px;
+  tab-size: 4;
+  white-space: pre;
+  background-color: black;
+}
+
+.content-item__editor {
+  border-radius: 4px;
+  padding: 12px;
+  background-color: black;
+
+  h1 {
+    @apply text-h2;
+  }
+
+  h2 {
+    @apply text-h3;
+  }
+
+  h3 {
+    @apply text-h4;
+  }
+
+  h4 {
+    @apply text-h5;
+  }
+
+  h5 {
+    @apply text-h6;
+  }
+
+  h6 {
+    @apply text-base;
+  }
+
+  line-height: 1.5;
+  font-size: 16px;
+}
+</style>

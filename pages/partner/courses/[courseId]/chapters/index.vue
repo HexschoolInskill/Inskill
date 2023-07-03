@@ -1,6 +1,8 @@
 <template>
+  <Title>章節管理 - Inskill</Title>
   <div class="relative">
     <draggable
+      v-if="course.chapters.length"
       v-model="course.chapters"
       item-key="_id"
       handle=".chapter-handler"
@@ -11,7 +13,7 @@
           <in-card border class="flex" :border-radius="4">
             <div class="flex-shrink-0 border-r border-solid border-white/50 px-4">
               <div class="chapter-handler flex h-15 cursor-grab items-center">
-                <i class="icon-reorder text-white"></i>
+                <i class="icon-reorder transition-base text-white/70 hover:text-white"></i>
               </div>
             </div>
             <div class="flex-1">
@@ -34,12 +36,13 @@
                     :chapter-id="chapter._id"
                     :value="lesson.title"
                     :publish="lesson.isPublish"
+                    :free-preview="lesson.freePreview"
                     @loading-start="isLoading = true"
                     @loading-end="isLoading = false"
                   />
                 </template>
               </draggable>
-              <div class="py-2 text-center">
+              <div class="border-t border-solid border-white/50 py-2 text-center">
                 <in-btn size="small" ghost @click="showCreatePopup('lesson', chapter._id)"
                   >新增課堂</in-btn
                 >
@@ -49,6 +52,7 @@
         </div>
       </template>
     </draggable>
+    <p v-else class="mt-[30vh] text-center text-h3 font-bold opacity-50">尚未創建章節</p>
     <div class="mt-5 text-center">
       <in-btn @click="showCreatePopup('chapter')">新增章節</in-btn>
     </div>
@@ -63,6 +67,7 @@
             :disabled="isLoading"
             class="mt-5 text-black"
             :placeholder="currentPopupType === 'chapter' ? '請輸入章節標題' : '請輸入課堂標題'"
+            @keyup.enter="createItem(currentPopupType, currentItemTitle, currentChapterId)"
           />
           <div class="mt-6 flex items-center justify-end gap-5">
             <in-btn :disabled="isLoading" ghost size="small" @click="closeCreatePopup">取消</in-btn>

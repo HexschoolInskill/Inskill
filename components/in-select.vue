@@ -1,7 +1,8 @@
 <template>
-  <in-dropdown :options="options" size="138px" @select="handleSelect">
+  <in-dropdown v-slot="{ show }" :options="options" size="138px" @select="handleSelect">
     <div
-      class="in-select text-fs-6 inline-flex h-10 min-w-[138px] cursor-pointer items-center justify-between gap-3 rounded-1 border border-solid border-white px-4 text-white"
+      class="in-select text-fs-6 transition-base inline-flex h-10 min-w-[138px] cursor-pointer select-none items-center justify-between gap-3 rounded-1 border border-solid border-white px-4 text-white hover:bg-black"
+      :class="{ 'in-select--active': show }"
     >
       <p>{{ currentSelect || defaultSelect || placeholder }}</p>
       <i class="icon-arrow"></i>
@@ -58,4 +59,11 @@ function handleSelect({ value }: Option) {
   emit('select', value)
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.in-select {
+  &:hover,
+  &--active {
+    @apply border-purple-600;
+  }
+}
+</style>

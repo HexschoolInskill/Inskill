@@ -15,6 +15,7 @@
         <in-card
           v-for="item in courses"
           :key="item._id"
+          glow
           xs-white
           perspective
           class="group flex cursor-pointer flex-col font-bold text-gray"
@@ -22,7 +23,7 @@
           <div class="relative flex-shrink-0 overflow-hidden pt-7/10 sm:pt-8/10">
             <nuxt-link
               :to="`/courses/${item._id}?courseType=normal`"
-              class="hidden cursor-pointer items-center text-white sm:flex"
+              class="cursor-pointer items-center text-white sm:flex"
             >
               <img
                 :src="item.thumbnail"
@@ -32,7 +33,7 @@
             </nuxt-link>
           </div>
           <div class="flex-1 p-8 xl:px-6 xl:py-4">
-            <h3 class="text-[28px] text-blue line-clamp-1 sm:text-gray">
+            <h3 class="line-clamp-1 text-[28px] text-blue sm:text-gray">
               {{ item.title }}
             </h3>
             <div class="mt-6 flex items-center">

@@ -14,7 +14,10 @@ export default defineEventHandler(async (event) => {
 
   const unProtectedRoutes = [/^\/api.*(?:\/(sign_up|sign_in|isEmailRegister|search.*))$/gi]
 
-  if (url!.startsWith('/api') && !unProtectedRoutes.some((pattern) => url!.match(pattern))) {
+  if (
+    (url!.startsWith('/api') && !unProtectedRoutes.some((pattern) => url!.match(pattern))) ||
+    (url!.startsWith('/newebpay') && method === 'GET')
+  ) {
     try {
       if (!accessToken) {
         return createError({

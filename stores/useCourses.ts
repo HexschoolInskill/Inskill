@@ -15,6 +15,7 @@ export default defineStore('courses', () => {
     _id: '001',
     teacherId: '002',
     teacherName: '',
+    teacherAvatar: '',
     isPublic: false,
     title: 'test01',
     description:
@@ -117,8 +118,30 @@ export default defineStore('courses', () => {
   const purchased = ref(false)
   const expandChapter = ref(0) // 預設在課程第一章
   const content = ref({ chapter: expandChapter, lesson: 0 }) // 當前查看的課程內容
+  const chatRoom = ref({
+    message: <any>[],
+    viewer: 0
+  })
+  const cart = ref<any>([])
 
-  const cart = ref<Object[]>([])
+  const getTotal = () => {
+    const total = cart.value.reduce(
+      (accumulator: number, currentItem: any) => accumulator + currentItem.price,
+      0
+    )
+    return total
+  }
+
+  const updateChatRoom = (payload: any) => {
+    console.log(payload)
+    const { username, comment, isTeacher, viewerCount } = payload
+    chatRoom.value.message.push({
+      username,
+      comment,
+      isTeacher
+    })
+    chatRoom.value.viewer = viewerCount
+  }
 
   const setCourse = (type: string, coursesFromBackend: courseArray) => {
     if (type === 'student') {
@@ -138,6 +161,10 @@ export default defineStore('courses', () => {
 
   const setCart = (cartFromBackend: Object[]) => {
     cart.value = cartFromBackend
+  }
+
+  const removeCartItem = (index: number) => {
+    cart.value.splice(index, 1)
   }
 
   const setCurrentCourse = (course: courseType) => {
@@ -195,8 +222,11 @@ export default defineStore('courses', () => {
     collected,
     content,
     cart,
+    chatRoom,
     setCourse,
     setCart,
+    getTotal,
+    removeCartItem,
     setCurrentCourse,
     setPurchased,
     setCollected,
@@ -204,6 +234,7 @@ export default defineStore('courses', () => {
     setContent,
     createReview,
     createQuestion,
-    createReply
+    createReply,
+    updateChatRoom
   }
 })

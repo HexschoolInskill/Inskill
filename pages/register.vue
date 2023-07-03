@@ -152,7 +152,7 @@ const register = async () => {
       // 往下一步
       if (registration.success) {
         step.value = 2
-        userProfile.value.username = registration.username
+        userProfile.value = registration.user
 
         token.setToken(registration.accessToken)
       } else {

@@ -1,6 +1,7 @@
 <template>
   <slot name="header"></slot>
   <in-container class="relative">
+    <!-- 上方課程標題、加入購物車、收藏與平價按鈕 -->
     <div
       class="border-bottom mb-4 mt-[12vh] flex items-center pb-4 pt-8 text-white max-[1536px]:mt-[15vh]"
       :class="{ hidden: deepDive }"
@@ -41,34 +42,6 @@
         <span>加入購物車</span>
       </button>
 
-      <div v-else class="course-header-action">
-        <svg
-          class="w-[25px]"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          x="0px"
-          y="0px"
-          viewBox="0 0 512 512"
-          enable-background="new 0 0 512 512"
-          xml:space="preserve"
-        >
-          <g>
-            <path
-              d="M169.6,377.6c-22.882,0-41.6,18.718-41.6,41.601c0,22.882,18.718,41.6,41.6,41.6s41.601-18.718,41.601-41.6
-		C211.2,396.317,192.481,377.6,169.6,377.6z M48,51.2v41.6h41.6l74.883,151.682l-31.308,50.954c-3.118,5.2-5.2,12.482-5.2,19.765
-		c0,27.85,19.025,41.6,44.825,41.6H416v-40H177.893c-3.118,0-5.2-2.082-5.2-5.2c0-1.036,2.207-5.2,2.207-5.2l20.782-32.8h154.954
-		c15.601,0,29.128-8.317,36.4-21.836l74.882-128.8c1.237-2.461,2.082-6.246,2.082-10.399c0-11.446-9.364-19.765-20.8-19.765H135.364
-		L115.6,51.2H48z M374.399,377.6c-22.882,0-41.6,18.718-41.6,41.601c0,22.882,18.718,41.6,41.6,41.6S416,442.082,416,419.2
-		C416,396.317,397.281,377.6,374.399,377.6z"
-              fill="#ffc107"
-            ></path>
-          </g>
-        </svg>
-
-        <span>已{{ purchased ? '購買' : '加入購物車' }}</span>
-      </div>
-
       <button class="course-header-action" type="button" @click="collector">
         <svg
           class="mr-1 w-[20px]"
@@ -78,7 +51,7 @@
         >
           <path
             d="M400 480a16 16 0 0 1-10.63-4L256 357.41L122.63 476A16 16 0 0 1 96 464V96a64.07 64.07 0 0 1 64-64h192a64.07 64.07 0 0 1 64 64v368a16 16 0 0 1-16 16z"
-            :fill="collected ? '#FFC107' : 'currentColor'"
+            :fill="collected ? 'rgb(147 51 234)' : 'currentColor'"
           ></path>
         </svg>
 
@@ -104,13 +77,19 @@
           <g fill="none">
             <path
               d="M7.194 2.101a.9.9 0 0 1 1.614 0l1.521 3.082l3.401.495a.9.9 0 0 1 .5 1.535l-2.462 2.399l.581 3.387a.9.9 0 0 1-1.306.949l-3.042-1.6l-3.042 1.6a.9.9 0 0 1-1.306-.949l.58-3.387l-2.46-2.4a.9.9 0 0 1 .499-1.534l3.4-.495l1.522-3.082z"
-              fill="currentColor"
+              fill="rgb(147 51 234)"
             ></path>
           </g>
         </svg>
         <span>評價課程</span>
       </button>
     </div>
+
+    <!-- 如果尚未購買直播課程的遮擋Modal -->
+    <in-course-blocker
+      v-if="liveCoursePurchased"
+      :current-course="currentCourse"
+    ></in-course-blocker>
 
     <!-- 評價modal -->
     <in-course-review-modal
@@ -120,10 +99,14 @@
     >
     </in-course-review-modal>
 
-    <div class="flex text-white" :class="{ 'mt-[15vh]': deepDive, hidden: open }">
+    <div
+      class="flex text-white"
+      :class="{ 'mt-[15vh]': deepDive, hidden: open || liveCoursePurchased }"
+    >
       <!-- 左邊課程切換列表 -->
       <in-course-chapter-selector
         :deep-dive="deepDive"
+        :purchased="purchased"
         :expand-chapter="expandChapter"
         :current-course="currentCourse"
         :content="content"
@@ -133,7 +116,10 @@
       </in-course-chapter-selector>
 
       <!-- 中間課程內容 -->
-      <main class="w-10/12 p-4 transition-all duration-200" :class="{ 'w-full': deepDive }">
+      <main
+        class="w-10/12 p-4 transition-all duration-200"
+        :class="{ 'w-full': deepDive, hidden: open || liveCoursePurchased }"
+      >
         <slot />
       </main>
 
@@ -146,18 +132,9 @@
         @move-to-lesson="goToLesson"
       >
       </in-course-float-button>
-
-      <!-- 直播課程聊天室 -->
-      <in-course-chat-room
-        v-else
-        class="w-3/12"
-        :chatroom-message="chatroomMessage"
-        @update:chatroom-message="addChatroomMessage"
-      >
-      </in-course-chat-room>
     </div>
   </in-container>
-  <slot v-if="$route.fullPath.includes('course')" name="footer"></slot>
+  <slot v-if="route.fullPath.includes('course')" name="footer"></slot>
 </template>
 
 <script lang="ts" setup>
@@ -167,8 +144,8 @@ import { storeToRefs } from 'pinia'
 // components
 import InCourseChapterSelector from './components/in-course-chapter-selector.vue'
 import InCourseFloatButton from './components/in-course-float-button.vue'
-import InCourseChatRoom from './components/in-course-chatroom.vue'
 import InCourseReviewModal from './components/in-course-review-modal.vue'
+import inCourseBlocker from './components/in-course-blocker.vue'
 
 import useCourses from '~/stores/useCourses'
 import useUser from '~/stores/useUser'
@@ -181,12 +158,14 @@ const { setChapter, setContent, setCollected, createReview } = useCourses()
 
 const { $api } = useNuxtApp()
 
+const route = useRoute()
 const router = useRouter()
 const courseType = computed(() => {
   return currentCourse.value.chapters ? 'Course' : 'LiveCourse'
 })
-
-const chatroomMessage: any = ref([])
+const liveCoursePurchased = computed(() => {
+  return route.query.courseType === 'stream' && !purchased.value
+})
 
 // 課程是否加入購物車
 const isInCart = ref(-1)
@@ -197,7 +176,7 @@ isInCart.value = userProfile.value.cartCourses.findIndex(
 const open = ref(false) // 評價modal 開關
 
 const deepDive = ref(false) // 直播課程時進入沉浸模式
-deepDive.value = currentCourse.value.chapters === undefined
+deepDive.value = currentCourse?.value?.chapters === undefined
 
 // 加入/取消收藏
 const collector = async () => {
@@ -249,7 +228,10 @@ const addToCart = async () => {
     })
     console.log('alterCart:>>>', alterCart)
 
-    if (alterCart.success) notification.success('已加入購物車')
+    if (alterCart.success) {
+      notification.success('已加入購物車')
+      isInCart.value = alterCart.cart.length - 1
+    }
   } catch (error: any) {
     console.log('error :>>>', error)
     notification.error(error.message)
@@ -291,29 +273,22 @@ const goToLesson = (index: number) => {
     }
   }
 }
-
-const addChatroomMessage = ($value: any) => {
-  console.log($value)
-
-  chatroomMessage.value.push({
-    userId: userProfile.value._id,
-    username: userProfile.value.username,
-    isTeacher: userProfile.value.isTeacher,
-    comment: $value
-  })
-}
 </script>
 
 <style lang="scss" scoped>
 .course-header-action {
-  @apply transition-base mx-2 flex items-center rounded bg-white px-3 py-2 text-black hover:bg-gray-l;
-}
+  @apply transition-base mx-2 flex items-center rounded border bg-white px-3 py-2 text-black hover:border-[rgb(147,51,234)];
 
-.course-header-action .tempStar {
+  svg {
+    path {
+      @apply transition-base;
+    }
+  }
+
   &:hover {
     svg {
       path {
-        fill: #ffc107;
+        fill: rgb(147, 51, 234);
       }
     }
   }

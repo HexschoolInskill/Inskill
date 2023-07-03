@@ -36,8 +36,10 @@ export default defineEventHandler(async (event) => {
               _id: '$collectCourses.courseId',
               title: '$course.title',
               description: '$course.description',
+              thumbnail: '$course.thumbnail',
               teacherId: '$course.teacherId',
-              teacherName: '$teacher.username'
+              teacherName: '$teacher.username',
+              teacherAvatar: '$teacher.avatar'
             }
           }
         }
@@ -81,8 +83,10 @@ export default defineEventHandler(async (event) => {
               _id: '$collectCourses.courseId',
               title: '$course.title',
               description: '$course.description',
+              thumbnail: '$course.thumbnail',
               teacherId: '$course.teacherId',
-              teacherName: '$teacher.username'
+              teacherName: '$teacher.username',
+              teacherAvatar: '$teacher.avatar'
             }
           }
         }

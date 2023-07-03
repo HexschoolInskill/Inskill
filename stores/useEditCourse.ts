@@ -12,6 +12,7 @@ export default defineStore('editCourse', () => {
     teacherId: '',
     purchasedCount: 0,
     teacherName: '',
+    teacherAvatar: '',
     averageRating: 0,
     scoreCount: 0,
     isPublic: false,
@@ -24,7 +25,17 @@ export default defineStore('editCourse', () => {
   const currentLesson = ref<CourseLesson | null>(null)
   const currentContents = ref<LessonContent[]>([])
 
-  const isLoading = ref(false)
+  let loadingTimer: NodeJS.Timeout | number | undefined
+  const delayLoading = ref(false)
+  const isLoading = computed({
+    get() {
+      return delayLoading.value
+    },
+    set(value) {
+      clearTimeout(loadingTimer)
+      loadingTimer = setTimeout(() => (delayLoading.value = value), 200)
+    }
+  })
 
   return {
     currentCourse,

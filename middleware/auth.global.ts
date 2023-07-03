@@ -2,12 +2,31 @@ import useUser from '~/stores/useUser'
 import useCourses from '~/stores/useCourses'
 
 export default defineNuxtRouteMiddleware(async (to) => {
+  const app: any = useNuxtApp()
+  const store = useUser()
+
   if (process.server) {
-    const app = useNuxtApp()
     await app.$api.user.fetchProfile()
   }
+  // 有切換頁面的情況
+  if (to.fullPath) {
+    // 有登入的情況
+    if (store.userProfile._id) {
+      // 取購物車資料
+      try {
+        const data: any = await app.$api.course.getCart()
+        // console.log('cart :>>>', data.cart)
+
+        if (data.success && data.cart.length) {
+          const courseStore = useCourses()
+          courseStore.setCart(data.cart)
+        }
+      } catch (error: any) {
+        console.log('error: >>>', error.message)
+      }
+    }
+  }
   if (to.meta.auth) {
-    const store = useUser()
     if (!store.userProfile._id) {
       const path = to.path
       const query = Object.entries(to.query)
@@ -15,6 +34,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
         .join('&')
       return `/login?redirect=${path}&${query}`
     }
+  }
+  if (to.meta.partner) {
+    if (!store.userProfile.isTeacher) return '/'
   }
   if (to.params.courseId) {
     console.log(to)

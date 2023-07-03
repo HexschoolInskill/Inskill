@@ -1,31 +1,44 @@
 <template>
   <div
     :data-id="id"
-    class="flex h-15 w-full items-center border-b border-solid border-white/50 px-6"
+    class="transition-base flex h-15 w-full items-center rounded-1 px-6 hover:bg-gray-600/30"
   >
     <div class="flex-shrink-0 cursor-grab pr-6">
-      <i class="lesson-handler icon-reorder text-white"></i>
+      <i class="lesson-handler icon-reorder transition-base text-white/50 hover:text-white"></i>
     </div>
-    <div class="flex-1 text-white">
-      <in-input v-if="isEditing" v-model="title" class="text-black" @keyup.enter="handleEdit" />
-      <template v-else>
-        <nuxt-link
-          :to="`/partner/courses/${$route.params.courseId}/${chapterId}/${id}`"
-          class="text-fs-6 group relative inline-block"
+    <div class="flex-1">
+      <transition name="fade" mode="out-in">
+        <in-input v-if="isEditing" v-model="title" class="text-black" @keyup.enter="handleEdit" />
+        <div v-else>
+          <nuxt-link
+            :to="`/partner/courses/${$route.params.courseId}/${chapterId}/${id}`"
+            class="text-fs-6 group relative inline-block"
+          >
+            <p class="line-clamp-1 text-white hover:text-white/80">{{ value }}</p>
+            <div
+              class="transition-base absolute bottom-0 left-0 h-2px w-full origin-left scale-x-0 bg-white/80 group-hover:scale-x-100"
+            ></div>
+          </nuxt-link>
+        </div>
+      </transition>
+    </div>
+    <transition name="fade" mode="out-in">
+      <div v-if="isEditing" class="flex flex-shrink-0 items-center gap-5 pl-6">
+        <button
+          class="transition-base flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full hover:bg-white/20"
+          @click="handleEdit"
         >
-          <p class="line-clamp-1">{{ value }}</p>
-          <div
-            class="transition-base absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-white group-hover:scale-x-100"
-          ></div>
-        </nuxt-link>
-      </template>
-    </div>
-    <div class="flex flex-shrink-0 items-center gap-5 pl-6">
-      <template v-if="isEditing">
-        <button @click="handleEdit"><i class="icon-check"></i></button>
-        <button @click="isEditing = false"><i class="icon-close"></i></button>
-      </template>
-      <template v-else>
+          <i class="icon-check"></i>
+        </button>
+        <button
+          class="transition-base flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full hover:bg-white/20"
+          @click="isEditing = false"
+        >
+          <i class="icon-close"></i>
+        </button>
+      </div>
+      <div v-else class="flex flex-shrink-0 items-center gap-5 pl-6">
+        <in-select :value="freePreview" :options="freePreviewOptions" @select="handleFreePreview" />
         <in-select :value="publish" :options="publishOptions" @select="handlePublish" />
         <in-dropdown v-slot="{ show }" :options="options" @select="handleOptionSelect">
           <div
@@ -47,8 +60,8 @@
             </svg>
           </div>
         </in-dropdown>
-      </template>
-    </div>
+      </div>
+    </transition>
   </div>
 </template>
 <script lang="ts" setup>
@@ -80,6 +93,10 @@ const props = defineProps({
   publish: {
     type: Boolean,
     required: true
+  },
+  freePreview: {
+    type: Boolean,
+    required: true
   }
 })
 
@@ -92,6 +109,16 @@ const publishOptions: Option[] = [
   },
   {
     label: '未發布',
+    value: false
+  }
+]
+const freePreviewOptions: Option[] = [
+  {
+    label: '開放試看',
+    value: true
+  },
+  {
+    label: '關閉試看',
     value: false
   }
 ]
@@ -162,6 +189,7 @@ function handleOptionSelect(option: Option) {
 }
 
 async function handlePublish(isPublish: boolean) {
+  if (props.publish === isPublish) return
   const confirmTitle = props.publish ? '取消發布' : '發布課堂'
   const confirmMessage = props.publish ? '所有學生都將看不到該課堂' : '將會把該課堂向所有學生公開'
   const isConfirm = await confirm(confirmTitle, confirmMessage)
@@ -183,5 +211,40 @@ async function handlePublish(isPublish: boolean) {
     isLoading.value = false
   }
 }
+async function handleFreePreview(isFreePreview: boolean) {
+  if (props.freePreview === isFreePreview) return
+  const confirmTitle = props.freePreview ? '關閉試看' : '開放試看'
+  const confirmMessage = props.freePreview
+    ? '沒有購買的學生都將看不到該課堂'
+    : '將會把該課堂向所有學生公開'
+  const isConfirm = await confirm(confirmTitle, confirmMessage)
+  if (!isConfirm) return
+  isLoading.value = true
+  try {
+    const { updatedChapter } = await app.$api.course.updateLesson({
+      courseId: route.params.courseId as string,
+      chapterId: props.chapterId,
+      lessonId: props.id,
+      freePreview: isFreePreview,
+      field: 'freePreview'
+    })
+    course.value.chapters = updatedChapter
+    notification.success('更新成功')
+  } catch (error) {
+    notification.error((error as Error).message)
+  } finally {
+    isLoading.value = false
+  }
+}
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: 0.1s linear;
+}
+</style>

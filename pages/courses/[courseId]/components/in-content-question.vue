@@ -11,13 +11,13 @@
         name="new_question"
         cols="30"
         rows="5"
-        placeholder="喜歡這堂課嗎? 購買課程後可以和大家已起討論囉!"
+        placeholder="喜歡這堂課嗎? 購買課程後可以和大家一起討論囉!"
         :disabled="!purchased"
       >
       </textarea>
 
       <button
-        class="my-2 ml-auto w-[150px] rounded border bg-white text-black"
+        class="transition-base my-2 ml-auto w-[150px] rounded border bg-white p-2 text-black hover:bg-[rgb(147,51,234)]"
         :class="{ 'bg-gray': !newQuestion.length }"
         type="button"
         :disabled="!newQuestion.length"
@@ -55,7 +55,7 @@
 
           <div class="my-4 flex">
             <button
-              class="mr-4 flex w-[100px] items-center"
+              class="mr-4 flex w-[100px] items-center hover:drop-shadow-[0_1px_5px_rgb(147,51,234)]"
               type="button"
               @click="openReplyBox(i - 1)"
             >
@@ -75,7 +75,7 @@
 
               <span class="w-4/6">回復</span>
             </button>
-            <button class="flex w-[100px] items-center" type="button">
+            <div class="flex w-[100px] items-center">
               <svg
                 class="w-1/6"
                 xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +91,7 @@
               </svg>
 
               <span class="w-4/6">共{{ questions[i - 1].replies?.length }}則</span>
-            </button>
+            </div>
           </div>
         </div>
       </div>
@@ -104,20 +104,20 @@
           name="new_question"
           cols="30"
           rows="5"
-          placeholder="喜歡這堂課嗎? 購買課程後可以和大家已起討論囉!"
+          placeholder="喜歡這堂課嗎? 購買課程後可以和大家一起討論囉!"
         >
         </textarea>
 
         <div class="my-2 flex">
           <button
-            class="my-2 ml-auto w-[150px] rounded border p-2"
+            class="transition-base my-2 ml-auto w-[150px] rounded border p-2 hover:bg-[rgb(147,51,234)]"
             type="button"
             @click="closeReply"
           >
             取消
           </button>
           <button
-            class="my-2 ml-6 w-[150px] rounded border bg-white p-2 text-black"
+            class="transition-base my-2 ml-6 w-[150px] rounded border bg-white p-2 text-black hover:bg-[rgb(147,51,234)]"
             :class="{ 'bg-gray': !newReply.length }"
             type="button"
             :disabled="!newReply.length"
@@ -158,7 +158,7 @@
 
     <button
       v-if="questions.length > showQuestion"
-      class="mx-auto rounded bg-white p-1 text-black"
+      class="transition-base mx-auto rounded bg-white p-1 text-black hover:bg-[rgb(147,51,234)]"
       type="button"
       @click="getMoreQuestion"
     >

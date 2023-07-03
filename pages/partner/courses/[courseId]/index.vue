@@ -1,42 +1,9 @@
 <template>
+  <Title>課程資訊 - Inskill</Title>
   <div class="flex items-start">
-    <div class="w-7/12 pr-10">
-      <in-card border :border-radius="4" class="flex flex-col bg-gray-900 p-10 text-white">
-        <section class="mb-10 border-b border-solid border-white/50 pb-5">
-          <h3 class="text-h3 font-bold">課程圖片</h3>
-          <label
-            class="transition-2 group relative mt-5 block cursor-pointer overflow-hidden rounded-6 border border-solid border-white/50 pt-6/10 hover:border-white"
-          >
-            <input
-              type="file"
-              class="hidden"
-              :accept="acceptImageType.join(',')"
-              @change="handleThumbnailChange"
-            />
-            <div
-              class="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center"
-            >
-              <in-spin v-if="isLoading" :size="40" color="white" />
-              <div v-else-if="course.thumbnail">
-                <img
-                  :src="previewNoCache()"
-                  alt=""
-                  class="absolute left-0 top-0 h-full w-full object-cover"
-                />
-                <div
-                  class="transition-base absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100"
-                >
-                  <in-btn ghost size="small" class="pointer-events-none mt-5">重新選擇圖片</in-btn>
-                </div>
-              </div>
-              <div v-else>
-                <p class="text-fs-6 text-white">課程圖片建議尺寸 1200 * 2000</p>
-                <in-btn size="small" ghost class="pointer-events-none mt-5">上傳課程圖片</in-btn>
-              </div>
-            </div>
-          </label>
-        </section>
-        <section class="mb-10 border-b border-solid border-white/50 pb-5">
+    <div class="w-8/12 pr-5 2xl:w-9/12 2xl:pr-10">
+      <in-card :border-radius="4" class="flex flex-col bg-gray-900 px-5 py-10 text-white 2xl:px-10">
+        <section class="mb-10 selection:2xl:mb-15">
           <h3 class="text-h3 font-bold">課程標題</h3>
           <in-input
             v-model="course.title"
@@ -46,18 +13,62 @@
           />
           <p v-if="v$.title.required.$invalid" class="mt-2 text-red-500">課程標題為必填</p>
         </section>
-        <section class="mb-10">
+        <section>
           <h3 class="text-h3 font-bold">課程說明</h3>
           <div class="mt-5">
-            <in-editor v-model="course.description" />
+            <in-editor v-model="course.description" :height="560" />
             <p v-if="v$.description.required.$invalid" class="mt-2 text-red-500">課程說明為必填</p>
           </div>
         </section>
       </in-card>
     </div>
-    <div class="sticky top-15 w-5/12">
-      <in-card border :border-radius="4" class="p-10">
-        <section class="mb-10 border-b border-solid border-white/50 pb-5">
+    <div class="sticky top-15 w-4/12 2xl:w-3/12">
+      <in-card border :border-radius="4" class="px-5 py-10 2xl:px-10">
+        <section class="mb-10 2xl:mb-15">
+          <h3 class="text-h3 font-bold">課程圖片</h3>
+          <label
+            class="transition-2 group relative mt-5 block cursor-pointer overflow-hidden rounded-6 border-2 border-solid border-white/50 pt-6/10 hover:border-purple-700"
+            :class="{ '!border-purple-700': isImageDragover, 'pointer-events-none': isLoading }"
+            @dragover.stop.prevent
+            @dragenter.stop.prevent="isImageDragover = true"
+            @dragleave.stop.prevent="isImageDragover = false"
+            @drop.stop.prevent="handleImageDrop"
+          >
+            <input
+              type="file"
+              class="hidden"
+              :accept="acceptImageType.join(',')"
+              @change="handleImageClick"
+            />
+            <div
+              class="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center"
+            >
+              <in-skeleton v-if="isLoading" class="absolute left-0 top-0 h-full w-full" />
+              <div v-else-if="course.thumbnail">
+                <img
+                  :src="previewNoCache()"
+                  alt=""
+                  class="absolute left-0 top-0 h-full w-full object-cover"
+                />
+                <div
+                  class="transition-base absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center bg-black/50 text-white opacity-0 group-hover:opacity-100"
+                  :class="{ '!opacity-100': isImageDragover }"
+                >
+                  <i
+                    class="icon-upload transition-base translate-y-2 text-[32px] delay-200 group-hover:translate-y-0"
+                    :class="{ '!translate-y-0': isImageDragover }"
+                  ></i>
+                  <p class="text-center text-fs-5">重新上傳圖片</p>
+                </div>
+              </div>
+              <div v-else class="text-center">
+                <p class="text-fs-6 text-white">課程圖片建議尺寸 2000 * 1200</p>
+                <in-btn size="small" ghost class="pointer-events-none mt-5">上傳課程圖片</in-btn>
+              </div>
+            </div>
+          </label>
+        </section>
+        <section class="mb-10 2xl:mb-15">
           <h3 class="text-h3 font-bold">課程售價</h3>
           <div class="mt-5 flex flex-wrap items-center gap-5">
             <in-btn size="small" :ghost="course.price !== 0" @click="course.price = 0">免費</in-btn>
@@ -104,6 +115,7 @@ const { currentCourse: course, isLoading } = storeToRefs(useEditCourse())
 const { confirm } = useConfirm()
 const { notification } = useNotification()
 const acceptImageType = ref(['image/png', 'image/jpeg', 'image/wepb'])
+const isImageDragover = ref(false)
 
 const rules = {
   title: {
@@ -141,15 +153,12 @@ const previewNoCache = () => {
   return course.value.thumbnail + `&ver=${Date.now()}`
 }
 
-async function handleThumbnailChange(event: Event) {
-  const target = event.target as HTMLInputElement
-  const file = target?.files?.[0]
+async function handleThumbnailChange(file: File) {
   if (!file) return
   if (!acceptImageType.value.includes(file.type)) {
     notification.error('不支援的圖片格式')
     return
   }
-
   isLoading.value = true
   try {
     const { course: response } = await app.$api.course.updateThumbnail(
@@ -163,6 +172,22 @@ async function handleThumbnailChange(event: Event) {
   } finally {
     isLoading.value = false
   }
+}
+
+function handleImageClick(event: Event) {
+  if (isLoading.value) return
+  const target = event.target as HTMLInputElement
+  const file = target?.files?.[0]
+  if (!file) return
+  handleThumbnailChange(file)
+}
+
+function handleImageDrop(event: DragEvent) {
+  if (isLoading.value) return
+  const file = event.dataTransfer?.files?.[0]
+  if (!file) return
+  handleThumbnailChange(file)
+  isImageDragover.value = false
 }
 
 async function saveCourse() {

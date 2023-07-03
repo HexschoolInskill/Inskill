@@ -33,9 +33,13 @@ export default defineEventHandler(async (event) => {
             $push: {
               _id: '$cartCourses.courseId',
               title: '$course.title',
+              courseType: '$cartCourses.courseType',
               description: '$course.description',
+              price: '$course.price',
+              thumbnail: '$course.thumbnail',
               teacherId: '$course.teacherId',
-              teacherName: '$teacher.username'
+              teacherName: '$teacher.username',
+              teacherAvatar: '$teacher.avatar'
             }
           }
         }
@@ -78,9 +82,13 @@ export default defineEventHandler(async (event) => {
             $push: {
               _id: '$cartCourses.courseId',
               title: '$course.title',
+              courseType: '$cartCourses.courseType',
               description: '$course.description',
+              price: '$course.price',
+              thumbnail: '$course.thumbnail',
               teacherId: '$course.teacherId',
-              teacherName: '$teacher.username'
+              teacherName: '$teacher.username',
+              teacherAvatar: '$teacher.avatar'
             }
           }
         }
@@ -93,7 +101,9 @@ export default defineEventHandler(async (event) => {
         }
       }
     ])
-    const cart = cartCourses.concat(cartLiveCourses)
+    const cart = (cartCourses.length > 0 ? cartCourses[0].courses : []).concat(
+      cartLiveCourses.length > 0 ? cartLiveCourses[0].courses : []
+    )
     return {
       success: true,
       cart

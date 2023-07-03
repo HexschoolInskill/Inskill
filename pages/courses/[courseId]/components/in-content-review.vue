@@ -1,13 +1,14 @@
 <template>
   <div class="gradient my-10 rounded-lg p-4 px-6">
-    <h2 class="text-2xl font-bold">課程評價</h2>
+    <h2 class="text-2xl font-bold">課程評價 ({{ review.length }})</h2>
 
-    <div class="flex">
-      <h1 class="mx-8 mt-4 text-4xl font-bold">{{ sumUpReviews.toFixed(1) }}</h1>
-
-      <div>
+    <div v-if="sumUpReviews" class="flex">
+      <h1 class="mx-8 mt-4 text-4xl font-bold">
+        {{ sumUpReviews.toFixed(1) }}
+      </h1>
+      <div class="mt-5">
         <in-content-star :stars="Math.floor(sumUpReviews)"></in-content-star>
-        <p>{{ review.length }} 則評價</p>
+        <!-- <p>{{ review.length }} 則評價</p> -->
       </div>
     </div>
 
@@ -40,7 +41,7 @@
 
     <div v-if="review.length > showReviews" class="mb-8 mt-8 text-center">
       <button
-        class="w-[150px] rounded bg-white py-1 text-black"
+        class="transition-base w-[150px] rounded bg-white py-1 text-black hover:bg-[rgb(147,51,234)]"
         type="button"
         @click="getMoreReviews"
       >

@@ -1,14 +1,7 @@
 <template>
   <NuxtLayout name="edit-course">
     <NuxtPage />
-    <teleport to="body">
-      <div
-        v-if="isLoading"
-        class="fixed left-0 top-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50"
-      >
-        <in-spin :size="48" color="#ffffff"></in-spin>
-      </div>
-    </teleport>
+    <in-loading :show="isLoading" />
   </NuxtLayout>
 </template>
 
@@ -31,3 +24,5 @@ const { data } = await useAsyncData(() =>
 
 Object.assign(store.currentCourse, data.value?.course?.[0] ?? {})
 </script>
+
+<style lang="scss"></style>

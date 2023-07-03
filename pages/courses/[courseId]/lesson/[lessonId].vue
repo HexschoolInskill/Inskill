@@ -33,7 +33,7 @@
     </div>
 
     <!-- 未開放試看 -->
-    <div v-if="!currenChapterLesson.freePreview" class="gradient h-[410px] rounded-lg p-4">
+    <div v-else class="gradient h-[410px] rounded-lg p-4">
       <div class="relative">
         <div class="absolute w-full bg-black p-4 py-[110px] text-center">
           <svg
@@ -88,9 +88,7 @@ definePageMeta({
   layout: 'view-courses'
 })
 
-const purchased = ref(false)
-
-const { currentCourse, content } = storeToRefs(useCourse())
+const { currentCourse, content, purchased } = storeToRefs(useCourse())
 const { userProfile } = storeToRefs(useUser())
 const { createQuestion, createReply } = useCourse()
 const route = useRoute()

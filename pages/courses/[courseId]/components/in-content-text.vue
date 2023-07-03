@@ -1,6 +1,6 @@
 <template>
   <div class="m-4">
-    <p>{{ props.content }}</p>
+    <p v-html="props.content"></p>
   </div>
 </template>
 
